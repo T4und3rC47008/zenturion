@@ -1,0 +1,1415 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Prinster — Demo</title>
+<meta name="theme-color" content="#0B2E5C" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          navy: '#0B2E5C', blue: '#1B5FAE', sky: '#EAF3FC', skyBorder: '#C7DCF2',
+          gold: '#F2A900', goldDark: '#CC8E00', ink: '#1F2733', slate: '#5C6B7A',
+        },
+        fontFamily: {
+          display: ['Poppins', 'system-ui', 'sans-serif'],
+          body: ['Inter', 'system-ui', 'sans-serif'],
+        },
+        borderRadius: { module: '8px' },
+      }
+    }
+  }
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  .text-footer { color: #c7dcf2; }
+  body { font-family: 'Inter', system-ui, sans-serif; background:#EAF3FC; color:#1F2733; }
+  .font-display { font-family: 'Poppins', system-ui, sans-serif; }
+  ::selection { background:#F2A900; color:#0B2E5C; }
+  .scrollbar-thin::-webkit-scrollbar { height:6px; width:6px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background:#C7DCF2; border-radius:4px; }
+  .input { border:1px solid #C7DCF2; border-radius:8px; padding:8px 12px; font-size:14px; width:100%; outline:none; background:#fff; }
+  .input:focus { box-shadow:0 0 0 2px #1B5FAE; border-color:transparent; }
+  .btn-primary { background:#1B5FAE; color:#fff; font-weight:600; border-radius:8px; padding:10px 18px; transition:.15s; }
+  .btn-primary:hover { background:#0B2E5C; }
+  .btn-primary:disabled { background:#cbd5e1; cursor:not-allowed; }
+  .btn-gold { background:#F2A900; color:#0B2E5C; font-weight:600; border-radius:8px; padding:10px 18px; transition:.15s; }
+  .btn-gold:hover { background:#CC8E00; }
+  .card { background:#fff; border:1px solid #C7DCF2; border-radius:8px; }
+  .fade-in { animation: fadeIn .25s ease; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(4px);} to {opacity:1; transform:translateY(0);} }
+  .toast { animation: slideUp .25s ease; }
+  @keyframes slideUp { from { opacity:0; transform:translateY(12px);} to {opacity:1; transform:translateY(0);} }
+  .spinner { border:3px solid #EAF3FC; border-top-color:#1B5FAE; border-radius:50%; width:32px; height:32px; animation:spin .8s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg);} }
+  .line-clamp-2 { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .demo-badge { position:fixed; z-index:60; }
+</style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+<!-- ============ DEMO CONTROL PANEL ============ -->
+<!--<div id="demo-panel" class="demo-badge bottom-4 right-4 card shadow-xl p-3 w-64 text-xs">
+  <div class="flex items-center justify-between mb-2">
+    <span class="font-display font-bold text-navy text-sm">Demo Controls</span>
+    <button onclick="toggleDemoPanel()" class="text-slate hover:text-navy">–</button>
+  </div>
+  <div id="demo-panel-body">
+    <label class="flex items-center justify-between mb-2 cursor-pointer">
+      <span>Simulate offline mode</span>
+      <input type="checkbox" id="offline-toggle" onchange="toggleOffline(this.checked)">
+    </label>
+    <button onclick="resetDemoData()" class="w-full border border-skyBorder rounded-module py-1.5 mb-1.5 hover:bg-sky transition">Reset demo data</button>
+    <button onclick="goTo('#/admin')" class="w-full border border-skyBorder rounded-module py-1.5 hover:bg-sky transition">Go to Admin</button>
+    <p class="text-slate mt-2 leading-snug">This is a simulated frontend for client review — no real payments or servers are used.</p>
+  </div>
+</div>-->
+
+<div id="app"></div>
+
+<script>
+/* =========================================================================
+   PRINSTER DEMO — a single-file simulation of the storefront + admin app.
+   All data lives in localStorage; nothing here calls a real server or
+   processes real payments. Built for client walkthroughs / stakeholder demos.
+   ========================================================================= */
+
+const STORAGE_KEY = 'prinsterDemoState_v1';
+
+/* ---------------------------------- Icons (inline SVG, no external deps) --------------------------------- */
+const ICONS = {
+  cart: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>`,
+  search: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>`,
+  menu: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>`,
+  wifiOff: `<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" x2="22" y1="2" y2="22"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M2 8.82a15 15 0 0 1 4.17-2.65"/><path d="M10.66 5c4.01-.36 8.14.9 11.34 3.76"/><path d="M16.85 11.25a10 10 0 0 1 2.22 1.68"/><path d="M5 13a10 10 0 0 1 5.24-2.76"/><line x1="12" x2="12.01" y1="20" y2="20"/></svg>`,
+  truck: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>`,
+  shield: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.79 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>`,
+  refresh: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>`,
+  check: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>`,
+  x: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`,
+  alert: `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>`,
+  trash: `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`,
+  edit: `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>`,
+  printer: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>`,
+  dash: `<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>`,
+  box: `<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.3 7 12 12l8.7-5"/><path d="M12 22V12"/></svg>`,
+  bag: `<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>`,
+  logout: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>`,
+  clock: `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+  wallet: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-1"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>`,
+  phone: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>`,
+  card: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>`,
+  cloudOff: `<svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#1B5FAE" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m2 2 20 20"/><path d="M5.782 5.782A7 7 0 0 0 9 19h8.5a4.5 4.5 0 0 0 1.307-8.807"/><path d="M9.879 9.879A5 5 0 0 1 18.5 12a4.5 4.5 0 0 1 1.5.5"/></svg>`,
+};
+
+/* ---------------------------------- Placeholder image generator --------------------------------- */
+function productImage(kind, brand, model) {
+  const NAVY='%230B2E5C', BLUE='%231B5FAE', SKY='%23EAF3FC', GOLD='%23F2A900';
+  let icon = '';
+  if (kind === 'printer') icon = `<rect x='60' y='90' width='180' height='90' rx='10' fill='${BLUE}'/><rect x='80' y='60' width='140' height='45' rx='6' fill='${NAVY}'/><rect x='85' y='180' width='130' height='60' rx='6' fill='${NAVY}' opacity='0.15'/><rect x='100' y='195' width='100' height='10' rx='3' fill='${GOLD}'/>`;
+  else if (kind === 'copier') icon = `<rect x='45' y='70' width='210' height='130' rx='10' fill='${NAVY}'/><rect x='65' y='90' width='170' height='60' rx='6' fill='${BLUE}'/><rect x='65' y='160' width='170' height='8' rx='3' fill='${GOLD}'/><rect x='90' y='55' width='120' height='20' rx='4' fill='${NAVY}' opacity='0.7'/>`;
+  else if (kind === 'ink') icon = `<path d='M150 50 C185 100 205 135 205 165 A55 55 0 1 1 95 165 C95 135 115 100 150 50 Z' fill='${BLUE}'/><ellipse cx='150' cy='175' rx='30' ry='18' fill='${SKY}' opacity='0.5'/>`;
+  else if (kind === 'toner') icon = `<rect x='75' y='90' width='150' height='90' rx='14' fill='${NAVY}'/><rect x='75' y='90' width='150' height='26' rx='14' fill='${GOLD}'/><rect x='100' y='140' width='100' height='14' rx='4' fill='${BLUE}'/>`;
+  else icon = `<circle cx='150' cy='140' r='70' fill='${BLUE}' opacity='0.15'/><circle cx='150' cy='140' r='45' fill='${NAVY}'/><circle cx='150' cy='140' r='16' fill='${GOLD}'/>`;
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><rect width='300' height='300' fill='${SKY}'/>${icon}<text x='150' y='255' text-anchor='middle' font-family='Arial' font-size='20' font-weight='700' fill='${NAVY}'>${brand}</text><text x='150' y='278' text-anchor='middle' font-family='Arial' font-size='14' fill='${BLUE}'>${model}</text></svg>`;
+  return `data:image/svg+xml,${svg.replace(/#/g,'%23').replace(/\n/g,'')}`;
+}
+
+/* ---------------------------------- Seed data --------------------------------- */
+const CATEGORIES = [
+  { id:'cat-printers', name:'Printers', slug:'printers' },
+  { id:'cat-copiers', name:'Copiers & MFPs', slug:'copiers-mfps' },
+  { id:'cat-ink', name:'Ink Cartridges', slug:'ink-cartridges' },
+  { id:'cat-toner', name:'Toner Cartridges', slug:'toner-cartridges' },
+  { id:'cat-parts', name:'Parts & Accessories', slug:'parts-accessories' },
+];
+
+function slugify(s){ return s.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,''); }
+
+const RAW_PRODUCTS = [
+  ['PRN-EPS-L3250','Epson EcoTank L3250 Wi-Fi All-in-One Printer','cat-printers','Epson','Compact ink tank printer with print, scan, copy and built-in Wi-Fi. Ideal for home offices and small businesses.',12995,13995,34,'printer','L3250'],
+  ['PRN-CAN-G3020','Canon PIXMA G3020 Ink Tank All-in-One Printer','cat-printers','Canon','Refillable ink tank all-in-one with wireless printing, built for high-volume home and SOHO use.',11895,null,28,'printer','G3020'],
+  ['PRN-HP-M141W','HP LaserJet MFP M141w Mono Laser Printer','cat-printers','HP','Compact monochrome laser all-in-one with fast print speeds for busy offices.',14995,null,15,'printer','M141w'],
+  ['PRN-BRO-DCPT720','Brother DCP-T720DW Ink Tank Printer','cat-printers','Brother','Duplex ink tank all-in-one with wireless connectivity and low cost-per-page printing.',13795,null,20,'printer','T720DW'],
+  ['CPR-XER-B215','Xerox B215 Multifunction Laser Printer/Copier','cat-copiers','Xerox','Business-grade mono laser MFP: print, copy, scan, fax with automatic document feeder.',18995,null,10,'copier','B215'],
+  ['CPR-CAN-C3125','Canon imageRUNNER C3125i Color Copier','cat-copiers','Canon','Full-size office color copier/MFP for mid-to-large offices, 25 ppm, network-ready.',189995,null,3,'copier','C3125i'],
+  ['CPR-RIC-IM2702','Ricoh IM 2702 Mono MFP Copier','cat-copiers','Ricoh','High-capacity monochrome office copier with finishing options, built for heavy daily volume.',159995,null,4,'copier','IM2702'],
+  ['CPR-KYO-2554CI','Kyocera TASKalfa 2554ci Color MFP','cat-copiers','Kyocera','Color multifunction copier with long-life components and low total cost of ownership.',219995,null,2,'copier','2554ci'],
+  ['INK-EPS-003BK','Epson 003 Black Ink Bottle','cat-ink','Epson','Genuine Epson 003 series ink bottle, black, for EcoTank printers.',395,null,120,'ink','003 Black'],
+  ['INK-EPS-003CMY','Epson 003 Color Ink Bottle Set (C/M/Y)','cat-ink','Epson','Genuine Epson 003 cyan, magenta and yellow ink bottle set for EcoTank printers.',1095,null,80,'ink','003 CMY'],
+  ['INK-CAN-GI790BK','Canon GI-790 Black Ink Bottle','cat-ink','Canon','Genuine Canon GI-790 black refill ink bottle for PIXMA G-series printers.',425,null,95,'ink','GI-790 Blk'],
+  ['INK-CAN-GI790CMY','Canon GI-790 Color Ink Bottle Set (C/M/Y)','cat-ink','Canon','Genuine Canon GI-790 cyan, magenta, yellow refill ink bottle set.',1195,null,70,'ink','GI-790 CMY'],
+  ['INK-BRO-BT6001BK','Brother BT6001 Black Ink Bottle','cat-ink','Brother','Genuine Brother BT6001 black ink bottle for Brother ink tank printers.',445,null,60,'ink','BT6001'],
+  ['INK-HP-680BK','HP 680 Black Ink Cartridge','cat-ink','HP','Original HP 680 black ink cartridge for HP Deskjet printers.',695,null,3,'ink','680 Black'],
+  ['TNR-HP-83A','HP 83A (CF283A) Black Toner Cartridge','cat-toner','HP','Original HP 83A black LaserJet toner cartridge, yields approx. 1,500 pages.',3495,null,40,'toner','83A'],
+  ['TNR-CAN-CRG-337','Canon CRG-337 Black Toner Cartridge','cat-toner','Canon','Genuine Canon 337 toner cartridge for imageCLASS mono laser printers.',3295,null,38,'toner','CRG-337'],
+  ['TNR-BRO-TN2480','Brother TN-2480 Black Toner Cartridge','cat-toner','Brother','High-yield Brother TN-2480 black toner cartridge, approx. 3,000 pages.',4295,null,4,'toner','TN-2480'],
+  ['TNR-XER-B215-BK','Xerox B215 Genuine Black Toner Cartridge','cat-toner','Xerox','Genuine Xerox toner cartridge for the Xerox B215 multifunction printer.',3895,null,25,'toner','B215 Toner'],
+  ['TNR-KYO-TK1174','Kyocera TK-1174 Black Toner Kit','cat-toner','Kyocera','Genuine Kyocera TK-1174 toner kit, high-capacity, for Kyocera ECOSYS M2x40 series.',4595,null,18,'toner','TK-1174'],
+  ['PRT-HP-DRUM-19A','HP 19A Imaging Drum Unit','cat-parts','HP','Genuine HP 19A imaging drum for LaserJet mono printers, approx. 12,000 page yield.',5995,null,12,'part','19A Drum'],
+  ['PRT-EPS-MAINT-L','Epson Maintenance Box for L-Series EcoTank','cat-parts','Epson','Genuine Epson waste ink maintenance box, compatible with most L-series EcoTank models.',795,null,45,'part','Maint. Box'],
+  ['PRT-CAN-CLEAN-KIT','Canon Printhead Cleaning Kit','cat-parts','Canon','Cleaning solution and swabs for maintaining Canon inkjet printheads.',345,null,60,'part','Clean Kit'],
+];
+
+const PRODUCTS = RAW_PRODUCTS.map(([sku,name,category_id,brand,description,price,compare,stock,kind,model]) => ({
+  id: sku, sku, name, slug: slugify(name), category_id, brand, description,
+  price, compare_at_price: compare, image: productImage(kind, brand, model),
+  reorder_level: (stock <= 5 ? Math.max(1,stock-1) : 5),
+  stock,
+}));
+
+const COMPAT = {
+  'INK-EPS-003BK': ['Epson L3110','Epson L3150','Epson L3250'],
+  'INK-EPS-003CMY': ['Epson L3110','Epson L3150','Epson L3250'],
+  'INK-CAN-GI790BK': ['Canon G1010','Canon G2010','Canon G3020'],
+  'INK-CAN-GI790CMY': ['Canon G1010','Canon G2010','Canon G3020'],
+  'INK-BRO-BT6001BK': ['Brother DCP-T420W','Brother DCP-T720DW'],
+  'INK-HP-680BK': ['HP Deskjet 2135','HP Deskjet 3785'],
+  'TNR-HP-83A': ['HP LaserJet Pro M127fn','HP LaserJet M225dw'],
+  'TNR-CAN-CRG-337': ['Canon imageCLASS MF211','Canon MF244dw'],
+  'TNR-BRO-TN2480': ['Brother HL-L2375DW','Brother DCP-L2540DW'],
+  'TNR-XER-B215-BK': ['Xerox B215'],
+  'TNR-KYO-TK1174': ['Kyocera ECOSYS M2040dn'],
+};
+
+/* ---------------------------------- Mock historical sales (for the dashboard chart) --------------------------------- */
+function seedSalesHistory() {
+  const days = [];
+  const today = new Date();
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date(today); d.setDate(d.getDate() - i);
+    const iso = d.toISOString().slice(0,10);
+    const revenue = Math.round(8000 + Math.random() * 22000);
+    const orderCount = Math.round(2 + Math.random() * 9);
+    days.push({ day: iso, revenue, order_count: orderCount });
+  }
+  return days;
+}
+
+function seedOrders() {
+  const statuses = ['completed','completed','completed','shipped','processing','paid'];
+  const names = ['Maria Santos','Juan dela Cruz','Angelica Reyes','Ramon Bautista','Cristina Aquino','Paolo Mendoza'];
+  const orders = [];
+  const today = new Date();
+  for (let i = 0; i < 9; i++) {
+    const d = new Date(today); d.setDate(d.getDate() - Math.floor(Math.random()*13));
+    const items = [];
+    const n = 1 + Math.floor(Math.random()*3);
+    let subtotal = 0;
+    const used = new Set();
+    for (let j=0;j<n;j++){
+      let p = PRODUCTS[Math.floor(Math.random()*PRODUCTS.length)];
+      if (used.has(p.id)) continue;
+      used.add(p.id);
+      const qty = 1 + Math.floor(Math.random()*2);
+      subtotal += p.price*qty;
+      items.push({ product_id:p.id, name:p.name, price:p.price, quantity:qty });
+    }
+    const shipping = 150;
+    orders.push({
+      id: 'seed-'+i,
+      order_number: `PRN-${d.toISOString().slice(0,10).replace(/-/g,'')}-${1000+i}`,
+      status: statuses[Math.floor(Math.random()*statuses.length)],
+      items, subtotal, shipping, total: subtotal+shipping,
+      payment_method: ['gcash','paymaya','card','grab_pay','cod'][Math.floor(Math.random()*5)],
+      customer_name: names[Math.floor(Math.random()*names.length)],
+      placed_offline: Math.random() < 0.15,
+      created_at: d.toISOString(),
+    });
+  }
+  return orders.sort((a,b)=> new Date(b.created_at)-new Date(a.created_at));
+}
+
+/* ---------------------------------- State --------------------------------- */
+function defaultState() {
+  const inventory = {};
+  PRODUCTS.forEach(p => { inventory[p.id] = { stock: p.stock, reorder_level: p.reorder_level }; });
+  return {
+    cart: [],               // { product_id, quantity }
+    orders: seedOrders(),
+    pendingOfflineOrders: [],
+    inventory,
+    inventoryMovements: {},  // product_id -> [{change, reason, date}]
+    salesHistory: seedSalesHistory(),
+    adminLoggedIn: false,
+    offline: false,
+    toasts: [],
+  };
+}
+
+let state = loadState();
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e){}
+  return defaultState();
+}
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+function resetDemoData() {
+  if (!confirm('Reset all demo data (cart, orders, inventory) back to the starting scenario?')) return;
+  state = defaultState();
+  saveState();
+  goTo('#/');
+  showToast('Demo data reset.');
+}
+
+/* ---------------------------------- Helpers --------------------------------- */
+function formatPHP(n) {
+  return new Intl.NumberFormat('en-PH', { style:'currency', currency:'PHP', maximumFractionDigits:2 }).format(n||0);
+}
+function getProduct(id){ return PRODUCTS.find(p=>p.id===id); }
+function getProductBySlug(slug){ return PRODUCTS.find(p=>p.slug===slug); }
+function getCategory(id){ return CATEGORIES.find(c=>c.id===id); }
+function stockOf(id){ return state.inventory[id]?.stock ?? 0; }
+function cartCount(){ return state.cart.reduce((n,i)=>n+i.quantity,0); }
+function cartSubtotal(){ return state.cart.reduce((sum,i)=> sum + getProduct(i.product_id).price * i.quantity, 0); }
+function esc(s){ return (s??'').toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function showToast(msg, tone='navy') {
+  const id = Date.now()+Math.random();
+  state.toasts.push({ id, msg, tone });
+  renderToasts();
+  setTimeout(() => { state.toasts = state.toasts.filter(t=>t.id!==id); renderToasts(); }, 3200);
+}
+function renderToasts() {
+  let el = document.getElementById('toast-container');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'toast-container';
+    el.className = 'fixed bottom-4 left-4 z-50 space-y-2';
+    document.body.appendChild(el);
+  }
+  el.innerHTML = state.toasts.map(t => `
+    <div class="toast bg-navy text-white text-sm rounded-module px-4 py-2.5 shadow-lg max-w-xs">${esc(t.msg)}</div>
+  `).join('');
+}
+
+/* ---------------------------------- Simulated network / offline mode --------------------------------- */
+function toggleOffline(checked) {
+  state.offline = checked;
+  saveState();
+  if (!checked && state.pendingOfflineOrders.length) {
+    syncOfflineOrders();
+  }
+  render();
+}
+function toggleDemoPanel() {
+  const body = document.getElementById('demo-panel-body');
+  body.classList.toggle('hidden');
+}
+function syncOfflineOrders() {
+  const queued = state.pendingOfflineOrders;
+  if (!queued.length) return;
+  queued.forEach(o => {
+    o.placed_offline = true;
+    o.status = o.payment_method === 'cod' ? 'pending' : 'paid';
+    state.orders.unshift(o);
+  });
+  state.pendingOfflineOrders = [];
+  saveState();
+  showToast(`${queued.length} offline order(s) synced successfully.`);
+}
+
+/* ---------------------------------- Router --------------------------------- */
+function goTo(hash) { window.location.hash = hash; }
+window.addEventListener('hashchange', render);
+window.addEventListener('DOMContentLoaded', () => { render(); renderToasts(); });
+
+function currentRoute() {
+  const hash = window.location.hash || '#/';
+  const pathOnly = hash.split('?')[0];
+  const parts = pathOnly.replace(/^#\//,'').split('/').filter(Boolean);
+  return parts;
+}
+
+function render() {
+  saveState();
+  const parts = currentRoute();
+  const app = document.getElementById('app');
+  window.scrollTo(0,0);
+
+  if (parts[0] === 'admin') {
+    app.innerHTML = renderAdmin(parts.slice(1));
+  } else {
+    app.innerHTML = renderStore(parts);
+  }
+  document.getElementById('offline-toggle').checked = state.offline;
+  attachDeferredWork();
+}
+
+/* Some views need post-render JS (charts). We track a queue. */
+let deferredWork = [];
+function attachDeferredWork() {
+  const work = deferredWork; deferredWork = [];
+  work.forEach(fn => fn());
+}
+
+/* =========================================================================
+   STOREFRONT
+   ========================================================================= */
+function renderStore(parts) {
+  const view = parts[0] || 'home';
+  let body = '';
+  if (view === 'home') body = viewHome();
+  else if (view === 'shop') body = viewShop();
+  else if (view === 'product') body = viewProduct(parts[1]);
+  else if (view === 'cart') body = viewCart();
+  else if (view === 'checkout') body = viewCheckout();
+  else if (view === 'order-success') body = viewOrderSuccess();
+  else if (view === 'order-queued') body = viewOrderQueued();
+  else body = viewHome();
+
+  return `
+    <div class="min-h-screen flex flex-col">
+      ${state.offline ? offlineBanner() : ''}
+      ${storeNavbar()}
+      <main class="flex-1">${body}</main>
+      ${storeFooter()}
+    </div>
+  `;
+}
+
+function offlineBanner() {
+  return `
+    <!--<div class="bg-navy text-white text-xs sm:text-sm px-4 py-2 flex items-center justify-center gap-2 text-center">
+      ${ICONS.wifiOff}
+      <span>You're offline (simulated). Browsing cached products — orders placed now will queue and sync automatically once you reconnect.</span>
+    </div>-->
+  `;
+}
+
+function storeNavbar() {
+  const cats = CATEGORIES.map(c => `<a href="#/shop/${c.slug}" class="hover:text-gold transition font-medium whitespace-nowrap">${esc(c.name)}</a>`).join('');
+  return `
+  <header class="sticky top-0 z-40 shadow">
+    <div class="bg-navy text-white">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+        <a href="#/" class="flex items-center gap-2 shrink-0">
+          <span class="bg-gold text-navy rounded-module p-1.5 flex items-center justify-center"><img src="img/LPA-Logo-v4.png" alt="LPA" style="height:64x;"></span><span class="bg-gold text-navy rounded-module p-1.5 flex items-center justify-center">${ICONS.printer}</span>
+          <span class="font-display font-bold text-xl tracking-tight">Prinster<span class="text-gold">.</span></span>
+          <span class="hidden sm:inline text-xs text-blue-200 ml-1 border-l border-blue-700 pl-2">Printers &amp; Ink, sorted.</span>
+        </a>
+        <form onsubmit="submitSearch(event,'desktop')" class="hidden md:flex flex-1 max-w-md relative" id="search-wrap-desktop">
+          <div class="relative w-full">
+            <input id="nav-search" type="text" autocomplete="off" placeholder="Search printers, ink, toner…"
+              oninput="handleSearchInput(this.value,'desktop')" onfocus="handleSearchInput(this.value,'desktop')"
+              class="w-full rounded-module bg-white/95 text-ink pl-9 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gold">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate">${ICONS.search}</span>
+          </div>
+          <div id="search-dropdown-desktop" class="hidden absolute left-0 right-0 top-full mt-1.5 card shadow-xl overflow-hidden text-ink z-50"></div>
+        </form>
+        <div class="flex items-center gap-3">
+          <a href="#/admin" class="hidden sm:inline text-xs text-blue-200 hover:text-white transition">Admin</a>
+          <a href="#/cart" class="relative flex items-center gap-1.5 bg-gold text-navy font-semibold text-sm rounded-module px-3 py-2 hover:bg-goldDark transition">
+            ${ICONS.cart}<span class="hidden sm:inline">Cart</span>
+            ${cartCount() > 0 ? `<span class="absolute -top-2 -right-2 bg-navy text-white text-[11px] rounded-full h-5 w-5 flex items-center justify-center">${cartCount()}</span>` : ''}
+          </a>
+        </div>
+      </div>
+    </div>
+    <nav class="bg-blue text-white text-sm">
+      <div class="max-w-6xl mx-auto px-4">
+        <!-- Mobile / tablet: search bar + collapsible category menu -->
+        <div class="md:hidden">
+          <form onsubmit="submitSearch(event,'mobile')" class="relative pt-2 pb-2" id="search-wrap-mobile">
+            <div class="relative w-full">
+              <input id="nav-search-mobile" type="text" autocomplete="off" placeholder="Search printers, ink, toner…"
+                oninput="handleSearchInput(this.value,'mobile')" onfocus="handleSearchInput(this.value,'mobile')"
+                class="w-full rounded-module bg-white/95 text-ink pl-9 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gold">
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate">${ICONS.search}</span>
+            </div>
+            <div id="search-dropdown-mobile" class="hidden absolute left-0 right-0 top-full mt-1.5 card shadow-xl overflow-hidden text-ink z-50"></div>
+          </form>
+          <button type="button" onclick="toggleMobileMenu()" aria-expanded="${mobileMenuOpen ? 'true' : 'false'}"
+            class="w-full flex items-center justify-between py-2.5 border-t border-white/10 font-medium">
+            <span class="flex items-center gap-2"><span id="mobile-menu-icon">${mobileMenuOpen ? ICONS.x : ICONS.menu}</span> Browse Categories</span>
+            <span class="text-xs text-blue-200">${mobileMenuOpen ? 'Hide' : 'Show'}</span>
+          </button>
+          <div id="mobile-category-menu" class="${mobileMenuOpen ? '' : 'hidden'} pb-2 border-t border-white/10">
+            <a href="#/shop" onclick="closeMobileMenu()" class="block py-2 hover:text-gold transition font-medium">Shop All</a>
+            ${CATEGORIES.map(c => `<a href="#/shop/${c.slug}" onclick="closeMobileMenu()" class="block py-2 hover:text-gold transition font-medium">${esc(c.name)}</a>`).join('')}
+          </div>
+        </div>
+        <!-- Desktop / large tablet: normal horizontal category bar -->
+        <div class="hidden md:flex md:items-center gap-6 py-2.5 overflow-x-auto">
+          <a href="#/shop" class="hover:text-gold transition font-medium">Shop All</a>
+          ${cats}
+        </div>
+      </div>
+    </nav>
+  </header>`;
+}
+let mobileMenuOpen = false;
+function toggleMobileMenu() {
+  mobileMenuOpen = !mobileMenuOpen;
+  const menu = document.getElementById('mobile-category-menu');
+  const icon = document.getElementById('mobile-menu-icon');
+  const btn = menu && menu.previousElementSibling;
+  if (menu) menu.classList.toggle('hidden', !mobileMenuOpen);
+  if (icon) icon.innerHTML = mobileMenuOpen ? ICONS.x : ICONS.menu;
+  if (btn) { btn.setAttribute('aria-expanded', mobileMenuOpen ? 'true' : 'false'); const lbl = btn.querySelector('span.text-xs'); if (lbl) lbl.textContent = mobileMenuOpen ? 'Hide' : 'Show'; }
+}
+function closeMobileMenu() {
+  mobileMenuOpen = false;
+  // no DOM patch needed here — the outgoing hashchange triggers a full render
+  // which will read mobileMenuOpen and render the menu collapsed.
+}
+
+/* ---------------------------------- Keyword search --------------------------------- */
+function tokenize(q) { return (q||'').toLowerCase().split(/\s+/).filter(Boolean); }
+
+function searchHaystack(p) {
+  const cat = getCategory(p.category_id);
+  return [p.name, p.brand, p.sku, p.description, cat?.name, ...(COMPAT[p.id]||[])].join(' ').toLowerCase();
+}
+
+// Matches ALL keywords (across name, brand, SKU, description, category and
+// compatible-model fields), so multi-word queries like "canon ink" or
+// "epson toner" narrow correctly instead of requiring one exact substring.
+function searchProducts(query) {
+  const tokens = tokenize(query);
+  if (!tokens.length) return [];
+  const q0 = tokens[0];
+  return PRODUCTS
+    .filter(p => { const hay = searchHaystack(p); return tokens.every(t => hay.includes(t)); })
+    .sort((a,b) => {
+      const rank = (p) => {
+        const name = p.name.toLowerCase();
+        if (name.startsWith(q0)) return 0;
+        if (p.brand.toLowerCase() === q0) return 1;
+        if (name.includes(q0)) return 2;
+        if (p.sku.toLowerCase().includes(q0)) return 3;
+        return 4;
+      };
+      return rank(a) - rank(b);
+    });
+}
+
+function groupByCategory(products) {
+  const buckets = {};
+  products.forEach(p => { (buckets[p.category_id] ||= []).push(p); });
+  return CATEGORIES.map(c => ({ category:c, products: buckets[c.id]||[] })).filter(g => g.products.length);
+}
+
+let searchDropdownQuery = '';
+function handleSearchInput(value, variant) {
+  searchDropdownQuery = value;
+  const dropdown = document.getElementById('search-dropdown-'+variant);
+  if (!dropdown) return;
+  const q = value.trim();
+  if (q.length < 2) { dropdown.classList.add('hidden'); dropdown.innerHTML=''; return; }
+
+  const results = searchProducts(q);
+  if (results.length === 0) {
+    dropdown.innerHTML = `<div class="p-4 text-sm text-slate">No products match "${esc(q)}".</div>`;
+    dropdown.classList.remove('hidden');
+    return;
+  }
+
+  const grouped = groupByCategory(results).map(g => ({ category:g.category, products:g.products.slice(0,3) }));
+  const totalShown = grouped.reduce((n,g)=>n+g.products.length,0);
+
+  dropdown.innerHTML = `
+    <div class="max-h-96 overflow-y-auto scrollbar-thin">
+      ${grouped.map(g => `
+        <div class="border-b border-skyBorder last:border-b-0">
+          <p class="px-4 pt-3 pb-1 text-[11px] font-semibold uppercase tracking-wide text-blue">${esc(g.category.name)} <span class="text-slate font-normal">(${searchProducts(q).filter(p=>p.category_id===g.category.id).length})</span></p>
+          ${g.products.map(p => `
+            <button type="button" onclick="goToSearchResult('${p.slug}','${variant}')" class="w-full flex items-center gap-3 px-4 py-2 hover:bg-sky transition text-left">
+              <img src="${p.image}" class="w-9 h-9 object-contain bg-sky rounded shrink-0">
+              <span class="min-w-0 flex-1">
+                <span class="block text-sm font-medium line-clamp-1">${esc(p.name)}</span>
+                <span class="block text-xs text-slate">${esc(p.brand)} · ${formatPHP(p.price)}</span>
+              </span>
+            </button>`).join('')}
+        </div>`).join('')}
+    </div>
+    <button type="button" onclick="submitSearchFromDropdown('${esc(q).replace(/'/g,"\\'")}','${variant}')" class="w-full text-center text-sm font-semibold text-blue hover:bg-sky py-2.5 border-t border-skyBorder transition">
+      View all ${results.length} result${results.length===1?'':'s'} for "${esc(q)}"
+    </button>`;
+  dropdown.classList.remove('hidden');
+}
+
+function goToSearchResult(slug, variant) {
+  closeSearchDropdown(variant);
+  goTo('#/product/'+slug);
+}
+function submitSearchFromDropdown(q, variant) {
+  closeSearchDropdown(variant);
+  goTo('#/shop'+(q?('?search='+encodeURIComponent(q)):''));
+}
+function closeSearchDropdown(variant) {
+  const dropdown = document.getElementById('search-dropdown-'+variant);
+  if (dropdown) { dropdown.classList.add('hidden'); dropdown.innerHTML=''; }
+}
+function submitSearch(e, variant) {
+  e.preventDefault();
+  const input = document.getElementById(variant==='mobile' ? 'nav-search-mobile' : 'nav-search');
+  const q = input ? input.value.trim() : '';
+  closeSearchDropdown(variant);
+  goTo('#/shop'+(q?('?search='+encodeURIComponent(q)):''));
+}
+document.addEventListener('click', (e) => {
+  ['desktop','mobile'].forEach(variant => {
+    const wrap = document.getElementById('search-wrap-'+variant);
+    if (wrap && !wrap.contains(e.target)) closeSearchDropdown(variant);
+  });
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') { closeSearchDropdown('desktop'); closeSearchDropdown('mobile'); }
+});
+
+function storeFooter() {
+  return `
+  <footer class="bg-navy text-blue-100 mt-16">
+    <div class="max-w-6xl mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+      <div class="col-span-2 md:col-span-1">
+        <div class="font-display font-bold text-white text-lg mb-2">LAGRANJA PRINT ASIA • <a href="#/" class="flex items-center gap-2 shrink-0"><span class="bg-gold text-navy rounded-module p-1.5 flex items-center justify-center">${ICONS.printer}</span>Prinster<span class="text-gold">.</span></a></div>
+        <p class="text-blue-200 text-footer text-xs leading-relaxed">Your Philippine source for printers, copiers, ink and toner — genuine and compatible cartridges, shipped nationwide.</p>
+      </div>
+      <div><h4 class="text-white font-semibold mb-2">Shop</h4><ul class="space-y-1 text-footer text-blue-200"><li>Printers</li><li>Copiers &amp; MFPs</li><li>Ink Cartridges</li><li>Toner Cartridges</li></ul></div>
+      <div><h4 class="text-white font-semibold mb-2">Support</h4><ul class="space-y-1 text-footer text-blue-200"><li>Order Tracking</li><li>Shipping Info</li><li>Returns</li><li>Contact Us</li></ul></div>
+      <div><h4 class="text-white font-semibold mb-2">We Accept</h4><ul class="space-y-1 text-footer text-blue-200"><li>GCash</li><li>Maya</li><li>GrabPay</li><li>Credit / Debit Card</li><li>Cash on Delivery</li></ul></div>
+    </div>
+    <div class="border-t border-blue-900 text-center text-footer text-xs text-blue-300 py-4">© ${new Date().getFullYear()} LAGRANJA PRINT ASIA • Prinster Philippines — Demo Build</div>
+  </footer>`;
+}
+
+function productCard(p) {
+  const st = stockOf(p.id);
+  const out = st <= 0;
+  const low = st > 0 && st <= state.inventory[p.id].reorder_level;
+  return `
+  <div class="group card overflow-hidden shadow hover:shadow-lg hover:-translate-y-0.5 transition">
+    <a href="#/product/${p.slug}" class="block">
+      <div class="aspect-square bg-sky flex items-center justify-center overflow-hidden">
+        <img src="${p.image}" alt="${esc(p.name)}" class="w-full h-full object-contain p-4 group-hover:scale-105 transition duration-300" loading="lazy">
+      </div>
+    </a>
+    <div class="p-3">
+      <p class="text-[11px] uppercase tracking-wide text-blue font-semibold">${esc(p.brand)}</p>
+      <a href="#/product/${p.slug}"><h3 class="text-sm font-medium leading-snug mt-0.5 line-clamp-2 hover:text-blue transition">${esc(p.name)}</h3></a>
+      <div class="flex items-baseline gap-2 mt-2">
+        <span class="font-display font-bold text-navy">${formatPHP(p.price)}</span>
+        ${p.compare_at_price ? `<span class="text-xs text-slate line-through">${formatPHP(p.compare_at_price)}</span>` : ''}
+      </div>
+      ${low ? `<p class="text-[11px] text-goldDark mt-1">Only ${st} left in stock</p>` : ''}
+      <button onclick="addToCart('${p.id}',1); event.stopPropagation();" ${out?'disabled':''} class="mt-3 w-full text-sm font-semibold rounded-module py-2 transition ${out ? 'bg-gray-200 text-slate cursor-not-allowed' : 'bg-blue text-white hover:bg-navy'}">
+        ${out ? 'Out of Stock' : 'Add to Cart'}
+      </button>
+    </div>
+  </div>`;
+}
+
+function viewHome() {
+  const featured = PRODUCTS.slice(0,8);
+  const cats = CATEGORIES.map(c => `
+    <a href="#/shop/${c.slug}" class="card p-4 text-center hover:border-blue hover:shadow transition">
+      <p class="font-medium text-sm text-navy">${esc(c.name)}</p>
+    </a>`).join('');
+  return `
+  <section class="bg-blue">
+    <div class="max-w-6xl mx-auto px-4 py-14 grid md:grid-cols-2 gap-8 items-center">
+      <div>
+        <span class="inline-block bg-gold text-navy text-xs font-semibold px-3 py-1 rounded-full mb-4">Nationwide delivery across the Philippines</span>
+        <h1 class="text-white font-display font-bold text-3xl md:text-4xl leading-tight">Printers, copiers, ink &amp; toner — all in one storefront.</h1>
+        <p class="text-blue-100 mt-4 text-footer text-sm md:text-base">Genuine and compatible cartridges for every major brand, real-time stock, and checkout via GCash, Maya, GrabPay or card.</p>
+        <div class="flex flex-wrap gap-3 mt-6">
+          <a href="#/shop" class="btn-gold">Shop All Products</a>
+          <a href="#/shop/ink-cartridges" class="bg-white/10 text-white font-semibold rounded-module px-5 py-2.5 border border-white/30 hover:bg-white/20 transition">Find My Cartridge</a>
+        </div>
+      </div>
+      <div class="hidden md:flex justify-center">
+        <div class="bg-white/10 border border-white/20 rounded-module w-full max-w-sm" style="padding:1rem;">
+          <div class="bg-white rounded-module p-4">
+            <div class="h-2 w-44 text-navy rounded mb-3" style="padding-bottom:14px;">Stock Keeping Unit</div>
+            <div class="grid grid-cols-3 gap-2">
+              ${[1,2,3].map(()=>`<div class="aspect-square bg-sky rounded-module flex items-center justify-center text-navy font-display font-bold text-xs">SKU</div>`).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="bg-white border-b border-skyBorder">
+    <div class="max-w-6xl mx-auto px-4 py-5 grid grid-cols-2 md:grid-cols-4 gap-4 text-xs text-slate">
+      <div class="flex items-center gap-2">${ICONS.truck} Nationwide shipping</div>
+      <div class="flex items-center gap-2">${ICONS.shield} Secure checkout</div>
+      <div class="flex items-center gap-2">${ICONS.refresh} 7-day replacement</div>
+      <div class="flex items-center gap-2">${ICONS.wifiOff} Works offline, syncs later</div>
+    </div>
+  </section>
+  <section class="max-w-6xl mx-auto px-4 py-10">
+    <h2 class="font-display font-bold text-xl text-navy mb-4">Shop by Category</h2>
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-3">${cats}</div>
+  </section>
+  <section class="max-w-6xl mx-auto px-4 pb-14">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="font-display font-bold text-xl text-navy">Popular Right Now</h2>
+      <a href="#/shop" class="text-sm text-blue font-medium hover:underline">View all →</a>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">${featured.map(productCard).join('')}</div>
+  </section>`;
+}
+
+function parseQuery(str) {
+  const q = {};
+  (str||'').replace(/^\?/,'').split('&').filter(Boolean).forEach(pair => {
+    const [k,v] = pair.split('=');
+    q[decodeURIComponent(k)] = decodeURIComponent(v||'');
+  });
+  return q;
+}
+
+function viewShop() {
+  const hash = window.location.hash;
+  const [routePart, queryPart] = hash.split('?');
+  const parts = routePart.replace(/^#\//,'').split('/').filter(Boolean);
+  const categorySlug = parts[1] || '';
+  const q = parseQuery(queryPart);
+  const search = q.search || '';
+  const searchSuffix = search ? `?search=${encodeURIComponent(search)}` : '';
+
+  let list = search ? searchProducts(search) : PRODUCTS.slice();
+  if (categorySlug) list = list.filter(p => getCategory(p.category_id)?.slug === categorySlug);
+
+  const chips = CATEGORIES.map(c => `
+    <a href="#/shop/${c.slug}${searchSuffix}" class="text-xs font-semibold px-3 py-1.5 rounded-full border ${categorySlug===c.slug ? 'bg-blue text-white border-blue' : 'bg-white text-navy border-skyBorder'}">${esc(c.name)}</a>
+  `).join('');
+
+  const activeCategory = categorySlug ? CATEGORIES.find(c => c.slug === categorySlug) : null;
+  const title = search ? `Results for "${esc(search)}"` : (activeCategory ? activeCategory.name : 'All Products');
+
+  let resultsHtml;
+  if (list.length === 0) {
+    resultsHtml = `<p class="text-slate text-sm py-16 text-center">No products found. Try a different search or category.</p>`;
+  } else if (search && !categorySlug) {
+    // Group results by category so it's clear where each match came from.
+    const groups = groupByCategory(list);
+    resultsHtml = groups.map(g => `
+      <div class="mb-8 last:mb-0">
+        <div class="flex items-center gap-2 mb-3">
+          <h2 class="font-display font-bold text-navy text-lg">${esc(g.category.name)}</h2>
+          <span class="text-xs text-slate bg-sky border border-skyBorder rounded-full px-2 py-0.5">${g.products.length} result${g.products.length===1?'':'s'}</span>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">${g.products.map(productCard).join('')}</div>
+      </div>`).join('');
+  } else {
+    resultsHtml = `<div class="grid grid-cols-2 md:grid-cols-4 gap-4">${list.map(productCard).join('')}</div>`;
+  }
+
+  return `
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-6">
+      <div>
+        <h1 class="font-display font-bold text-2xl text-navy">${title}</h1>
+        ${search ? `<p class="text-xs text-slate mt-1">${list.length} product${list.length===1?'':'s'} match${list.length===1?'es':''} across ${groupByCategory(list).length} categor${groupByCategory(list).length===1?'y':'ies'}</p>` : ''}
+      </div>
+      <!--<div class="flex flex-wrap gap-2">
+        <a href="#/shop${searchSuffix}" class="text-xs font-semibold px-3 py-1.5 rounded-full border ${!categorySlug ? 'bg-blue text-white border-blue' : 'bg-white text-navy border-skyBorder'}">All</a>
+        ${chips}
+      </div>-->
+    </div>
+    ${resultsHtml}
+  </div>`;
+}
+
+function viewProduct(slug) {
+  const p = getProductBySlug(slug);
+  if (!p) return `<div class="max-w-6xl mx-auto px-4 py-16 text-center text-slate">Product not found.</div>`;
+  const st = stockOf(p.id);
+  const out = st <= 0;
+  const compat = COMPAT[p.id] || [];
+  return `
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <div class="text-xs text-slate mb-4"><a href="#/shop" class="hover:underline">Shop</a> / ${esc(p.brand)} / <span class="text-ink">${esc(p.name)}</span></div>
+    <div class="grid md:grid-cols-2 gap-10">
+      <div class="card p-8 flex items-center justify-center"><img src="${p.image}" alt="${esc(p.name)}" class="max-h-80 object-contain"></div>
+      <div>
+        <p class="text-xs uppercase tracking-wide text-blue font-semibold">${esc(p.brand)}</p>
+        <h1 class="font-display font-bold text-2xl text-navy mt-1">${esc(p.name)}</h1>
+        <p class="text-xs text-slate mt-1">SKU: ${esc(p.sku)}</p>
+        <div class="flex items-baseline gap-3 mt-4">
+          <span class="font-display font-bold text-3xl text-navy">${formatPHP(p.price)}</span>
+          ${p.compare_at_price ? `<span class="text-slate line-through">${formatPHP(p.compare_at_price)}</span>` : ''}
+        </div>
+        <div class="mt-3 flex items-center gap-2 text-sm">
+          ${out ? `<span class="flex items-center gap-1 text-red-600">${ICONS.x} Out of stock</span>` : `<span class="flex items-center gap-1 text-green-700">${ICONS.check} In stock — ${st} available</span>`}
+        </div>
+        <p class="text-sm text-ink mt-5 leading-relaxed">${esc(p.description)}</p>
+        ${compat.length ? `
+          <div class="mt-5">
+            <p class="text-sm font-semibold text-navy mb-1.5">Compatible with:</p>
+            <div class="flex flex-wrap gap-1.5">${compat.map(m=>`<span class="text-xs bg-sky border border-skyBorder rounded-full px-2.5 py-1">${esc(m)}</span>`).join('')}</div>
+          </div>` : ''}
+        <div class="flex items-center gap-3 mt-6">
+          <div class="flex items-center border border-skyBorder rounded-module">
+            <button onclick="stepQty(-1)" class="px-3 py-2 text-navy font-bold">−</button>
+            <span id="pdp-qty" class="px-4 text-sm font-medium">1</span>
+            <button onclick="stepQty(1,${st})" class="px-3 py-2 text-navy font-bold">+</button>
+          </div>
+          <button ${out?'disabled':''} onclick="addToCart('${p.id}', parseInt(document.getElementById('pdp-qty').textContent,10)); this.textContent='Added to Cart ✓'; setTimeout(()=>{this.textContent='Add to Cart'},1500);"
+            class="flex-1 bg-blue text-white font-semibold rounded-module py-2.5 hover:bg-navy transition disabled:bg-gray-300 disabled:cursor-not-allowed">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+function stepQty(delta, max) {
+  const el = document.getElementById('pdp-qty');
+  let v = parseInt(el.textContent,10) + delta;
+  v = Math.max(1, v);
+  if (max) v = Math.min(max, v);
+  el.textContent = v;
+}
+
+function addToCart(productId, qty) {
+  const existing = state.cart.find(i => i.product_id === productId);
+  const available = stockOf(productId);
+  if (available <= 0) { showToast('This item is out of stock.'); return; }
+  if (existing) {
+    existing.quantity = Math.min(available, existing.quantity + qty);
+  } else {
+    state.cart.push({ product_id: productId, quantity: Math.min(available, qty) });
+  }
+  saveState();
+  showToast(`${getProduct(productId).name} added to cart.`);
+  render();
+}
+function updateCartQty(productId, qty) {
+  if (qty <= 0) { removeFromCart(productId); return; }
+  const item = state.cart.find(i=>i.product_id===productId);
+  if (item) item.quantity = Math.min(stockOf(productId), qty);
+  saveState(); render();
+}
+function removeFromCart(productId) {
+  state.cart = state.cart.filter(i=>i.product_id!==productId);
+  saveState(); render();
+}
+
+function viewCart() {
+  if (state.cart.length === 0) {
+    return `
+    <div class="max-w-3xl mx-auto px-4 py-20 text-center">
+      <h1 class="font-display font-bold text-xl text-navy mb-2">Your cart is empty</h1>
+      <p class="text-slate text-sm mb-6">Browse printers, copiers, ink and toner to get started.</p>
+      <a href="#/shop" class="btn-primary inline-block">Continue Shopping</a>
+    </div>`;
+  }
+  const rows = state.cart.map(i => {
+    const p = getProduct(i.product_id);
+    return `
+    <div class="flex items-center gap-4 p-4">
+      <img src="${p.image}" alt="${esc(p.name)}" class="w-16 h-16 object-contain bg-sky rounded-module p-1">
+      <div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">${esc(p.name)}</p><p class="text-xs text-slate">${esc(p.sku)}</p></div>
+      <div class="flex items-center border border-skyBorder rounded-module">
+        <button onclick="updateCartQty('${p.id}', ${i.quantity-1})" class="px-2.5 py-1 font-bold text-navy">−</button>
+        <span class="px-3 text-sm">${i.quantity}</span>
+        <button onclick="updateCartQty('${p.id}', ${i.quantity+1})" class="px-2.5 py-1 font-bold text-navy">+</button>
+      </div>
+      <div class="w-24 text-right font-semibold text-sm">${formatPHP(p.price*i.quantity)}</div>
+      <button onclick="removeFromCart('${p.id}')" class="text-slate hover:text-red-600 transition">${ICONS.trash}</button>
+    </div>`;
+  }).join('');
+  return `
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <h1 class="font-display font-bold text-2xl text-navy mb-6">Your Cart</h1>
+    <div class="card divide-y divide-skyBorder">${rows}</div>
+    <div class="flex justify-end mt-6">
+      <div class="w-full max-w-xs card p-4">
+        <div class="flex justify-between text-sm mb-2"><span class="text-slate">Subtotal</span><span class="font-semibold">${formatPHP(cartSubtotal())}</span></div>
+        <p class="text-xs text-slate mb-4">Shipping calculated at checkout.</p>
+        <a href="#/checkout" class="btn-gold w-full block text-center">Proceed to Checkout</a>
+      </div>
+    </div>
+  </div>`;
+}
+
+const SHIPPING_FLAT = 150;
+const PAYMENT_METHODS = [
+  { id:'gcash', label:'GCash', icon: ICONS.phone },
+  { id:'paymaya', label:'Maya', icon: ICONS.wallet },
+  { id:'grab_pay', label:'GrabPay', icon: ICONS.wallet },
+  { id:'card', label:'Credit / Debit Card', icon: ICONS.card },
+  { id:'cod', label:'Cash on Delivery', icon: ICONS.truck },
+];
+let checkoutMethod = 'gcash';
+
+function viewCheckout() {
+  if (state.cart.length === 0) return `<div class="max-w-3xl mx-auto px-4 py-20 text-center text-slate">Your cart is empty.</div>`;
+  const total = cartSubtotal() + SHIPPING_FLAT;
+  const itemRows = state.cart.map(i => {
+    const p = getProduct(i.product_id);
+    return `<div class="flex justify-between gap-2"><span class="text-ink line-clamp-1">${esc(p.name)} × ${i.quantity}</span><span class="font-medium shrink-0">${formatPHP(p.price*i.quantity)}</span></div>`;
+  }).join('');
+  const methodButtons = PAYMENT_METHODS.map(m => `
+    <button type="button" onclick="selectPaymentMethod('${m.id}')" data-method="${m.id}"
+      class="method-btn flex items-center gap-2 border rounded-module px-3 py-2.5 text-sm font-medium transition ${checkoutMethod===m.id ? 'border-blue bg-sky text-navy' : 'border-skyBorder text-slate hover:border-blue'}">
+      ${m.icon} ${m.label}
+    </button>`).join('');
+
+  return `
+  <div class="max-w-4xl mx-auto px-4 py-8 grid md:grid-cols-3 gap-8">
+    ${state.offline ? `<div class="md:col-span-3 bg-navy text-white text-sm rounded-module px-4 py-3 flex items-center gap-2">${ICONS.wifiOff} You're offline (simulated) — this order will be queued and sent automatically once you reconnect.</div>` : ''}
+    <form id="checkout-form" onsubmit="submitCheckout(event)" class="md:col-span-2 space-y-6">
+      <div class="card p-5">
+        <h2 class="font-display font-bold text-navy mb-4">Contact &amp; Shipping</h2>
+        <div class="grid grid-cols-2 gap-3">
+          <input required name="full_name" placeholder="Full name" class="input col-span-2" value="Maria Santos">
+          <input required type="email" name="email" placeholder="Email" class="input" value="maria.santos@example.com">
+          <input required name="phone" placeholder="Mobile number" class="input" value="0917 123 4567">
+          <input required name="address_line1" placeholder="Address line 1" class="input col-span-2" value="123 Rizal St., Brgy. San Isidro">
+          <input name="address_line2" placeholder="Address line 2 (optional)" class="input col-span-2">
+          <input required name="city" placeholder="City / Municipality" class="input" value="Quezon City">
+          <input required name="province" placeholder="Province" class="input" value="Metro Manila">
+          <input required name="postal_code" placeholder="Postal code" class="input" value="1100">
+        </div>
+      </div>
+      <div class="card p-5">
+        <h2 class="font-display font-bold text-navy mb-4">Payment Method</h2>
+        <div id="method-grid" class="grid grid-cols-2 gap-3">${methodButtons}</div>
+        <p class="text-xs text-slate mt-3">E-wallet and card payments are simulated for this demo — no real gateway is contacted.</p>
+      </div>
+      <button type="submit" id="place-order-btn" class="w-full btn-gold py-3 text-base">Place Order — ${formatPHP(total)}</button>
+    </form>
+    <div class="card p-5 h-fit">
+      <h2 class="font-display font-bold text-navy mb-4">Order Summary</h2>
+      <div class="space-y-2 text-sm mb-4 max-h-64 overflow-y-auto scrollbar-thin">${itemRows}</div>
+      <div class="border-t border-skyBorder pt-3 space-y-1.5 text-sm">
+        <div class="flex justify-between"><span class="text-slate">Subtotal</span><span>${formatPHP(cartSubtotal())}</span></div>
+        <div class="flex justify-between"><span class="text-slate">Shipping</span><span>${formatPHP(SHIPPING_FLAT)}</span></div>
+        <div class="flex justify-between font-bold text-navy text-base pt-1"><span>Total</span><span>${formatPHP(total)}</span></div>
+      </div>
+    </div>
+  </div>`;
+}
+function selectPaymentMethod(id) {
+  checkoutMethod = id;
+  document.querySelectorAll('.method-btn').forEach(btn => {
+    if (btn.dataset.method === id) { btn.classList.add('border-blue','bg-sky','text-navy'); btn.classList.remove('border-skyBorder','text-slate'); }
+    else { btn.classList.remove('border-blue','bg-sky','text-navy'); btn.classList.add('border-skyBorder','text-slate'); }
+  });
+}
+
+function generateOrderNumber() {
+  const stamp = new Date().toISOString().slice(0,10).replace(/-/g,'');
+  return `PRN-${stamp}-${1000+Math.floor(Math.random()*9000)}`;
+}
+
+function submitCheckout(e) {
+  e.preventDefault();
+  const form = e.target;
+  const fd = new FormData(form);
+  const customerName = fd.get('full_name');
+  const items = state.cart.map(i => ({ product_id:i.product_id, name:getProduct(i.product_id).name, price:getProduct(i.product_id).price, quantity:i.quantity }));
+  const subtotal = cartSubtotal();
+  const order = {
+    id: 'order-'+Date.now(),
+    order_number: generateOrderNumber(),
+    status: checkoutMethod === 'cod' ? 'pending' : 'paid',
+    items, subtotal, shipping: SHIPPING_FLAT, total: subtotal+SHIPPING_FLAT,
+    payment_method: checkoutMethod,
+    customer_name: customerName,
+    placed_offline: false,
+    created_at: new Date().toISOString(),
+  };
+
+  if (state.offline) {
+    state.pendingOfflineOrders.push(order);
+    decrementInventoryForOrder(order, false);
+    state.cart = [];
+    saveState();
+    goTo('#/order-queued');
+    return;
+  }
+
+  if (checkoutMethod === 'cod') {
+    finalizeOrder(order);
+    return;
+  }
+
+  // Simulate redirecting to an e-wallet / card gateway
+  showGatewayModal(checkoutMethod, () => finalizeOrder(order));
+}
+
+function decrementInventoryForOrder(order, recordMovement) {
+  order.items.forEach(i => {
+    const inv = state.inventory[i.product_id];
+    if (!inv) return;
+    inv.stock = Math.max(0, inv.stock - i.quantity);
+    if (recordMovement) {
+      if (!state.inventoryMovements[i.product_id]) state.inventoryMovements[i.product_id] = [];
+      state.inventoryMovements[i.product_id].unshift({ change: -i.quantity, reason: 'sale', date: new Date().toISOString() });
+    }
+  });
+}
+
+function finalizeOrder(order) {
+  decrementInventoryForOrder(order, true);
+  state.orders.unshift(order);
+  const todayIso = new Date().toISOString().slice(0,10);
+  const todayEntry = state.salesHistory.find(d => d.day === todayIso);
+  if (todayEntry) { todayEntry.revenue += order.total; todayEntry.order_count += 1; }
+  state.cart = [];
+  saveState();
+  window.__lastOrderNumber = order.order_number;
+  goTo('#/order-success');
+}
+
+function showGatewayModal(method, onComplete) {
+  const labels = { gcash:'GCash', paymaya:'Maya', grab_pay:'GrabPay', card:'your card issuer' };
+  const overlay = document.createElement('div');
+  overlay.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-50 fade-in';
+  overlay.innerHTML = `
+    <div class="card p-8 text-center max-w-xs w-full">
+      <div class="spinner mx-auto mb-4"></div>
+      <p class="font-display font-bold text-navy">Redirecting to ${labels[method]}…</p>
+      <p class="text-xs text-slate mt-1">Simulating secure payment authorization</p>
+    </div>`;
+  document.body.appendChild(overlay);
+  setTimeout(() => {
+    overlay.innerHTML = `
+      <div class="card p-8 text-center max-w-xs w-full">
+        <div class="text-green-600 mx-auto mb-3">${ICONS.check.replace('width="18" height="18"','width="40" height="40"')}</div>
+        <p class="font-display font-bold text-navy">Payment Authorized</p>
+        <p class="text-xs text-slate mt-1">Returning to Prinster…</p>
+      </div>`;
+    setTimeout(() => { overlay.remove(); onComplete(); }, 900);
+  }, 1600);
+}
+
+function viewOrderSuccess() {
+  const num = window.__lastOrderNumber || (state.orders[0] && state.orders[0].order_number) || '';
+  return `
+  <div class="max-w-lg mx-auto px-4 py-20 text-center">
+    <div class="text-green-600 mx-auto mb-4 flex justify-center">${ICONS.check.replace('width="18" height="18"','width="48" height="48"')}</div>
+    <h1 class="font-display font-bold text-2xl text-navy mb-2">Order Placed!</h1>
+    <p class="text-slate text-sm mb-1">Thank you for shopping with Prinster.</p>
+    ${num ? `<p class="text-sm mb-6">Order reference: <span class="font-semibold text-navy">${esc(num)}</span></p>` : ''}
+    <a href="#/shop" class="btn-primary inline-block">Continue Shopping</a>
+  </div>`;
+}
+function viewOrderQueued() {
+  return `
+  <div class="max-w-lg mx-auto px-4 py-20 text-center">
+    <div class="mx-auto mb-4 flex justify-center">${ICONS.cloudOff}</div>
+    <h1 class="font-display font-bold text-2xl text-navy mb-2">Order Queued</h1>
+    <p class="text-slate text-sm mb-1">You're currently offline (simulated). Your order has been saved on this device and will be sent automatically as soon as you're back online.</p>
+    <p class="text-xs text-slate mt-3">Tip: uncheck "Simulate offline mode" in the demo panel to trigger the sync now.</p>
+    <a href="#/shop" class="btn-primary inline-block mt-6">Continue Shopping</a>
+  </div>`;
+}
+
+/* =========================================================================
+   ADMIN
+   ========================================================================= */
+function renderAdmin(parts) {
+  if (!state.adminLoggedIn) return renderAdminLogin();
+  const page = parts[0] || 'dashboard';
+  let body = '';
+  if (page === 'dashboard') body = viewAdminDashboard();
+  else if (page === 'products') body = viewAdminProducts();
+  else if (page === 'inventory') body = viewAdminInventory();
+  else if (page === 'orders') body = viewAdminOrders();
+  else body = viewAdminDashboard();
+
+  return `
+  <div class="min-h-screen flex bg-sky">
+    ${adminSidebar(page)}
+    <main class="flex-1 overflow-auto">${body}</main>
+  </div>`;
+}
+
+function renderAdminLogin() {
+  return `
+  <div class="min-h-screen bg-navy flex items-center justify-center px-4">
+    <form onsubmit="adminLogin(event)" class="card p-8 w-full max-w-sm">
+      <div class="flex items-center gap-2 mb-6">
+        <span class="bg-gold text-navy rounded-module p-1.5">${ICONS.printer}</span>
+        <span class="font-display font-bold text-xl text-navy">Prinster Admin</span>
+      </div>
+      <div class="space-y-3">
+        <input required type="email" name="email" placeholder="Email" class="input" value="admin@prinster.ph">
+        <input required type="password" name="password" placeholder="Password" class="input" value="ChangeMe123!">
+      </div>
+      <button class="w-full mt-5 btn-primary">Sign In</button>
+      <p class="text-xs text-slate mt-4 text-center">Demo login accepts any password. Use it to explore the admin dashboard.</p>
+      <a href="#/" class="block text-center text-xs text-blue mt-3 hover:underline">← Back to storefront</a>
+    </form>
+  </div>`;
+}
+function adminLogin(e) {
+  e.preventDefault();
+  state.adminLoggedIn = true;
+  saveState();
+  goTo('#/admin/dashboard');
+}
+function adminLogout() {
+  state.adminLoggedIn = false;
+  saveState();
+  goTo('#/admin');
+}
+
+function adminSidebar(active) {
+  const links = [
+    ['dashboard','Dashboard', ICONS.dash],
+    ['products','Products', ICONS.bag],
+    ['inventory','Inventory', ICONS.box],
+    ['orders','Orders', ICONS.bag],
+  ];
+  return `
+  <aside class="w-56 bg-navy text-white flex flex-col shrink-0">
+    <div class="flex items-center gap-2 px-5 py-5 border-b border-white/10">
+      <span class="bg-gold text-navy rounded-module p-1.5">${ICONS.printer}</span>
+      <span class="font-display font-bold">Prinster</span>
+    </div>
+    <nav class="flex-1 py-4">
+      ${links.map(([key,label,icon]) => `
+        <a href="#/admin/${key}" class="flex items-center gap-3 px-5 py-2.5 text-sm font-medium transition ${active===key ? 'bg-white/10 text-gold border-r-2 border-gold' : 'text-blue-100 hover:bg-white/5'}">
+          ${icon} ${label}
+        </a>`).join('')}
+    </nav>
+    <div class="px-5 py-4 border-t border-white/10 text-xs">
+      <p class="text-blue-200">admin@prinster.ph</p>
+      <button onclick="adminLogout()" class="flex items-center gap-1.5 text-blue-200 hover:text-white mt-2 transition">${ICONS.logout} Sign out</button>
+      <a href="#/" class="block text-blue-200 hover:text-white mt-2">← View storefront</a>
+    </div>
+  </aside>`;
+}
+
+function computeDashboardSummary() {
+  const activeStatuses = ['paid','processing','shipped','completed'];
+  const allOrders = state.orders;
+  const totalRevenue = allOrders.filter(o=>activeStatuses.includes(o.status)).reduce((s,o)=>s+o.total,0);
+  const todayIso = new Date().toISOString().slice(0,10);
+  const ordersToday = allOrders.filter(o => o.created_at.slice(0,10) === todayIso).length;
+  const revenueToday = allOrders.filter(o => o.created_at.slice(0,10)===todayIso && activeStatuses.includes(o.status)).reduce((s,o)=>s+o.total,0);
+  const pendingOrders = allOrders.filter(o=>o.status==='pending').length;
+  const lowStock = Object.entries(state.inventory).filter(([id,inv]) => inv.stock <= inv.reorder_level);
+  const topMap = {};
+  allOrders.filter(o=>activeStatuses.includes(o.status)).forEach(o => {
+    o.items.forEach(i => {
+      if (!topMap[i.product_id]) topMap[i.product_id] = { name:i.name, units:0, revenue:0 };
+      topMap[i.product_id].units += i.quantity;
+      topMap[i.product_id].revenue += i.price*i.quantity;
+    });
+  });
+  const topProducts = Object.values(topMap).sort((a,b)=>b.units-a.units).slice(0,5);
+  return { totalRevenue, ordersToday, revenueToday, pendingOrders, lowStockCount: lowStock.length, topProducts, totalProducts: PRODUCTS.length, totalCustomers: new Set(allOrders.map(o=>o.customer_name)).size };
+}
+
+function viewAdminDashboard() {
+  const s = computeDashboardSummary();
+  deferredWork.push(renderSalesChart);
+  return `
+  <div class="p-6 md:p-8">
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="font-display font-bold text-2xl text-navy">Dashboard</h1>
+      <span class="text-xs text-slate flex items-center gap-1">${ICONS.clock} live demo data</span>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div class="card p-4 flex items-center gap-3"><span class="rounded-module p-2.5 bg-sky text-blue">${ICONS.dash}</span><div><p class="text-xs text-slate">Total Revenue</p><p class="font-display font-bold text-lg text-navy">${formatPHP(s.totalRevenue)}</p></div></div>
+      <div class="card p-4 flex items-center gap-3"><span class="rounded-module p-2.5 bg-yellow-50 text-goldDark">${ICONS.bag}</span><div><p class="text-xs text-slate">Orders Today</p><p class="font-display font-bold text-lg text-navy">${s.ordersToday}</p></div></div>
+      <div class="card p-4 flex items-center gap-3"><span class="rounded-module p-2.5 bg-yellow-50 text-goldDark">${ICONS.box}</span><div><p class="text-xs text-slate">Pending Orders</p><p class="font-display font-bold text-lg text-navy">${s.pendingOrders}</p></div></div>
+      <div class="card p-4 flex items-center gap-3"><span class="rounded-module p-2.5 bg-red-50 text-red-600">${ICONS.alert}</span><div><p class="text-xs text-slate">Low Stock Items</p><p class="font-display font-bold text-lg text-navy">${s.lowStockCount}</p></div></div>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="md:col-span-2 card p-5">
+        <h2 class="font-display font-bold text-navy mb-4">Revenue — Last 14 Days</h2>
+        <canvas id="sales-chart" height="110"></canvas>
+      </div>
+      <div class="card p-5">
+        <h2 class="font-display font-bold text-navy mb-4">Top Products</h2>
+        <div class="space-y-3">
+          ${s.topProducts.length === 0 ? `<p class="text-sm text-slate">No sales yet.</p>` : s.topProducts.map((p,i)=>`
+            <div class="flex items-center justify-between text-sm">
+              <div><p class="font-medium text-navy">${i+1}. ${esc(p.name)}</p><p class="text-xs text-slate">${p.units} units sold</p></div>
+              <span class="font-semibold">${formatPHP(p.revenue)}</span>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 text-sm">
+      <div class="card p-4"><p class="text-slate text-xs">Active Products</p><p class="font-display font-bold text-navy text-lg">${s.totalProducts}</p></div>
+      <div class="card p-4"><p class="text-slate text-xs">Customers</p><p class="font-display font-bold text-navy text-lg">${s.totalCustomers}</p></div>
+      <div class="card p-4"><p class="text-slate text-xs">Revenue Today</p><p class="font-display font-bold text-navy text-lg">${formatPHP(s.revenueToday)}</p></div>
+      <div class="card p-4"><p class="text-slate text-xs">Offline Orders Queued</p><p class="font-display font-bold text-navy text-lg">${state.pendingOfflineOrders.length}</p></div>
+    </div>
+  </div>`;
+}
+
+let salesChartInstance = null;
+function renderSalesChart() {
+  const canvas = document.getElementById('sales-chart');
+  if (!canvas || typeof Chart === 'undefined') return;
+  if (salesChartInstance) { salesChartInstance.destroy(); }
+  const data = state.salesHistory;
+  salesChartInstance = new Chart(canvas.getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: data.map(d => d.day.slice(5)),
+      datasets: [{
+        label: 'Revenue',
+        data: data.map(d => d.revenue),
+        borderColor: '#1B5FAE',
+        backgroundColor: 'rgba(27,95,174,0.08)',
+        fill: true,
+        tension: 0.35,
+        pointBackgroundColor: '#1B5FAE',
+        pointRadius: 3,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display:false }, tooltip: { callbacks: { label: (ctx) => formatPHP(ctx.parsed.y) } } },
+      scales: {
+        y: { ticks: { callback: (v) => '₱'+v.toLocaleString() }, grid: { color:'#C7DCF2' } },
+        x: { grid: { display:false } },
+      }
+    }
+  });
+}
+
+/* ---- Admin: Products ---- */
+let productModalState = null; // null closed, {} new, {...product} editing
+
+function viewAdminProducts() {
+  const rows = PRODUCTS.map(p => {
+    const inv = state.inventory[p.id];
+    const low = inv.stock <= inv.reorder_level;
+    return `
+    <tr>
+      <td class="px-4 py-3 flex items-center gap-2"><img src="${p.image}" class="w-8 h-8 object-contain bg-sky rounded"><span class="font-medium">${esc(p.name)}</span></td>
+      <td class="px-4 py-3 text-slate">${esc(p.sku)}</td>
+      <td class="px-4 py-3">${formatPHP(p.price)}</td>
+      <td class="px-4 py-3"><span class="${low?'text-red-600 font-semibold':''}">${inv.stock}</span></td>
+      <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded-full bg-green-50 text-green-700">Active</span></td>
+      <td class="px-4 py-3 text-right">
+        <button onclick="openProductModal('${p.id}')" class="text-blue hover:text-navy mr-3">${ICONS.edit}</button>
+        <button onclick="deactivateProduct('${p.id}')" class="text-slate hover:text-red-600">${ICONS.trash}</button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  return `
+  <div class="p-6 md:p-8">
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="font-display font-bold text-2xl text-navy">Products</h1>
+      <button onclick="openProductModal()" class="flex items-center gap-1.5 bg-blue text-white text-sm font-semibold rounded-module px-4 py-2 hover:bg-navy transition">+ New Product</button>
+    </div>
+    <div class="card overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-sky text-navy text-xs uppercase"><tr><th class="text-left px-4 py-3">Product</th><th class="text-left px-4 py-3">SKU</th><th class="text-left px-4 py-3">Price</th><th class="text-left px-4 py-3">Stock</th><th class="text-left px-4 py-3">Status</th><th class="text-right px-4 py-3">Actions</th></tr></thead>
+        <tbody class="divide-y divide-skyBorder">${rows}</tbody>
+      </table>
+    </div>
+  </div>
+  ${productModalState !== null ? productModalHtml() : ''}`;
+}
+
+function openProductModal(id) {
+  productModalState = id ? getProduct(id) : {};
+  render();
+}
+function closeProductModal() { productModalState = null; render(); }
+
+function productModalHtml() {
+  const editing = productModalState && productModalState.id;
+  const p = productModalState || {};
+  const cats = CATEGORIES.map(c => `<option value="${c.id}" ${p.category_id===c.id?'selected':''}>${esc(c.name)}</option>`).join('');
+  return `
+  <div class="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
+    <form onsubmit="saveProductModal(event)" class="card p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-display font-bold text-lg text-navy">${editing ? 'Edit Product' : 'New Product'}</h2>
+        <button type="button" onclick="closeProductModal()" class="text-slate">${ICONS.x}</button>
+      </div>
+      <div class="space-y-3">
+        <input required name="sku" ${editing?'disabled':''} placeholder="SKU" class="input ${editing?'bg-gray-100':''}" value="${esc(p.sku||'')}">
+        <input required name="name" placeholder="Product name" class="input" value="${esc(p.name||'')}">
+        <select required name="category_id" class="input">${cats || '<option value="">Select category…</option>'+cats}</select>
+        <input name="brand" placeholder="Brand" class="input" value="${esc(p.brand||'')}">
+        <textarea name="description" rows="3" placeholder="Description" class="input">${esc(p.description||'')}</textarea>
+        <div class="grid grid-cols-2 gap-3">
+          <input required type="number" step="0.01" name="price" placeholder="Price (PHP)" class="input" value="${p.price||''}">
+          <input type="number" step="0.01" name="compare_at_price" placeholder="Compare-at price" class="input" value="${p.compare_at_price||''}">
+        </div>
+        ${!editing ? `<div class="grid grid-cols-2 gap-3"><input type="number" name="stock" placeholder="Initial stock" class="input" value="10"><input type="number" name="reorder_level" placeholder="Reorder level" class="input" value="5"></div>` : ''}
+      </div>
+      <button class="w-full mt-5 btn-primary py-2.5">Save Product</button>
+      <p class="text-xs text-slate mt-2 text-center">This is a demo — changes are stored locally in your browser only.</p>
+    </form>
+  </div>`;
+}
+
+function saveProductModal(e) {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const editing = productModalState && productModalState.id;
+  if (editing) {
+    const p = getProduct(productModalState.id);
+    p.name = fd.get('name'); p.category_id = fd.get('category_id'); p.brand = fd.get('brand');
+    p.description = fd.get('description'); p.price = parseFloat(fd.get('price'));
+    p.compare_at_price = fd.get('compare_at_price') ? parseFloat(fd.get('compare_at_price')) : null;
+    showToast('Product updated.');
+  } else {
+    const id = fd.get('sku');
+    if (getProduct(id)) { showToast('A product with that SKU already exists.'); return; }
+    const newP = {
+      id, sku:id, name:fd.get('name'), slug:slugify(fd.get('name')), category_id:fd.get('category_id'),
+      brand:fd.get('brand'), description:fd.get('description'), price:parseFloat(fd.get('price')),
+      compare_at_price: fd.get('compare_at_price')?parseFloat(fd.get('compare_at_price')):null,
+      image: productImage('part', fd.get('brand')||'Prinster', (fd.get('name')||'New').slice(0,12)),
+      reorder_level: parseInt(fd.get('reorder_level')||'5',10),
+    };
+    PRODUCTS.push(newP);
+    state.inventory[id] = { stock: parseInt(fd.get('stock')||'0',10), reorder_level: newP.reorder_level };
+    showToast('Product created.');
+  }
+  productModalState = null;
+  saveState();
+  render();
+}
+function deactivateProduct(id) {
+  if (!confirm('Remove this product from the demo catalog?')) return;
+  const idx = PRODUCTS.findIndex(p=>p.id===id);
+  if (idx>-1) PRODUCTS.splice(idx,1);
+  delete state.inventory[id];
+  saveState();
+  showToast('Product deactivated.');
+  render();
+}
+
+/* ---- Admin: Inventory ---- */
+let adjustingProductId = null;
+function viewAdminInventory() {
+  const rows = PRODUCTS.map(p => {
+    const inv = state.inventory[p.id];
+    const low = inv.stock <= inv.reorder_level;
+    const cat = getCategory(p.category_id);
+    return `
+    <tr class="${low ? 'bg-red-50/50' : ''}">
+      <td class="px-4 py-3 flex items-center gap-2"><img src="${p.image}" class="w-8 h-8 object-contain bg-sky rounded"><span class="font-medium">${esc(p.name)}</span>${low?ICONS.alert.replace('currentColor','#dc2626'):''}</td>
+      <td class="px-4 py-3 text-slate">${esc(cat?.name||'')}</td>
+      <td class="px-4 py-3 font-semibold ${low?'text-red-600':''}">${inv.stock}</td>
+      <td class="px-4 py-3 text-slate">${inv.reorder_level}</td>
+      <td class="px-4 py-3 text-slate">Main Warehouse - Manila</td>
+      <td class="px-4 py-3 text-right"><button onclick="openAdjustModal('${p.id}')" class="text-blue hover:underline text-xs font-semibold">Adjust</button></td>
+    </tr>`;
+  }).join('');
+
+  return `
+  <div class="p-6 md:p-8">
+    <h1 class="font-display font-bold text-2xl text-navy mb-6">Inventory</h1>
+    <div class="card overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-sky text-navy text-xs uppercase"><tr><th class="text-left px-4 py-3">Product</th><th class="text-left px-4 py-3">Category</th><th class="text-left px-4 py-3">On Hand</th><th class="text-left px-4 py-3">Reorder Level</th><th class="text-left px-4 py-3">Warehouse</th><th class="text-right px-4 py-3">Actions</th></tr></thead>
+        <tbody class="divide-y divide-skyBorder">${rows}</tbody>
+      </table>
+    </div>
+  </div>
+  ${adjustingProductId ? adjustModalHtml() : ''}`;
+}
+function openAdjustModal(id) { adjustingProductId = id; render(); }
+function closeAdjustModal() { adjustingProductId = null; render(); }
+function adjustModalHtml() {
+  const p = getProduct(adjustingProductId);
+  const inv = state.inventory[p.id];
+  return `
+  <div class="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
+    <form onsubmit="saveAdjust(event)" class="card p-6 w-full max-w-sm">
+      <h2 class="font-display font-bold text-lg text-navy mb-1">${esc(p.name)}</h2>
+      <p class="text-xs text-slate mb-4">Current stock: ${inv.stock}</p>
+      <input required type="number" name="change" placeholder="Change (e.g. +50 or -3)" class="input mb-3">
+      <select name="reason" class="input mb-4">
+        <option value="restock">Restock</option>
+        <option value="adjustment">Manual Adjustment</option>
+        <option value="return">Customer Return</option>
+      </select>
+      <div class="flex gap-2">
+        <button type="button" onclick="closeAdjustModal()" class="flex-1 border border-skyBorder rounded-module py-2 text-sm font-medium">Cancel</button>
+        <button class="flex-1 btn-primary py-2">Save</button>
+      </div>
+    </form>
+  </div>`;
+}
+function saveAdjust(e) {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const change = parseInt(fd.get('change'),10);
+  const inv = state.inventory[adjustingProductId];
+  const newQty = inv.stock + change;
+  if (newQty < 0) { showToast('Resulting stock cannot be negative.'); return; }
+  inv.stock = newQty;
+  if (!state.inventoryMovements[adjustingProductId]) state.inventoryMovements[adjustingProductId] = [];
+  state.inventoryMovements[adjustingProductId].unshift({ change, reason: fd.get('reason'), date: new Date().toISOString() });
+  adjustingProductId = null;
+  saveState();
+  showToast('Inventory updated.');
+  render();
+}
+
+/* ---- Admin: Orders ---- */
+const ORDER_STATUSES = ['pending','paid','processing','shipped','completed','cancelled','refunded'];
+const STATUS_COLORS = {
+  pending:'bg-yellow-50 text-yellow-700', paid:'bg-blue-50 text-blue-700', processing:'bg-indigo-50 text-indigo-700',
+  shipped:'bg-purple-50 text-purple-700', completed:'bg-green-50 text-green-700', cancelled:'bg-gray-100 text-gray-500', refunded:'bg-red-50 text-red-600'
+};
+let orderStatusFilter = '';
+function viewAdminOrders() {
+  let orders = state.orders.slice();
+  if (orderStatusFilter) orders = orders.filter(o=>o.status===orderStatusFilter);
+  const rows = orders.map(o => `
+    <tr>
+      <td class="px-4 py-3 font-medium">${esc(o.order_number)}</td>
+      <td class="px-4 py-3 text-slate">${new Date(o.created_at).toLocaleString('en-PH')}</td>
+      <td class="px-4 py-3 font-semibold">${formatPHP(o.total)}</td>
+      <td class="px-4 py-3 text-slate capitalize">${esc(o.payment_method||'—')}</td>
+      <td class="px-4 py-3">${o.placed_offline ? `<span class="text-xs bg-sky text-blue px-2 py-0.5 rounded-full">Synced offline order</span>` : `<span class="text-xs text-slate">Online</span>`}</td>
+      <td class="px-4 py-3">
+        <select onchange="setOrderStatus('${o.id}', this.value)" class="text-xs font-semibold rounded-full px-2 py-1 border-0 outline-none ${STATUS_COLORS[o.status]}">
+          ${ORDER_STATUSES.map(s=>`<option value="${s}" ${o.status===s?'selected':''}>${s}</option>`).join('')}
+        </select>
+      </td>
+    </tr>`).join('');
+  return `
+  <div class="p-6 md:p-8">
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="font-display font-bold text-2xl text-navy">Orders</h1>
+      <select class="input w-auto" onchange="orderStatusFilter=this.value; render();">
+        <option value="">All statuses</option>
+        ${ORDER_STATUSES.map(s=>`<option value="${s}" ${orderStatusFilter===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+    </div>
+    <div class="card overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-sky text-navy text-xs uppercase"><tr><th class="text-left px-4 py-3">Order #</th><th class="text-left px-4 py-3">Date</th><th class="text-left px-4 py-3">Total</th><th class="text-left px-4 py-3">Payment</th><th class="text-left px-4 py-3">Source</th><th class="text-left px-4 py-3">Status</th></tr></thead>
+        <tbody class="divide-y divide-skyBorder">${rows || `<tr><td colspan="6" class="text-center text-slate py-8">No orders yet.</td></tr>`}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+function setOrderStatus(id, status) {
+  const o = state.orders.find(o=>o.id===id);
+  if (o) o.status = status;
+  saveState();
+  showToast(`Order ${o.order_number} marked ${status}.`);
+  render();
+}
+
+/* Debug helper for QA / smoke testing — safe to leave in, read-only. */
+window.__prinsterState = () => state;
+</script>
+</body>
+</html>
