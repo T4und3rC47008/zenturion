@@ -99,6 +99,7 @@ const ICONS = {
   dash: `<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>`,
   box: `<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="M3.3 7 12 12l8.7-5"/><path d="M12 22V12"/></svg>`,
   bag: `<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>`,
+  users: `<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
   logout: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>`,
   clock: `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
   wallet: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-1"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>`,
@@ -191,37 +192,50 @@ function seedSalesHistory() {
   return days;
 }
 
+const CRM_CUSTOMERS = [
+  { name: 'Maria Santos', email: 'maria.santos@example.com', phone: '0917 111 2222', orderCount: 5 },
+  { name: 'Juan dela Cruz', email: 'juan.delacruz@example.com', phone: '0917 222 3333', orderCount: 3 },
+  { name: 'Angelica Reyes', email: 'angelica.reyes@example.com', phone: '0917 333 4444', orderCount: 2 },
+  { name: 'Ramon Bautista', email: 'ramon.bautista@example.com', phone: '0917 444 5555', orderCount: 1 },
+  { name: 'Cristina Aquino', email: 'cristina.aquino@example.com', phone: '0917 555 6666', orderCount: 1 },
+  { name: 'Paolo Mendoza', email: 'paolo.mendoza@example.com', phone: '0917 666 7777', orderCount: 1 },
+];
+
 function seedOrders() {
   const statuses = ['completed','completed','completed','shipped','processing','paid'];
-  const names = ['Maria Santos','Juan dela Cruz','Angelica Reyes','Ramon Bautista','Cristina Aquino','Paolo Mendoza'];
   const orders = [];
   const today = new Date();
-  for (let i = 0; i < 9; i++) {
-    const d = new Date(today); d.setDate(d.getDate() - Math.floor(Math.random()*13));
-    const items = [];
-    const n = 1 + Math.floor(Math.random()*3);
-    let subtotal = 0;
-    const used = new Set();
-    for (let j=0;j<n;j++){
-      let p = PRODUCTS[Math.floor(Math.random()*PRODUCTS.length)];
-      if (used.has(p.id)) continue;
-      used.add(p.id);
-      const qty = 1 + Math.floor(Math.random()*2);
-      subtotal += p.price*qty;
-      items.push({ product_id:p.id, name:p.name, price:p.price, quantity:qty });
+  let seq = 0;
+  CRM_CUSTOMERS.forEach((cust) => {
+    for (let i = 0; i < cust.orderCount; i++) {
+      const d = new Date(today); d.setDate(d.getDate() - Math.floor(Math.random()*20));
+      const items = [];
+      const n = 1 + Math.floor(Math.random()*3);
+      let subtotal = 0;
+      const used = new Set();
+      for (let j=0;j<n;j++){
+        let p = PRODUCTS[Math.floor(Math.random()*PRODUCTS.length)];
+        if (used.has(p.id)) continue;
+        used.add(p.id);
+        const qty = 1 + Math.floor(Math.random()*2);
+        subtotal += p.price*qty;
+        items.push({ product_id:p.id, name:p.name, price:p.price, quantity:qty });
+      }
+      const shipping = 150;
+      orders.push({
+        id: 'seed-'+(seq++),
+        order_number: `PRN-${d.toISOString().slice(0,10).replace(/-/g,'')}-${1000+seq}`,
+        status: statuses[Math.floor(Math.random()*statuses.length)],
+        items, subtotal, shipping, total: subtotal+shipping,
+        payment_method: ['gcash','paymaya','card','grab_pay','cod'][Math.floor(Math.random()*5)],
+        customer_name: cust.name,
+        customer_email: cust.email,
+        customer_phone: cust.phone,
+        placed_offline: Math.random() < 0.15,
+        created_at: d.toISOString(),
+      });
     }
-    const shipping = 150;
-    orders.push({
-      id: 'seed-'+i,
-      order_number: `PRN-${d.toISOString().slice(0,10).replace(/-/g,'')}-${1000+i}`,
-      status: statuses[Math.floor(Math.random()*statuses.length)],
-      items, subtotal, shipping, total: subtotal+shipping,
-      payment_method: ['gcash','paymaya','card','grab_pay','cod'][Math.floor(Math.random()*5)],
-      customer_name: names[Math.floor(Math.random()*names.length)],
-      placed_offline: Math.random() < 0.15,
-      created_at: d.toISOString(),
-    });
-  }
+  });
   return orders.sort((a,b)=> new Date(b.created_at)-new Date(a.created_at));
 }
 
@@ -394,7 +408,8 @@ function storeNavbar() {
     <div class="bg-navy text-white">
       <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
         <a href="#/" class="flex items-center gap-2 shrink-0">
-          <span class="bg-gold text-navy rounded-module p-1.5 flex items-center justify-center"><img src="img/LPA-Logo-v4.png" alt="LPA" style="height:64x;"></span><span class="bg-gold text-navy rounded-module p-1.5 flex items-center justify-center">${ICONS.printer}</span>
+          <span class="bg-gold text-navy rounded-module p-1.5 flex items-center justify-center"><img src="img/LPA-Logo-v4.png" alt="LPA" style="height:64x;"></span>
+          <span class="bg-gold text-navy rounded-module p-1.5 flex items-center justify-center">${ICONS.printer}</span>
           <span class="font-display font-bold text-xl tracking-tight">Prinster<span class="text-gold">.</span></span>
           <span class="hidden sm:inline text-xs text-blue-200 ml-1 border-l border-blue-700 pl-2">Printers &amp; Ink, sorted.</span>
         </a>
@@ -408,7 +423,7 @@ function storeNavbar() {
           <div id="search-dropdown-desktop" class="hidden absolute left-0 right-0 top-full mt-1.5 card shadow-xl overflow-hidden text-ink z-50"></div>
         </form>
         <div class="flex items-center gap-3">
-          <a href="#/admin" class="hidden sm:inline text-xs text-blue-200 hover:text-white transition">Admin</a>
+          <a href="#/admin" class="sm:inline text-xs text-blue-200 hover:text-white transition">Admin</a>
           <a href="#/cart" class="relative flex items-center gap-1.5 bg-gold text-navy font-semibold text-sm rounded-module px-3 py-2 hover:bg-goldDark transition">
             ${ICONS.cart}<span class="hidden sm:inline">Cart</span>
             ${cartCount() > 0 ? `<span class="absolute -top-2 -right-2 bg-navy text-white text-[11px] rounded-full h-5 w-5 flex items-center justify-center">${cartCount()}</span>` : ''}
@@ -573,14 +588,14 @@ function storeFooter() {
   <footer class="bg-navy text-blue-100 mt-16">
     <div class="max-w-6xl mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
       <div class="col-span-2 md:col-span-1">
-        <div class="font-display font-bold text-white text-lg mb-2">LAGRANJA PRINT ASIA • <a href="#/" class="flex items-center gap-2 shrink-0"><span class="bg-gold text-navy rounded-module p-1.5 flex items-center justify-center">${ICONS.printer}</span>Prinster<span class="text-gold">.</span></a></div>
+        <div class="font-display font-bold text-white text-lg mb-2">Prinster<span class="text-gold">.</span></div>
         <p class="text-blue-200 text-footer text-xs leading-relaxed">Your Philippine source for printers, copiers, ink and toner — genuine and compatible cartridges, shipped nationwide.</p>
       </div>
       <div><h4 class="text-white font-semibold mb-2">Shop</h4><ul class="space-y-1 text-footer text-blue-200"><li>Printers</li><li>Copiers &amp; MFPs</li><li>Ink Cartridges</li><li>Toner Cartridges</li></ul></div>
       <div><h4 class="text-white font-semibold mb-2">Support</h4><ul class="space-y-1 text-footer text-blue-200"><li>Order Tracking</li><li>Shipping Info</li><li>Returns</li><li>Contact Us</li></ul></div>
       <div><h4 class="text-white font-semibold mb-2">We Accept</h4><ul class="space-y-1 text-footer text-blue-200"><li>GCash</li><li>Maya</li><li>GrabPay</li><li>Credit / Debit Card</li><li>Cash on Delivery</li></ul></div>
     </div>
-    <div class="border-t border-blue-900 text-center text-footer text-xs text-blue-300 py-4">© ${new Date().getFullYear()} LAGRANJA PRINT ASIA • Prinster Philippines — Demo Build</div>
+    <div class="border-t border-blue-900 text-center text-footer text-xs text-blue-300 py-4">© ${new Date().getFullYear()} Prinster Philippines — Demo Build</div>
   </footer>`;
 }
 
@@ -629,8 +644,10 @@ function viewHome() {
         </div>
       </div>
       <div class="hidden md:flex justify-center">
+        <!--<div class="bg-white/10 border border-white/20 rounded-module p-6 w-full max-w-sm">-->
         <div class="bg-white/10 border border-white/20 rounded-module w-full max-w-sm" style="padding:1rem;">
           <div class="bg-white rounded-module p-4">
+            <!--<div class="h-2 w-24 bg-sky rounded mb-3"></div>-->
             <div class="h-2 w-44 text-navy rounded mb-3" style="padding-bottom:14px;">Stock Keeping Unit</div>
             <div class="grid grid-cols-3 gap-2">
               ${[1,2,3].map(()=>`<div class="aspect-square bg-sky rounded-module flex items-center justify-center text-navy font-display font-bold text-xs">SKU</div>`).join('')}
@@ -912,6 +929,8 @@ function submitCheckout(e) {
   const form = e.target;
   const fd = new FormData(form);
   const customerName = fd.get('full_name');
+  const customerEmail = fd.get('email');
+  const customerPhone = fd.get('phone');
   const items = state.cart.map(i => ({ product_id:i.product_id, name:getProduct(i.product_id).name, price:getProduct(i.product_id).price, quantity:i.quantity }));
   const subtotal = cartSubtotal();
   const order = {
@@ -921,6 +940,8 @@ function submitCheckout(e) {
     items, subtotal, shipping: SHIPPING_FLAT, total: subtotal+SHIPPING_FLAT,
     payment_method: checkoutMethod,
     customer_name: customerName,
+    customer_email: customerEmail,
+    customer_phone: customerPhone,
     placed_offline: false,
     created_at: new Date().toISOString(),
   };
@@ -1021,6 +1042,7 @@ function renderAdmin(parts) {
   if (page === 'dashboard') body = viewAdminDashboard();
   else if (page === 'products') body = viewAdminProducts();
   else if (page === 'inventory') body = viewAdminInventory();
+  else if (page === 'crm') body = viewAdminCrm();
   else if (page === 'orders') body = viewAdminOrders();
   else body = viewAdminDashboard();
 
@@ -1066,13 +1088,17 @@ function adminSidebar(active) {
     ['dashboard','Dashboard', ICONS.dash],
     ['products','Products', ICONS.bag],
     ['inventory','Inventory', ICONS.box],
+    ['crm','Customers (CRM)', ICONS.users],
     ['orders','Orders', ICONS.bag],
   ];
   return `
   <aside class="w-56 bg-navy text-white flex flex-col shrink-0">
-    <div class="flex items-center gap-2 px-5 py-5 border-b border-white/10">
+    <div class="flex items-center gap-2 px-4 py-4 border-b border-white/10">
+      
       <span class="bg-gold text-navy rounded-module p-1.5">${ICONS.printer}</span>
+      <a href="#/" style="font-size:1.25rem;">
       <span class="font-display font-bold">Prinster</span>
+      </a>
     </div>
     <nav class="flex-1 py-4">
       ${links.map(([key,label,icon]) => `
@@ -1106,7 +1132,51 @@ function computeDashboardSummary() {
     });
   });
   const topProducts = Object.values(topMap).sort((a,b)=>b.units-a.units).slice(0,5);
-  return { totalRevenue, ordersToday, revenueToday, pendingOrders, lowStockCount: lowStock.length, topProducts, totalProducts: PRODUCTS.length, totalCustomers: new Set(allOrders.map(o=>o.customer_name)).size };
+  const totalCustomers = new Set(allOrders.map(o=>o.customer_email || o.customer_name)).size;
+  return { totalRevenue, ordersToday, revenueToday, pendingOrders, lowStockCount: lowStock.length, topProducts, totalProducts: PRODUCTS.length, totalCustomers };
+}
+
+/* ---------------------------------- CRM aggregation --------------------------------- */
+// Mirrors the same logic as the real backend's /api/dashboard/customers route:
+// group orders by customer identity, compute lifetime value / order count /
+// last order date, and apply a lightweight VIP/Repeat/New segmentation.
+function computeCrmCustomers() {
+  const activeStatuses = ['paid','processing','shipped','completed'];
+  const byCustomer = {};
+  state.orders.forEach(o => {
+    const key = o.customer_email || o.customer_name;
+    if (!key) return;
+    if (!byCustomer[key]) {
+      byCustomer[key] = {
+        id: key, name: o.customer_name, email: o.customer_email || '', phone: o.customer_phone || '',
+        orders: [], date_registered: o.created_at,
+      };
+    }
+    const c = byCustomer[key];
+    if (new Date(o.created_at) < new Date(c.date_registered)) c.date_registered = o.created_at;
+    if (activeStatuses.includes(o.status)) c.orders.push(o);
+  });
+
+  return Object.values(byCustomer).map(c => {
+    const ordersCount = c.orders.length;
+    const totalSpend = c.orders.reduce((s,o)=>s+o.total,0);
+    const avgOrderValue = ordersCount ? totalSpend/ordersCount : 0;
+    const lastOrder = c.orders.slice().sort((a,b)=>new Date(b.created_at)-new Date(a.created_at))[0];
+    let segment = 'New';
+    if (ordersCount >= 4 || totalSpend >= 50000) segment = 'VIP';
+    else if (ordersCount >= 2) segment = 'Repeat';
+    return {
+      id: c.id, name: c.name, email: c.email, phone: c.phone,
+      orders_count: ordersCount, total_spend: totalSpend, avg_order_value: avgOrderValue,
+      date_last_order: lastOrder ? lastOrder.created_at : null,
+      date_registered: c.date_registered, segment,
+    };
+  }).sort((a,b)=>b.total_spend-a.total_spend);
+}
+function getCustomerOrderHistory(customerId) {
+  return state.orders
+    .filter(o => (o.customer_email || o.customer_name) === customerId)
+    .sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
 }
 
 function viewAdminDashboard() {
@@ -1358,6 +1428,111 @@ function saveAdjust(e) {
   saveState();
   showToast('Inventory updated.');
   render();
+}
+
+/* ---- Admin: CRM ---- */
+const SEGMENT_STYLES = {
+  VIP: 'bg-yellow-50 text-goldDark',
+  Repeat: 'bg-blue-50 text-blue',
+  New: 'bg-gray-100 text-gray-500',
+};
+let crmSegmentFilter = '';
+let crmSelectedCustomerId = null;
+
+function viewAdminCrm() {
+  const customers = computeCrmCustomers();
+  const filtered = crmSegmentFilter ? customers.filter(c => c.segment === crmSegmentFilter) : customers;
+  const totals = {
+    vip: customers.filter(c => c.segment === 'VIP').length,
+    repeat: customers.filter(c => c.segment === 'Repeat').length,
+    newCount: customers.filter(c => c.segment === 'New').length,
+  };
+
+  const rows = filtered.map(c => `
+    <tr onclick="openCrmDetail('${c.id.replace(/'/g,"\\'")}')" class="cursor-pointer hover:bg-sky/50 transition">
+      <td class="px-4 py-3"><p class="font-medium">${esc(c.name||'—')}</p><p class="text-xs text-slate">${esc(c.email)}</p></td>
+      <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded-full font-semibold ${SEGMENT_STYLES[c.segment]}">${c.segment}</span></td>
+      <td class="px-4 py-3">${c.orders_count}</td>
+      <td class="px-4 py-3 font-semibold">${formatPHP(c.total_spend)}</td>
+      <td class="px-4 py-3 text-slate">${formatPHP(c.avg_order_value)}</td>
+      <td class="px-4 py-3 text-slate">${c.date_last_order ? new Date(c.date_last_order).toLocaleDateString('en-PH') : '—'}</td>
+    </tr>`).join('');
+
+  return `
+  <div class="p-6 md:p-8">
+    <h1 class="font-display font-bold text-2xl text-navy mb-1">Customers (CRM)</h1>
+    <p class="text-xs text-slate mb-6">Lifetime value, order history and lightweight segmentation, computed from your orders.</p>
+
+    <div class="grid grid-cols-3 gap-4 mb-6">
+      <button onclick="setCrmSegmentFilter('VIP')" class="card p-4 text-left transition ${crmSegmentFilter==='VIP'?'ring-2 ring-gold':''}">
+        <p class="text-xs text-slate">VIP customers</p><p class="font-display font-bold text-navy text-lg">${totals.vip}</p>
+      </button>
+      <button onclick="setCrmSegmentFilter('Repeat')" class="card p-4 text-left transition ${crmSegmentFilter==='Repeat'?'ring-2 ring-blue':''}">
+        <p class="text-xs text-slate">Repeat customers</p><p class="font-display font-bold text-navy text-lg">${totals.repeat}</p>
+      </button>
+      <button onclick="setCrmSegmentFilter('New')" class="card p-4 text-left transition ${crmSegmentFilter==='New'?'ring-2 ring-slate':''}">
+        <p class="text-xs text-slate">New / one-time</p><p class="font-display font-bold text-navy text-lg">${totals.newCount}</p>
+      </button>
+    </div>
+
+    <div class="card overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-sky text-navy text-xs uppercase">
+          <tr><th class="text-left px-4 py-3">Customer</th><th class="text-left px-4 py-3">Segment</th><th class="text-left px-4 py-3">Orders</th><th class="text-left px-4 py-3">Lifetime Value</th><th class="text-left px-4 py-3">Avg. Order</th><th class="text-left px-4 py-3">Last Order</th></tr>
+        </thead>
+        <tbody class="divide-y divide-skyBorder">
+          ${rows || `<tr><td colspan="6" class="text-center text-slate py-8">No customers in this segment yet.</td></tr>`}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  ${crmSelectedCustomerId ? crmDetailModalHtml() : ''}`;
+}
+function setCrmSegmentFilter(segment) {
+  crmSegmentFilter = crmSegmentFilter === segment ? '' : segment;
+  render();
+}
+function openCrmDetail(customerId) {
+  crmSelectedCustomerId = customerId;
+  render();
+}
+function closeCrmDetail() {
+  crmSelectedCustomerId = null;
+  render();
+}
+function crmDetailModalHtml() {
+  const customer = computeCrmCustomers().find(c => c.id === crmSelectedCustomerId);
+  if (!customer) return '';
+  const history = getCustomerOrderHistory(customer.id);
+  return `
+  <div class="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
+    <div class="card p-6 w-full max-w-lg max-h-[85vh] overflow-y-auto">
+      <div class="flex items-start justify-between mb-1">
+        <div>
+          <h2 class="font-display font-bold text-lg text-navy">${esc(customer.name || 'Customer')}</h2>
+          <p class="text-xs text-slate">${esc(customer.email)}${customer.phone ? ' · '+esc(customer.phone) : ''}</p>
+        </div>
+        <button onclick="closeCrmDetail()" class="text-slate">${ICONS.x}</button>
+      </div>
+      <div class="grid grid-cols-3 gap-3 my-4">
+        <div class="bg-sky rounded-module p-3">
+          <p class="text-xs text-slate">Segment</p>
+          <span class="inline-block mt-1 text-xs px-2 py-0.5 rounded-full font-semibold ${SEGMENT_STYLES[customer.segment]}">${customer.segment}</span>
+        </div>
+        <div class="bg-sky rounded-module p-3"><p class="text-xs text-slate">Lifetime Value</p><p class="font-display font-bold text-navy">${formatPHP(customer.total_spend)}</p></div>
+        <div class="bg-sky rounded-module p-3"><p class="text-xs text-slate">Orders</p><p class="font-display font-bold text-navy">${customer.orders_count}</p></div>
+      </div>
+      <h3 class="text-sm font-semibold text-navy mb-2">Order History</h3>
+      ${history.length === 0 ? `<p class="text-sm text-slate">No orders yet.</p>` : `
+        <div class="divide-y divide-skyBorder border border-skyBorder rounded-module">
+          ${history.map(o => `
+            <div class="flex items-center justify-between px-3 py-2 text-sm">
+              <div><p class="font-medium">${esc(o.order_number)}</p><p class="text-xs text-slate">${new Date(o.created_at).toLocaleDateString('en-PH')} · ${esc(o.payment_method||'—')}</p></div>
+              <div class="text-right"><p class="font-semibold">${formatPHP(o.total)}</p><p class="text-xs text-slate capitalize">${o.status}</p></div>
+            </div>`).join('')}
+        </div>`}
+    </div>
+  </div>`;
 }
 
 /* ---- Admin: Orders ---- */
