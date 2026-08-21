@@ -44,7 +44,9 @@ body{
   background: radial-gradient(circle at 15% 20%, rgba(186,150,83,0.30), transparent 48%),
               radial-gradient(circle at 88% 0%, rgba(150,56,33,0.24), transparent 42%),
               linear-gradient(155deg, var(--green-mid) 0%, var(--green-deep) 55%, var(--green-night) 100%);
-  color: var(--paper);
+  /*color: var(--paper);*/
+  color: #44f244;
+
   padding: 48px 24px 40px;
   position: relative;
   overflow: hidden;
@@ -79,7 +81,7 @@ body{
   color: rgba(255,255,255,0.9); margin:0 0 10px;
 }
 h1.title{
-  font-family:'Fraunces', serif; font-weight:600; font-optical-sizing:auto;
+  font-family:'Fraunces', serif; font-weight:600; font-optical-sizing:auto;color: #90e56e;
   font-size: clamp(32px, 5vw, 54px); line-height:1.02; margin:0 0 4px; letter-spacing:-0.01em;
 }
 h1.title em{ font-style: italic; color: var(--gold); font-weight:400; }
@@ -88,7 +90,7 @@ h1.title em{ font-style: italic; color: var(--gold); font-weight:400; }
 }
 
 /* Signature element: the Freshness Clock */
-.clock-card{
+.clock-card-time{
   background: var(--court);
   border: 1px solid rgba(186,150,83,0.35);
   border-radius: 4px;
@@ -96,9 +98,25 @@ h1.title em{ font-style: italic; color: var(--gold); font-weight:400; }
   /*min-width: 260px;*/
   position: relative;
 }
+.clock-card-time::before{
+  content:"TODAY'S TIME";
+  position:absolute; top:-9px; left:18px;
+  background: var(--gold); color: var(--court);
+  font-family:'Space Mono',monospace; font-size:10px; letter-spacing:0.14em;
+  padding:3px 8px; font-weight:700;
+}
+.clock-card{
+  margin-top: 4px;
+  background: var(--court);
+  border: 1px solid rgba(186,150,83,0.35);
+  border-radius: 4px;
+  padding: 4px 6px;
+  /*min-width: 260px;*/
+  position: relative;
+}
 .clock-card::before{
   content:"TODAY'S HARVEST";
-  position:absolute; top:-9px; left:20px;
+  position:absolute; top:-9px; left:18px;
   background: var(--gold); color: var(--court);
   font-family:'Space Mono',monospace; font-size:10px; letter-spacing:0.14em;
   padding:3px 8px; font-weight:700;
@@ -109,20 +127,21 @@ h1.title em{ font-style: italic; color: var(--gold); font-weight:400; }
   animation: pulse 2s ease-in-out infinite;
   box-shadow: 0 0 0 0 rgba(186,150,83,0.6);
 }
+
 @keyframes pulse{
   0%{ box-shadow: 0 0 0 0 rgba(186,150,83,0.55); }
   70%{ box-shadow: 0 0 0 8px rgba(186,150,83,0); }
   100%{ box-shadow: 0 0 0 0 rgba(186,150,83,0); }
 }
 #clock-time{
-  font-family:'Space Mono', monospace; font-size: 24px; font-weight:700;
+  font-family:'Space Mono', monospace; font-size: 14px; font-weight:700;
   color: var(--paper); letter-spacing: 0.01em;
 }
 #clock-day{
-  font-family:'Fraunces', serif; font-size: 20px; color: var(--gold); /*margin-top:8px;*/
+  font-family:'Fraunces', serif; font-size: 16px; color: var(--gold); /*margin-top:8px;*/
 }
 #clock-date{
-  font-family:'Sora', sans-serif; font-size:13px; color: rgba(255,255,255,0.65); /*margin-top:2px;*/
+  font-family:'Sora', sans-serif; font-size:13px; color: rgba(255,255,255,0.65); margin-top:10px;
 }
 
 /* ---------- TABS ---------- */
@@ -174,7 +193,7 @@ h1.title em{ font-style: italic; color: var(--gold); font-weight:400; }
 }
 .week-picker{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
 .week-picker .field-label{
-  font-family:'Space Mono',monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase;
+  font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.16em; text-transform:uppercase;
   color: var(--gold); display:block; margin-bottom:6px;
 }
 .select-shell{ position:relative; }
@@ -184,7 +203,10 @@ h1.title em{ font-style: italic; color: var(--gold); font-weight:400; }
 }
 #week-select{
   appearance:none; -webkit-appearance:none;
-  background: rgba(255,255,255,0.06);
+  /*background: rgba(255,255,255,0.06);*/
+background: #a78341;
+
+  /*background: var(--brown);*/
   border:1px solid rgba(186,150,83,0.4);
   border-radius:3px;
   color: var(--paper);
@@ -203,15 +225,15 @@ h1.title em{ font-style: italic; color: var(--gold); font-weight:400; }
   box-shadow: 0 0 0 3px rgba(186,150,83,0.16);
 }
 .step-btn{
-  background:none; border:1px solid rgba(186,150,83,0.4); color: var(--gold);
-  width:36px; height:38px; border-radius:3px; cursor:pointer;
-  font-size:15px; line-height:1;
+  background:#ba9653; border:1px solid rgba(186,150,83,0.4); color: #00260e;
+  width:36px; height:42px; border-radius:3px; cursor:pointer;
+  font-size:20px; line-height:1;
   transition: background 0.2s ease, color 0.2s ease;
 }
 .step-btn:hover:not(:disabled){ background: var(--gold); color: var(--court); }
 .step-btn:disabled{ opacity:0.3; cursor:not-allowed; }
 .today-btn{
-  background: var(--gold); border:1px solid var(--gold); color: var(--court);
+  background: #007a33; border:1px solid var(--gold); color: var(--court);
   font-family:'Sora',sans-serif; font-size:12px; font-weight:600;
   padding:10px 15px; border-radius:3px; cursor:pointer;
   transition: opacity 0.2s ease;
@@ -230,7 +252,7 @@ h1.title em{ font-style: italic; color: var(--gold); font-weight:400; }
 .dial-seg.on{ background: var(--gold); }
 .dial-seg span{
   position:absolute; top:10px; left:0;
-  font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.06em;
+  font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.06em;
   color: rgba(255,255,255,0.4);
 }
 .dial-seg.on span{ color: var(--gold); }
@@ -243,9 +265,9 @@ h1.title em{ font-style: italic; color: var(--gold); font-weight:400; }
 }
 .now-pill{
   display:inline-block; margin-left:8px; vertical-align:2px;
-  font-family:'Space Mono',monospace; font-size:8.5px; letter-spacing:0.12em; text-transform:uppercase;
+  font-family:'Space Mono',monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase;
   background: var(--brown); color: var(--paper);
-  padding:2px 7px; border-radius:2px;
+  padding:4px 4px; border-radius:2px;
 }
 .now-pill.hidden{ display:none; }
 
@@ -270,7 +292,7 @@ main{ max-width: 1100px; margin: 0 auto; padding: 16px 24px 80px; }
   display:flex; flex-direction:column;
 }
 .meal-photo{
-  height: 300px;
+  /*height: 300px;*/
   display:flex; align-items:center; justify-content:center;
   position:relative;
   color: var(--paper);
@@ -325,7 +347,7 @@ main{ max-width: 1100px; margin: 0 auto; padding: 16px 24px 80px; }
   display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;
 }
 .exercise-icon{
-  width:46px; height:46px; border-radius:50%; background: var(--gold);
+  width:100%; height:100%; border-radius:50%; background: var(--gold);
   color: var(--court); display:flex; align-items:center; justify-content:center;
   font-size:22px; flex:none;
 }
@@ -338,8 +360,8 @@ footer{
   font-family:'Space Mono',monospace;
 }
 
-/* ---------- FLOATING SUPPORT BUTTON ---------- */
-.coffee-fab{
+/* ---------- FLOATING KO-FI BUTTON ---------- */
+.kofi-fab{
   position: fixed;
   right: 22px;
   bottom: 22px;
@@ -361,48 +383,316 @@ footer{
   white-space: nowrap;
   box-shadow: 0 12px 26px rgba(0,38,14,0.30), 0 2px 6px rgba(0,0,0,0.18);
   transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
-  animation: coffee-in .5s cubic-bezier(.2,.8,.25,1) .8s both;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  animation: kofi-in .5s cubic-bezier(.2,.8,.25,1) .8s both;
 }
-.coffee-fab:hover{
+.kofi-fab:hover{
   background: #C9A55F;
   transform: translateY(-3px);
   box-shadow: 0 18px 32px rgba(0,38,14,0.36), 0 2px 6px rgba(0,0,0,0.2);
 }
-.coffee-fab:active{ transform: translateY(-1px); }
-.coffee-fab:focus-visible{ outline: 3px solid var(--green); outline-offset: 3px; }
+.kofi-fab:active{ transform: translateY(-1px); }
+.kofi-fab:focus-visible{ outline: 3px solid var(--green); outline-offset: 3px; }
 
 /* The mug sits in a black disc — same treatment as the exercise icon, inverted */
-.coffee-mug{
+.kofi-cup{
   width: 34px; height: 34px; border-radius: 50%;
   background: var(--court); color: var(--gold);
   display:flex; align-items:center; justify-content:center;
   font-size: 15px; flex: none; position: relative;
 }
 /* Two wisps of steam, only while hovered */
-.coffee-mug::before,
-.coffee-mug::after{
+.kofi-cup::before,
+.kofi-cup::after{
   content:"";
   position:absolute; top:-7px;
   width:3px; height:10px; border-radius:2px;
   background: rgba(11,11,11,0.5);
   opacity: 0;
 }
-.coffee-mug::before{ left: 11px; }
-.coffee-mug::after{ left: 20px; }
-.coffee-fab:hover .coffee-mug::before{ animation: coffee-steam 1.5s ease-in-out infinite; }
-.coffee-fab:hover .coffee-mug::after{ animation: coffee-steam 1.5s ease-in-out .4s infinite; }
+.kofi-cup::before{ left: 11px; }
+.kofi-cup::after{ left: 20px; }
+.kofi-fab:hover .kofi-cup::before{ animation: kofi-steam 1.5s ease-in-out infinite; }
+.kofi-fab:hover .kofi-cup::after{ animation: kofi-steam 1.5s ease-in-out .4s infinite; }
 
-@keyframes coffee-steam{
+@keyframes kofi-steam{
   0%{ opacity:0; transform: translateY(4px) scaleY(.6); }
   45%{ opacity:.85; }
   100%{ opacity:0; transform: translateY(-8px) scaleY(1.15); }
 }
-@keyframes coffee-in{
+@keyframes kofi-in{
   from{ opacity:0; transform: translateY(16px) scale(.94); }
   to{ opacity:1; transform: none; }
 }
 
-@media print{ .coffee-fab{ display:none; } }
+@media print{ .kofi-fab{ display:none; } }
+
+/* ---------- SUPPORT MODAL ---------- */
+.support-overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  background: rgba(0,38,14,0.62);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  overflow-y: auto;
+}
+.support-overlay.open{ display: flex; animation: support-fade .18s ease both; }
+
+.support-card{
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  margin: auto;
+  background: var(--paper);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 30px 70px rgba(0,38,14,0.45), 0 4px 12px rgba(0,0,0,0.25);
+  animation: support-rise .3s cubic-bezier(.2,.8,.25,1) both;
+}
+
+/* Header borrows the hero's parquet so the modal reads as part of the same building */
+.support-head{
+  position: relative;
+  padding: 24px 26px 20px;
+  color: var(--paper);
+  background: linear-gradient(155deg, var(--green-mid) 0%, var(--green-deep) 60%, var(--green-night) 100%);
+  overflow: hidden;
+}
+.support-head::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cg stroke='%23BA9653' stroke-opacity='0.55' stroke-width='1' fill='none'%3E%3Cpath d='M0 8H38M0 18H38M0 28H38M0 38H38'/%3E%3Cpath d='M48 0V38M58 0V38M68 0V38M78 0V38'/%3E%3Cpath d='M8 42V80M18 42V80M28 42V80M38 42V80'/%3E%3Cpath d='M42 48H80M42 58H80M42 68H80M42 78H80'/%3E%3C/g%3E%3Cpath d='M40 0V80M0 40H80' stroke='%23BA9653' stroke-opacity='0.4'/%3E%3C/svg%3E");
+  background-size: 92px 92px;
+  opacity: 0.16;
+  pointer-events: none;
+}
+.support-head > *{ position: relative; z-index: 1; }
+.support-eyebrow{
+  font-family:'Space Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.support-head h2{
+  font-family:'Fraunces', serif;
+  font-size: 26px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  padding-right: 40px;
+  line-height: 1.15;
+}
+.support-sub{
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.82);
+  max-width: 46ch;
+}
+.support-close{
+  position: absolute;
+  top: 16px; right: 16px;
+  z-index: 2;
+  width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.28);
+  background: rgba(0,0,0,0.22);
+  color: var(--paper);
+  font-size: 15px;
+  cursor: pointer;
+  transition: background .16s ease, transform .16s ease;
+}
+.support-close:hover{ background: rgba(0,0,0,0.45); transform: rotate(90deg); }
+.support-close:focus-visible{ outline: 3px solid var(--gold); outline-offset: 2px; }
+
+.support-body{ padding: 22px 24px 24px; }
+
+.pay-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.pay-card{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 16px 14px 14px;
+  border: 1px solid rgba(186,150,83,0.55);
+  border-radius: 14px;
+  background: #FCFBF6;
+}
+.pay-head{
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 13px;
+}
+.pay-mark{
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  flex: none;
+  background: var(--green);
+  color: var(--paper);
+}
+.pay-mark.bank{ background: var(--brown); }
+.pay-title{
+  font-family:'Space Mono', monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* Scanner reticle — two gold corner brackets frame the code */
+.qr-frame{
+  position: relative;
+  width: 100%;
+  max-width: 178px;
+  aspect-ratio: 1 / 1;
+  padding: 11px;
+  background: var(--paper);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: inset 0 0 0 1px rgba(11,11,11,0.08);
+}
+.qr-frame::before,
+.qr-frame::after{
+  content:"";
+  position: absolute;
+  width: 20px; height: 20px;
+  border: 2px solid var(--gold);
+  pointer-events: none;
+}
+.qr-frame::before{ top:-1px; left:-1px; border-right:0; border-bottom:0; border-radius: 6px 0 0 0; }
+.qr-frame::after{ bottom:-1px; right:-1px; border-left:0; border-top:0; border-radius: 0 0 6px 0; }
+.qr-frame img{ width: 100%; height: 100%; object-fit: contain; display: block; }
+
+/* Shown in place of a QR that hasn't been dropped in yet */
+.qr-missing{
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 7px;
+  padding: 10px;
+  border: 1.5px dashed rgba(11,11,11,0.24);
+  border-radius: 7px;
+  font-family:'Space Mono', monospace;
+  font-size: 9.5px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: #7F8079;
+  text-align: center;
+  word-break: break-all;
+}
+.qr-missing i{ font-size: 17px; color: rgba(11,11,11,0.28); }
+
+.pay-lines{ margin: 12px 0 10px; width: 100%; }
+.pay-label{
+  font-family:'Space Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--green-soft);
+  margin-bottom: 2px;
+}
+.pay-value{
+  font-family:'Space Mono', monospace;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  word-break: break-word;
+}
+.pay-lines .pay-label:not(:first-child){ margin-top: 9px; }
+
+.copy-btn{
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border: 1px solid rgba(11,11,11,0.18);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family:'Space Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .16s ease, color .16s ease, border-color .16s ease;
+}
+.copy-btn:hover{ background: var(--gold); border-color: rgba(11,11,11,0.28); }
+.copy-btn:focus-visible{ outline: 3px solid var(--green); outline-offset: 2px; }
+.copy-btn.copied{ background: var(--green); border-color: var(--green); color: var(--paper); }
+
+.paypal-btn{
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  width: 100%;
+  padding: 15px 18px;
+  border-radius: 12px;
+  background: var(--court);
+  color: var(--gold);
+  text-decoration: none;
+  font-family:'Space Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: background .16s ease, transform .16s ease;
+}
+.paypal-btn i{ font-size: 19px; }
+.paypal-btn:hover{ background: #1E1E1E; transform: translateY(-2px); }
+.paypal-btn:focus-visible{ outline: 3px solid var(--gold); outline-offset: 3px; }
+
+.support-foot{
+  margin: 14px 0 0;
+  font-family:'Space Mono', monospace;
+  font-size: 10.5px;
+  line-height: 1.65;
+  color: #7F8079;
+  text-align: center;
+}
+
+@keyframes support-fade{ from{ opacity: 0; } to{ opacity: 1; } }
+@keyframes support-rise{
+  from{ opacity: 0; transform: translateY(18px) scale(.97); }
+  to{ opacity: 1; transform: none; }
+}
+
+body.support-open{ overflow: hidden; }
+/* The button has done its job once the card is up — get it out of the way */
+body.support-open .kofi-fab{ opacity: 0; pointer-events: none; transition: opacity .18s ease; }
+
+@media (max-width: 560px){
+  .support-overlay{ padding: 14px 12px; }
+  .support-head{ padding: 20px 20px 17px; }
+  .support-head h2{ font-size: 22px; }
+  .support-body{ padding: 18px 18px 20px; }
+  .pay-grid{ grid-template-columns: 1fr; }
+  .qr-frame{ max-width: 210px; }
+}
+
+@media print{ .support-overlay{ display: none !important; } }
 
 /* ---------- RESPONSIVE BREAKPOINTS ---------- */
 
@@ -462,8 +752,8 @@ footer{
   .today-btn{ padding:10px 12px; }
   .hero{ padding: 32px 16px 28px; }
   .hero-inner{ flex-direction:column; align-items:stretch; gap: 12px; }
-  .clock-card{ min-width:0; padding: 18px 18px; }
-  #clock-time{ font-size: 28px; }
+  .clock-card{ min-width:0; padding: 4px 6px; }
+  #clock-time{ font-size: 14px; }
   .tabs-wrap{ padding: 0 12px; margin-top: -14px; }
   .tab-btn{ min-width: 66px; padding: 11px 3px 9px; }
   .tab-btn .tab-day{ font-size: 12.5px; }
@@ -472,8 +762,8 @@ footer{
   .meal-grid{ grid-template-columns: 1fr; gap: 16px; }
   .exercise-card{ padding: 18px 18px; }
   /* Collapse the support button to the mug alone — the label costs too much width here */
-  .coffee-fab{ right: 16px; bottom: 16px; padding: 9px; gap: 0; }
-  .coffee-fab .coffee-label{ display: none; }
+  .kofi-fab{ right: 16px; bottom: 16px; padding: 9px; gap: 0; }
+  .kofi-fab .kofi-label{ display: none; }
 }
 
 @media (max-width: 640px){
@@ -489,10 +779,12 @@ footer{
 ;
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
-.bg-\[\#007A33\] {
+.bg2-\[\#007A33\] {
     --tw-bg-opacity: 1;
     background-color: rgb(0 122 51 / var(--tw-bg-opacity, 1));
+    /*background-color: rgb(186 150 72 / var(--tw-bg-opacity, 1));*/
 }
+
 .border-\[\#BA9648\]\/50 {
     border-color: rgb(186 150 72 / 0.5);
 }
@@ -500,12 +792,17 @@ footer{
 .border {
     border-width: 1px;
 }
+.text2-\[\#BA968\] {
+    --tw-text-opacity: 1;
+    color: rgb(0 122 51 / var(--tw-text-opacity, 1));
+}
 
 .text-\[\#BA9648\]
 Specificity: (0,1,0)
  {
     --tw-text-opacity: 1;
-    color: rgb(186 150 72 / var(--tw-text-opacity, 1));
+    /*color: rgb(186 150 72 / var(--tw-text-opacity, 1));*/
+    color: rgb(0 122 51 / var(--tw-text-opacity, 1));
 }
 .animate-pulse
 Specificity: (0,1,0)
@@ -536,7 +833,7 @@ Specificity: (0,1,0)
     border-color: #e5e7eb;
 }
 .sm\:text-2xl {
-        font-size: 1.5rem;
+        font-size: 2.20rem;
         line-height: 2rem;
 }
 @media (min-width: 640px) {
@@ -546,39 +843,24 @@ Specificity: (0,1,0)
 }
 p.sub2 {
     max-width: 100%;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 1.6;
     color: rgba(255, 255, 255, 0.78);
     margin: 0;
 }
-.object-cover {
-    object-fit: cover;
-}
 
-.w-full {
-    width: 100%;
-}
-
-.h-full {
-    height: 100%;
-}
-
-img, video {
-    max-width: 100%;
-    height: auto;
-}
 </style>
 </head>
 <body>
 
 <div class="hero">
   <div class="hero-inner">
-    <div class="bg-[#007A33] p-2.5 sm:p-3 rounded-full border border-[#BA9648]/50 shadow-inner flex items-center justify-center shrink-0">
-    <i class="fa-solid fa-clover text-[#BA9648] text-xl sm:text-2xl animate-pulse"></i>
+    <div class="bg2-[#007A33] p-2.5 sm:p-3 rounded-full border border-[#BA9648]/50 shadow-inner flex items-center justify-center shrink-0">
+    <i class="fa-solid fa-clover text2-[#BA9648] text-xl sm:text-2xl animate-pulse"></i>
     </div>
     <div>
       <p class="eyebrow">Four weeks · Eighty-four dishes · One rotation</p>
-      <h1 class="title">The Anti-Aging <em>Meal Planner</em></h1>
+      <h1 class="title">Anti-Aging <em>Meal Planner</em></h1>
       </div>      
 <p class="sub2">A Longevity one-month meal plan on a four-week loop. Each calendar week draws its menu from one of four themed cycles — omega-3 foundations, ferments and crucifers, Blue Zones Mediterranean, and green tea with mushrooms and sea greens — then starts over.</p>
     
@@ -601,18 +883,18 @@ img, video {
         </div>
       </div>
       <div class="clock-card">
-          <div class="clock-row"><span class="clock-dot"></span><span id="clock-time">--:--:--</span></div>
-          <div id="clock-day">Loading…</div>
+          <!--<div id="clock-day">Loading…</div>-->
           <div id="clock-date"></div>
+          <div class="clock-row"><span class="clock-dot"></span><span id="clock-time">--:--:--</span></div>
       </div>
     </div>
 
     <div class="cycle-dial">
-      <div class="dial-segments" id="dial" aria-hidden="true"></div>
       <div class="cycle-copy">
         <p class="cycle-name" id="cycle-name">—<span class="now-pill hidden" id="now-pill">now</span></p>
         <div class="cycle-range" id="cycle-range"></div>
       </div>
+      <div class="dial-segments" id="dial" aria-hidden="true"></div>
     </div>
   </div>
 </div>
@@ -625,15 +907,39 @@ img, video {
 
 <footer>THE LONGEVITY TABLE — a four-week rotation, looped across the calendar year. Built for daily use, not a substitute for medical advice.</footer>
 
-<!-- Floating donation button. Replace "yourusername" below with your own Buy Me a Coffee handle. -->
-<a class="coffee-fab"
-   href="https://www.buymeacoffee.com/yourusername"
-   target="_blank"
-   rel="noopener noreferrer"
-   aria-label="Buy me a coffee — opens Buy Me a Coffee in a new tab">
-  <span class="coffee-mug" aria-hidden="true"><i class="fa-solid fa-mug-hot"></i></span>
-  <span class="coffee-label">Buy me a coffee</span>
-</a>
+<!-- Floating donation button — opens the support modal below. -->
+<button type="button"
+   class="kofi-fab"
+   id="kofi-fab"
+   aria-haspopup="dialog"
+   aria-controls="support-overlay"
+   aria-label="Support this planner — opens payment options">
+  <span class="kofi-cup" aria-hidden="true"><i class="fa-solid fa-mug-hot"></i></span>
+  <span class="kofi-label">Buy Me a Ko-fi</span>
+</button>
+
+<!-- Support modal. Edit the SUPPORT object in the script below to set your own
+     GCash number, bank details, PayPal link, and QR image paths. -->
+<div class="support-overlay" id="support-overlay" role="dialog" aria-modal="true" aria-labelledby="support-title" hidden>
+  <div class="support-card">
+    <div class="support-head">
+      <div class="support-eyebrow">Support the table</div>
+      <h2 id="support-title">Buy me a Ko-fi</h2>
+      <p class="support-sub">Scan a code with your banking app, or tap through to PayPal. Any amount keeps this planner free and ad-free.</p>
+      <button type="button" class="support-close" id="support-close" aria-label="Close">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="support-body">
+      <div class="pay-grid" id="pay-grid"></div>
+      <a class="paypal-btn" id="paypal-btn" href="#" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-paypal" aria-hidden="true"></i>
+        <span>Send with PayPal</span>
+      </a>
+      <p class="support-foot">Payments go straight to my own accounts. Nothing is stored in this page.</p>
+    </div>
+  </div>
+</div>
 
 <script>
 // Meal-card gradients, drawn only from the Celtics five.
@@ -646,196 +952,196 @@ const WEEK_1_DAYS = [
   intro:"Ease into the week with anti-inflammatory omega-3s, curcumin, and fiber-forward plants.",
   meals:[
     {
-      tag:"Breakfast", icon:"🫐",
+      tag:"Breakfast", icon:"<img src='img/greek-yogurt-berry-chia-parfait.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Greek Yogurt Berry Chia Parfait",
       ingredients:["1 cup plain full-fat Greek yogurt","1 tbsp chia seeds","1/2 cup mixed berries (blueberries, strawberries, raspberries)","1 tbsp raw honey","2 tbsp chopped walnuts","1 tsp vanilla extract","Pinch of cinnamon"],
       steps:["Stir chia seeds and vanilla into the Greek yogurt; let sit 5 minutes to thicken.","Rinse berries; slice any larger ones.","Layer yogurt and berries alternately in a glass, finishing with berries on top.","Drizzle with honey and scatter walnuts and cinnamon over the top.","Chill 10 minutes, or refrigerate overnight for a firmer set."],
       benefits:"<b>Berries</b> supply anthocyanins and vitamin C that help neutralize free radicals and support collagen production. <b>Chia seeds</b> add omega-3 ALA and fiber that ease inflammation, while <b>Greek yogurt's</b> probiotics support gut and skin health, and <b>walnuts</b> contribute vitamin E for skin elasticity."
     },
     {
-      tag:"Lunch", icon:"🥑",
+      tag:"Lunch", icon:"<img src='img/salmon-avocado-salad-with-walnuts.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Salmon & Avocado Salad with Walnuts",
       ingredients:["4 oz cooked salmon, flaked","2 cups mixed greens (arugula, spinach)","1/2 avocado, sliced","1/4 cup walnuts","1/4 cup cherry tomatoes, halved","2 tbsp crumbled goat cheese","1 tbsp olive oil","1 tsp lemon juice","Salt & pepper"],
       steps:["Season salmon with salt and pepper; bake at 400°F for 12–15 minutes until flaky. Cool and flake.","Toss greens, tomatoes, and avocado in a bowl.","Whisk olive oil and lemon juice; drizzle over the salad.","Top with flaked salmon, walnuts, and goat cheese."],
       benefits:"<b>Salmon</b> is rich in EPA/DHA omega-3s that reduce inflammatory markers tied to skin aging. <b>Avocado</b> provides monounsaturated fats and vitamin E for hydration, and <b>walnuts</b> add plant-based omega-3s and polyphenols."
     },
     {
-      tag:"Dinner", icon:"🍚",
+      tag:"Dinner", icon:"<img src='img/turmeric-roasted-vegetable-quinoa-bowl.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Turmeric Roasted Vegetable Quinoa Bowl",
       ingredients:["1 cup cooked quinoa","1 cup cauliflower florets","1 cup diced carrots","1 cup diced zucchini","1 tbsp olive oil","1 tsp ground turmeric","1/2 tsp cumin","1/4 tsp black pepper","2 tbsp tahini","1 tbsp lemon juice","1 tbsp water","Salt to taste"],
       steps:["Preheat oven to 425°F. Toss vegetables with olive oil, turmeric, cumin, black pepper, and salt.","Roast 20–25 minutes, turning once, until golden and tender.","Cook quinoa according to package directions.","Whisk tahini, lemon juice, and water into a smooth sauce.","Assemble bowl with quinoa, roasted vegetables, and a tahini drizzle."],
       benefits:"<b>Turmeric's</b> curcumin — better absorbed with black pepper's piperine — is a potent anti-inflammatory and antioxidant compound linked to lower cellular aging markers. <b>Quinoa</b> adds complete protein and fiber, and the colorful vegetables supply carotenoids that guard skin against UV-related oxidative stress."
     }
   ],
-  exercise:{icon:"🏋️", title:"Brisk Walk + Full-Body Strength", text:"30-minute brisk walk followed by 20 minutes of full-body resistance training (squats, push-ups, rows). Preserving muscle mass and bone density through resistance work is one of the most reliable levers against age-related decline."}
+  exercise:{icon:"<img src='img/brisk-walk-full-body-strength.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Brisk Walk + Full-Body Strength", text:"30-minute brisk walk followed by 20 minutes of full-body resistance training (squats, push-ups, rows). Preserving muscle mass and bone density through resistance work is one of the most reliable levers against age-related decline."}
 },
 {
   key:"Tuesday",
   intro:"Steady blood sugar and high-antioxidant produce carry the day.",
   meals:[
     {
-      tag:"Breakfast", icon:"🌾",
+      tag:"Breakfast", icon:"<img src='img/blueberry-walnut-oatmeal.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Blueberry Walnut Oatmeal",
       ingredients:["1/2 cup rolled oats","1 cup unsweetened almond milk","1/2 cup blueberries","2 tbsp chopped walnuts","1 tbsp ground flaxseed","1/2 tsp cinnamon","1 tsp honey or maple syrup"],
       steps:["Combine oats and almond milk in a saucepan; bring to a gentle simmer.","Cook 5–7 minutes, stirring occasionally, until creamy.","Stir in ground flaxseed and cinnamon.","Top with blueberries, walnuts, and a drizzle of honey."],
       benefits:"<b>Oats</b> provide beta-glucan fiber that supports steady blood sugar — glycation from sugar spikes is a major driver of skin aging. <b>Blueberries</b> rank among the highest antioxidant-density fruits, and <b>flaxseed</b> adds lignans and omega-3s with anti-inflammatory effects."
     },
     {
-      tag:"Lunch", icon:"🥗",
+      tag:"Lunch", icon:"<img src='img/mediterranean-chickpea-salad.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Mediterranean Chickpea Salad",
       ingredients:["1.5 cups cooked chickpeas","1 cucumber, diced","1 cup cherry tomatoes, halved","1/4 red onion, thinly sliced","1/4 cup Kalamata olives","1/4 cup crumbled feta","2 tbsp olive oil","1 tbsp red wine vinegar","1 tsp dried oregano","Salt & pepper"],
       steps:["Combine chickpeas, cucumber, tomatoes, onion, and olives in a bowl.","Whisk olive oil, vinegar, oregano, salt, and pepper.","Pour dressing over the salad and toss well.","Top with feta and let sit 10 minutes so flavors meld."],
       benefits:"<b>Chickpeas</b> supply fiber and plant protein that stabilize blood sugar. <b>Olive oil's</b> polyphenols and oleocanthal carry anti-inflammatory effects, while <b>tomatoes</b> provide lycopene, shown to help protect skin from photoaging."
     },
     {
-      tag:"Dinner", icon:"🐟",
+      tag:"Dinner", icon:"<img src='img/baked-salmon-with-broccoli-sweet-potato.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Baked Salmon with Broccoli & Sweet Potato",
       ingredients:["5 oz salmon fillet","1 medium sweet potato, cubed","2 cups broccoli florets","1 tbsp olive oil","1 lemon, juiced and sliced","2 garlic cloves, minced","Salt, pepper, 1/2 tsp paprika"],
       steps:["Preheat oven to 400°F. Toss sweet potato with half the oil, salt, and pepper; roast 15 minutes.","Add broccoli with remaining oil and garlic; roast 10 more minutes.","Push vegetables aside, place salmon on the pan, season with paprika, salt, pepper, and lemon slices.","Bake 12–15 minutes until salmon flakes easily.","Finish with fresh lemon juice."],
       benefits:"<b>Sweet potato's</b> beta-carotene converts to vitamin A, essential for skin cell turnover. <b>Broccoli</b> contains sulforaphane, which activates the body's own antioxidant defenses, and <b>salmon's</b> omega-3s support the skin barrier."
     }
   ],
-  exercise:{icon:"🧘", title:"Yoga & Mobility Flow", text:"30 minutes of yoga or a mobility/stretching flow. Supports joint flexibility, balance, and healthy cortisol regulation — chronic elevated cortisol is linked to accelerated cellular aging."}
+  exercise:{icon:"<img src='img/yoga-mobility-flow.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Yoga & Mobility Flow", text:"30 minutes of yoga or a mobility/stretching flow. Supports joint flexibility, balance, and healthy cortisol regulation — chronic elevated cortisol is linked to accelerated cellular aging."}
 },
 {
   key:"Wednesday",
   intro:"Fiber, folate, and lean protein to support DNA repair and muscle maintenance.",
   meals:[
     {
-      tag:"Breakfast", icon:"🍳",
+      tag:"Breakfast", icon:"<img src='img/avocado-toast-with-poached-egg.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Avocado Toast with Poached Egg",
       ingredients:["2 slices whole grain bread","1/2 avocado","1 egg","1 tsp white vinegar","Red pepper flakes","Salt & pepper","Handful microgreens or spinach","Squeeze of lemon"],
       steps:["Toast the bread until golden.","Bring a pot of water to a gentle simmer, add vinegar; swirl and slide in the egg. Poach 3 minutes.","Mash avocado with lemon juice, salt, and pepper; spread on toast.","Top with the poached egg, microgreens, and red pepper flakes."],
       benefits:"<b>Eggs</b> provide choline and lutein, linked to skin hydration and eye health. <b>Avocado's</b> fats improve absorption of fat-soluble antioxidants, and the <b>whole grain bread</b> slows glucose spikes that otherwise accelerate glycation-driven collagen damage."
     },
     {
-      tag:"Lunch", icon:"🍲",
+      tag:"Lunch", icon:"<img src='img/spinach-and-lentil-soup.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Spinach & Lentil Soup",
       ingredients:["1 cup dried red lentils","4 cups vegetable broth","2 cups fresh spinach","1 onion, diced","2 garlic cloves, minced","1 carrot, diced","1 tsp cumin","1 tsp turmeric","1 tbsp olive oil","Salt & pepper"],
       steps:["Sauté onion, garlic, and carrot in olive oil for 5 minutes.","Add cumin and turmeric; stir 1 minute until fragrant.","Add lentils and broth; simmer 20–25 minutes until lentils soften.","Stir in spinach and cook 2–3 minutes until wilted. Season to taste."],
       benefits:"<b>Lentils</b> are rich in folate and polyphenols that support DNA repair and lower oxidative stress. <b>Spinach</b> provides lutein and vitamin K, and <b>turmeric</b> adds anti-inflammatory curcumin."
     },
     {
-      tag:"Dinner", icon:"🍗",
+      tag:"Dinner", icon:"<img src='img/grilled-chicken-with-brussels-sprouts-wild-rice.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Grilled Chicken with Brussels Sprouts & Wild Rice",
       ingredients:["5 oz chicken breast","2 cups Brussels sprouts, halved","1/2 cup wild rice (dry)","1 tbsp olive oil","1 tsp garlic powder","1 tsp smoked paprika","Salt & pepper","1 tbsp balsamic vinegar"],
       steps:["Cook wild rice according to package directions (about 45 minutes).","Preheat oven to 425°F. Toss Brussels sprouts with oil, salt, and pepper; roast 20–25 minutes until crisp-edged.","Season chicken with garlic powder, paprika, salt, and pepper. Grill or pan-sear 6–7 minutes per side.","Drizzle Brussels sprouts with balsamic vinegar before serving alongside chicken and rice."],
       benefits:"<b>Brussels sprouts</b> are rich in vitamin C and glucosinolates that support the body's own antioxidant enzymes. <b>Wild rice</b> offers fiber and manganese, and lean <b>chicken</b> provides protein to help maintain the muscle mass that naturally declines with age."
     }
   ],
-  exercise:{icon:"💪", title:"Upper-Body Strength", text:"30–40 minutes of upper-body resistance training: dumbbell press, rows, and planks. Twice-weekly resistance training is consistently linked to better long-term muscle and metabolic health."}
+  exercise:{icon:"<img src='img/upper-body-strength-2.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Upper-Body Strength", text:"30–40 minutes of upper-body resistance training: dumbbell press, rows, and planks. Twice-weekly resistance training is consistently linked to better long-term muscle and metabolic health."}
 },
 {
   key:"Thursday",
   intro:"Ginger, glutathione-rich vegetables, and gut-supportive fiber.",
   meals:[
     {
-      tag:"Breakfast", icon:"🥣",
+      tag:"Breakfast", icon:"<img src='img/green-smoothie-bowl.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Green Smoothie Bowl",
       ingredients:["1 cup spinach","1 frozen banana","1/2 cup frozen mixed berries","1/2 cup unsweetened almond milk","1 tbsp almond butter","1 tbsp ground flaxseed","Toppings: granola, banana slices, chia seeds"],
       steps:["Blend spinach, frozen banana, berries, almond milk, almond butter, and flaxseed until smooth and thick.","Pour into a bowl.","Top with granola, banana slices, and chia seeds."],
       benefits:"<b>Spinach</b> delivers folate and antioxidants without diluting the sweetness. <b>Almond butter's</b> vitamin E protects skin cell membranes from oxidative damage, and the frozen fruit retains anthocyanins that combat free-radical-driven aging."
     },
     {
-      tag:"Lunch", icon:"🐟",
+      tag:"Lunch", icon:"<img src='img/tuna-white-bean-salad.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Tuna & White Bean Salad",
       ingredients:["1 can tuna in olive oil, drained","1.5 cups cooked cannellini beans","1/4 red onion, diced","1 cup arugula","1 tbsp capers","2 tbsp olive oil","1 tbsp lemon juice","Salt & pepper"],
       steps:["Combine tuna, beans, red onion, and capers in a bowl.","Whisk olive oil and lemon juice; pour over the mixture and toss.","Serve over a bed of arugula, seasoned with salt and pepper."],
       benefits:"<b>White beans</b> provide resistant starch and fiber that feed beneficial gut bacteria, which influence systemic inflammation. <b>Tuna</b> offers omega-3s and selenium, a mineral that supports the body's glutathione antioxidant system."
     },
     {
-      tag:"Dinner", icon:"🫚",
+      tag:"Dinner", icon:"<img src='img/turmeric-ginger-salmon-with-asparagus.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Turmeric Ginger Salmon with Asparagus",
       ingredients:["5 oz salmon fillet","1 bunch asparagus, trimmed","1 tbsp olive oil","1 tsp grated fresh ginger","1 tsp ground turmeric","1 garlic clove, minced","1 tbsp tamari or soy sauce","1 tsp honey","Lemon wedges"],
       steps:["Preheat oven to 400°F. Whisk olive oil, ginger, turmeric, garlic, tamari, and honey into a marinade.","Coat salmon in the marinade; let sit 10 minutes.","Place salmon and asparagus on a baking sheet; drizzle asparagus with remaining marinade.","Bake 12–15 minutes until salmon flakes and asparagus is tender.","Serve with lemon wedges."],
       benefits:"Fresh <b>ginger</b> contains gingerol, an antioxidant compound that helps neutralize free radicals. <b>Asparagus</b> is rich in glutathione precursors, and combined with turmeric and omega-3-rich salmon, this dish targets inflammation from several angles at once."
     }
   ],
-  exercise:{icon:"🚴", title:"Zone 2 Cardio", text:"30 minutes of steady-state cardio — brisk cycling, swimming, or an incline walk at a conversational pace. Zone 2 training is associated with improved mitochondrial density and cardiovascular health."}
+  exercise:{icon:"<img src='img/zone-2-cardio-2.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Zone 2 Cardio", text:"30 minutes of steady-state cardio — brisk cycling, swimming, or an incline walk at a conversational pace. Zone 2 training is associated with improved mitochondrial density and cardiovascular health."}
 },
 {
   key:"Friday",
   intro:"Ellagitannins, zinc, and selenium round out the week's antioxidant lineup.",
   meals:[
     {
-      tag:"Breakfast", icon:"🍇",
+      tag:"Breakfast", icon:"<img src='img/chia-pudding-with-pomegranate-almonds.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Chia Pudding with Pomegranate & Almonds",
       ingredients:["3 tbsp chia seeds","1 cup unsweetened almond milk","1/2 tsp vanilla extract","1 tsp maple syrup","1/4 cup pomegranate seeds","2 tbsp sliced almonds"],
       steps:["Whisk chia seeds, almond milk, vanilla, and maple syrup in a jar.","Refrigerate at least 4 hours or overnight, stirring once after 30 minutes to prevent clumping.","Top with pomegranate seeds and sliced almonds before serving."],
       benefits:"<b>Pomegranate</b> is one of the richest sources of ellagitannins, compounds studied for supporting skin elasticity and mitochondrial health. <b>Almonds</b> add vitamin E to protect skin from UV-induced oxidative stress."
     },
     {
-      tag:"Lunch", icon:"🥬",
+      tag:"Lunch", icon:"<img src='img/kale-and-quinoa-power-bowl.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Kale & Quinoa Power Bowl",
       ingredients:["1 cup cooked quinoa","2 cups chopped kale, massaged with oil","1/4 cup shredded carrots","1/4 cup roasted chickpeas","2 tbsp pumpkin seeds","2 tbsp olive oil","1 tbsp apple cider vinegar","1 tsp dijon mustard","Honey to taste"],
       steps:["Massage kale with a drizzle of olive oil until softened.","Whisk olive oil, apple cider vinegar, dijon, and honey for the dressing.","Combine kale, quinoa, carrots, chickpeas, and pumpkin seeds in a bowl.","Toss with dressing just before serving."],
       benefits:"<b>Kale</b> is exceptionally dense in vitamin K, lutein, and zeaxanthin — antioxidants that protect skin and eyes. <b>Pumpkin seeds</b> provide zinc, essential for collagen production and skin repair."
     },
     {
-      tag:"Dinner", icon:"🥕",
+      tag:"Dinner", icon:"<img src='img/herb-roasted-cod-with-roasted-carrots-farro.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Herb Roasted Cod with Roasted Carrots & Farro",
       ingredients:["5 oz cod fillet","2 cups carrots, sliced","1/2 cup farro (dry)","1 tbsp olive oil","1 tsp dried thyme","1 tsp dried rosemary","1 lemon, zested and juiced","2 garlic cloves, minced","Salt & pepper"],
       steps:["Cook farro according to package directions (25–30 minutes).","Preheat oven to 400°F. Toss carrots with oil, salt, and pepper; roast 20 minutes.","Season cod with thyme, rosemary, garlic, lemon zest, salt, and pepper.","Add cod to the pan with carrots; bake 10–12 minutes until cod is opaque and flakes easily.","Finish with fresh lemon juice and serve over farro."],
       benefits:"<b>Carrots</b> supply beta-carotene, which the body converts to vitamin A for skin renewal. <b>Farro</b> is a whole grain rich in fiber and selenium, and <b>cod</b> is a lean, low-mercury protein ideal for regular anti-inflammatory eating."
     }
   ],
-  exercise:{icon:"🦵", title:"Lower-Body Strength", text:"30–40 minutes of lower-body resistance training: squats, lunges, and glute bridges. Leg strength is one of the strongest predictors of healthy mobility later in life."}
+  exercise:{icon:"<img src='img/lower-body-strength-3.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Lower-Body Strength", text:"30–40 minutes of lower-body resistance training: squats, lunges, and glute bridges. Leg strength is one of the strongest predictors of healthy mobility later in life."}
 },
 {
   key:"Saturday",
   intro:"A Mediterranean-leaning day, the dietary pattern most consistently tied to slower biological aging.",
   meals:[
     {
-      tag:"Breakfast", icon:"🥞",
+      tag:"Breakfast", icon:"<img src='img/whole-grain-pancakes-with-berries-walnuts.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Whole Grain Pancakes with Berries & Walnuts",
       ingredients:["1 cup whole wheat flour","1 cup buttermilk (or milk + 1 tsp vinegar)","1 egg","1 tbsp honey","1 tsp baking powder","1/2 tsp cinnamon","1 cup mixed berries","1/4 cup chopped walnuts"],
       steps:["Whisk flour, baking powder, and cinnamon in a bowl.","In another bowl, whisk buttermilk, egg, and honey; combine with dry ingredients until just mixed.","Heat a lightly oiled griddle over medium heat; pour 1/4 cup batter per pancake.","Cook 2–3 minutes per side until golden and bubbles form.","Top with fresh berries and chopped walnuts."],
       benefits:"<b>Whole wheat flour</b> retains bran and germ, providing fiber and B vitamins for cellular energy metabolism. The <b>berry</b> topping adds concentrated antioxidant polyphenols, and <b>walnuts</b> contribute anti-inflammatory omega-3 fats."
     },
     {
-      tag:"Lunch", icon:"🍤",
+      tag:"Lunch", icon:"<img src='img/grilled-shrimp-mediterranean-salad.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Grilled Shrimp Mediterranean Salad",
       ingredients:["5 oz shrimp, peeled and deveined","2 cups romaine or mixed greens","1/2 cup cherry tomatoes, halved","1/4 cup cucumber, diced","2 tbsp crumbled feta","8 Kalamata olives","1 tbsp olive oil","1 tsp oregano","Garlic powder, lemon juice"],
       steps:["Toss shrimp with olive oil, oregano, garlic powder, salt, and pepper.","Grill or pan-sear shrimp 2–3 minutes per side until pink and opaque.","Combine greens, tomatoes, cucumber, olives, and feta in a bowl.","Top with grilled shrimp and drizzle with lemon juice and a little extra olive oil."],
       benefits:"<b>Shrimp</b> contributes selenium, linked to antioxidant defense. The Mediterranean-style combination of vegetables and <b>olive oil</b> is associated in long-term population studies with slower biological aging markers."
     },
     {
-      tag:"Dinner", icon:"🥦",
+      tag:"Dinner", icon:"<img src='img/tofu-vegetable-stir-fry-with-brown-rice.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Tofu Vegetable Stir-fry with Brown Rice",
       ingredients:["6 oz firm tofu, cubed","1 cup broccoli florets","1 bell pepper, sliced","1 carrot, julienned","1 cup snap peas","2 garlic cloves, minced","1 tsp grated ginger","2 tbsp low-sodium soy sauce","1 tsp sesame oil","1 cup cooked brown rice","1 tbsp neutral oil"],
       steps:["Press tofu to remove excess water, then cube. Pan-fry in oil until golden on all sides; set aside.","In the same pan, stir-fry garlic and ginger 30 seconds until fragrant.","Add broccoli, bell pepper, carrot, and snap peas; stir-fry 5–6 minutes until crisp-tender.","Return tofu to the pan, add soy sauce and sesame oil, and toss to coat.","Serve over brown rice."],
       benefits:"<b>Tofu</b> provides plant-based isoflavones with antioxidant properties. The variety of colorful vegetables supplies a broad spectrum of carotenoids and vitamin C, and <b>brown rice</b> adds fiber and manganese."
     }
   ],
-  exercise:{icon:"⚡", title:"Low-Impact Interval Training", text:"20 minutes of low-impact HIIT — bike intervals or a bodyweight circuit. Short bursts of higher intensity improve insulin sensitivity and VO2 max without excessive joint stress."}
+  exercise:{icon:"<img src='img/low-impact-interval-training.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Low-Impact Interval Training", text:"20 minutes of low-impact HIIT — bike intervals or a bodyweight circuit. Short bursts of higher intensity improve insulin sensitivity and VO2 max without excessive joint stress."}
 },
 {
   key:"Sunday",
   intro:"A restorative close to the week: collagen-supportive vitamin C, unique plant pigments, and recovery-focused movement.",
   meals:[
     {
-      tag:"Breakfast", icon:"🍅",
+      tag:"Breakfast", icon:"<img src='img/vegetable-spinach-omelet.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Vegetable Spinach Omelet",
       ingredients:["3 eggs","1/2 cup spinach, chopped","1/4 cup diced tomatoes","2 tbsp diced onion","2 tbsp shredded cheese (optional)","1 tsp olive oil","Salt & pepper"],
       steps:["Whisk eggs with salt and pepper.","Heat olive oil in a nonstick pan over medium heat; sauté onion 2 minutes.","Add spinach and tomatoes; cook until spinach wilts, about 2 minutes.","Pour eggs over the vegetables; cook until edges set, then fold in half.","Add cheese if using, cover briefly to melt, and serve."],
       benefits:"<b>Eggs</b> are one of the few dietary sources of lutein and zeaxanthin in a highly bioavailable form. <b>Spinach and tomato</b> add vitamin C, required for collagen synthesis."
     },
     {
-      tag:"Lunch", icon:"🌹",
+      tag:"Lunch", icon:"<img src='img/roasted-beet-walnut-salad-with-goat-cheese.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Roasted Beet & Walnut Salad with Goat Cheese",
       ingredients:["2 medium beets","4 cups arugula","1/4 cup walnuts","1/4 cup crumbled goat cheese","2 tbsp olive oil","1 tbsp balsamic vinegar","1 tsp honey","Salt & pepper"],
       steps:["Preheat oven to 400°F. Wrap beets in foil and roast 45–50 minutes until fork-tender. Cool, peel, and slice.","Whisk olive oil, balsamic vinegar, honey, salt, and pepper for the dressing.","Toss arugula with dressing; arrange on plates.","Top with roasted beet slices, walnuts, and goat cheese."],
       benefits:"<b>Beets</b> contain betalains, unique antioxidant pigments studied for anti-inflammatory potential. <b>Walnuts and olive oil</b> add skin-supportive fats, and <b>arugula</b> contributes nitrates that support healthy blood flow to tissue, including skin."
     },
     {
-      tag:"Dinner", icon:"🌿",
+      tag:"Dinner", icon:"<img src='img/baked-salmon-with-quinoa-tabbouleh.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Baked Salmon with Quinoa Tabbouleh",
       ingredients:["5 oz salmon fillet","1 cup cooked quinoa","1 cup parsley, finely chopped","1/2 cup cherry tomatoes, diced","1/4 cup cucumber, diced","2 tbsp mint, chopped","2 tbsp lemon juice","2 tbsp olive oil","Salt & pepper"],
       steps:["Preheat oven to 400°F. Season salmon with salt, pepper, and a drizzle of olive oil; bake 12–15 minutes until flaky.","Combine cooked quinoa, parsley, tomatoes, cucumber, and mint in a bowl.","Whisk lemon juice, olive oil, salt, and pepper; toss with the quinoa mixture.","Serve salmon alongside the quinoa tabbouleh."],
       benefits:"<b>Parsley</b> is a concentrated source of vitamin C and flavonoids. Swapping bulgur for <b>quinoa</b> adds a fiber- and protein-rich whole grain, and <b>salmon</b> closes the week with more anti-inflammatory omega-3s for the skin barrier."
     }
   ],
-  exercise:{icon:"🚶", title:"Active Recovery", text:"30–40 minutes of easy walking plus balance and stretching work. Active recovery supports the nervous system and long-term joint health heading into the new week."}
+  exercise:{icon:"<img src='img/active-recovery.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Active Recovery", text:"30–40 minutes of easy walking plus balance and stretching work. Active recovery supports the nervous system and long-term joint health heading into the new week."}
 }
 ];
 
@@ -847,196 +1153,196 @@ const WEEK_2_DAYS = [
   intro:"Open the ferment-and-cruciferous week with live cultures and sulfur-rich greens.",
   meals:[
     {
-      tag:"Breakfast", icon:"🥬",
+      tag:"Breakfast", icon:"<img src='img/kimchi-scrambled-eggs-on-rye.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Kimchi Scrambled Eggs on Rye",
       ingredients:["3 eggs","1/3 cup chopped kimchi, drained","2 slices dark rye bread","1 scallion, sliced","1 tsp toasted sesame oil","1 tsp olive oil","1/2 tsp toasted sesame seeds","Black pepper"],
       steps:["Squeeze excess brine from the kimchi and chop it roughly.","Warm olive oil in a nonstick pan over medium-low heat; sauté kimchi 2 minutes until the edges caramelize.","Whisk eggs with black pepper, pour into the pan, and stir slowly until just set — pull them off the heat while still glossy.","Toast the rye, pile on the eggs, and finish with scallion, sesame oil, and sesame seeds."],
       benefits:"<b>Kimchi</b> delivers live lactic-acid bacteria and the same glucosinolates found in cabbage, a combination linked to lower inflammatory markers. <b>Eggs</b> supply choline and highly bioavailable lutein, and <b>rye</b> keeps the glucose curve flat, limiting the glycation that stiffens collagen."
     },
     {
-      tag:"Lunch", icon:"🥦",
+      tag:"Lunch", icon:"<img src='img/broccoli-sprout-and-chickpea-grain-bowl.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Broccoli Sprout & Chickpea Grain Bowl",
       ingredients:["1 cup cooked farro or barley","1.5 cups broccoli florets, blanched","1 cup cooked chickpeas","1/2 cup broccoli sprouts","1/4 cup shredded red cabbage","2 tbsp tahini","1 tbsp lemon juice","1 tsp dijon mustard","1 tbsp olive oil","Salt & pepper"],
       steps:["Blanch broccoli 90 seconds in salted water, then plunge into ice water to hold its colour and crunch.","Whisk tahini, lemon juice, dijon, olive oil, and 1–2 tbsp water into a pourable dressing.","Layer grain, chickpeas, broccoli, and cabbage in a bowl.","Crown with raw broccoli sprouts and spoon the dressing over just before eating."],
       benefits:"<b>Broccoli sprouts</b> carry up to fifty times the sulforaphane precursor of mature broccoli, a compound that switches on the body's Nrf2 antioxidant pathway. Adding raw sprouts to cooked broccoli restores the myrosinase enzyme heat destroys, and <b>chickpea</b> fiber feeds the gut bacteria that keep systemic inflammation low."
     },
     {
-      tag:"Dinner", icon:"🐟",
+      tag:"Dinner", icon:"<img src='img/miso-glazed-cod-with-bok-choy.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Miso-Glazed Cod with Bok Choy",
       ingredients:["5 oz cod fillet","2 tbsp white miso paste","1 tbsp mirin","1 tsp grated ginger","1 tsp honey","3 heads baby bok choy, halved","1 cup cooked brown rice","1 tsp sesame oil","1 garlic clove, sliced"],
       steps:["Whisk miso, mirin, ginger, and honey; coat the cod and marinate 20 minutes (or overnight).","Heat the broiler. Broil cod 6–8 minutes until the glaze blisters and the fish flakes.","Meanwhile sear bok choy cut-side down in sesame oil with the garlic, 2 minutes, then add a splash of water and cover 2 minutes to steam through.","Serve fish and greens over brown rice, spooning any pan juices over the top."],
       benefits:"<b>Miso</b> is a fermented soy food supplying isoflavones and gut-friendly organisms — traditional intakes track with longer healthspan in Japanese cohorts. <b>Bok choy</b> is a cruciferous green rich in vitamin K and calcium, and <b>cod</b> is a lean, low-mercury protein that supports muscle without an inflammatory fat load."
     }
   ],
-  exercise:{icon:"🏋️", title:"Full-Body Strength", text:"40 minutes of compound resistance work — goblet squats, dumbbell rows, overhead press, and carries. Loading the whole body twice a week is the most reliable defence against sarcopenia, the muscle loss that quietly drives frailty after 50."}
+  exercise:{icon:"<img src='img/full-body-strength-3.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Full-Body Strength", text:"40 minutes of compound resistance work — goblet squats, dumbbell rows, overhead press, and carries. Loading the whole body twice a week is the most reliable defence against sarcopenia, the muscle loss that quietly drives frailty after 50."}
 },
 {
   key:"Tuesday",
   intro:"Cultured dairy and slow carbohydrate keep blood sugar and the microbiome steady.",
   meals:[
     {
-      tag:"Breakfast", icon:"🥛",
+      tag:"Breakfast", icon:"<img src='img/kefir-overnight-oats-with-raspberries-and-pistachios.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Kefir Overnight Oats with Raspberries & Pistachios",
       ingredients:["1/2 cup rolled oats","3/4 cup plain kefir","1 tbsp ground flaxseed","1/2 tsp vanilla extract","1/2 cup raspberries","2 tbsp shelled pistachios, chopped","1 tsp maple syrup","Pinch of sea salt"],
       steps:["Stir oats, kefir, flaxseed, vanilla, maple syrup, and salt together in a jar.","Refrigerate at least 6 hours or overnight.","In the morning, loosen with a splash of kefir if needed.","Top with raspberries and pistachios."],
       benefits:"<b>Kefir</b> carries a broader range of bacterial and yeast strains than yogurt, and fermentation-rich diets have been shown to increase microbiome diversity while lowering inflammatory proteins. <b>Raspberries</b> are among the highest-fiber fruits, and <b>pistachios</b> add lutein and vitamin E for skin and eye tissue."
     },
     {
-      tag:"Lunch", icon:"🥗",
+      tag:"Lunch", icon:"<img src='img/roasted-cauliflower-and-lentil-salad.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Roasted Cauliflower & Lentil Salad",
       ingredients:["1 small head cauliflower, in florets","1 cup cooked green lentils","1 tbsp olive oil","1 tsp ground coriander","1/2 tsp smoked paprika","2 tbsp tahini","1 tbsp lemon juice","2 tbsp chopped parsley","2 tbsp pomegranate seeds","Salt & pepper"],
       steps:["Heat oven to 425°F. Toss cauliflower with oil, coriander, paprika, salt, and pepper.","Roast 25 minutes, turning once, until deeply browned at the edges — the char is where the flavour lives.","Thin tahini with lemon juice and water to a drizzling consistency.","Fold warm cauliflower through the lentils, dress, and scatter with parsley and pomegranate."],
       benefits:"<b>Cauliflower</b> supplies glucosinolates and vitamin C in a low-glycemic package. <b>Lentils</b> bring folate for DNA methylation and repair, while <b>pomegranate's</b> ellagitannins are converted by gut bacteria into urolithin A, studied for its effect on mitochondrial renewal."
     },
     {
-      tag:"Dinner", icon:"🍜",
+      tag:"Dinner", icon:"<img src='img/chicken-cabbage-stir-fry-with-buckwheat-noodles.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Chicken & Cabbage Stir-fry with Buckwheat Noodles",
       ingredients:["5 oz chicken breast, sliced thin","3 cups shredded green cabbage","1 carrot, julienned","4 oz soba (buckwheat) noodles","2 garlic cloves, minced","1 tsp grated ginger","2 tbsp low-sodium tamari","1 tsp rice vinegar","1 tbsp neutral oil","1 tsp sesame oil","1 scallion, sliced"],
       steps:["Boil soba 4–5 minutes, drain, and rinse under cold water so they don't clump.","Sear chicken in neutral oil over high heat 3–4 minutes until golden; set aside.","Stir-fry garlic and ginger 30 seconds, add cabbage and carrot, and toss 4 minutes until just wilted but still crisp.","Return chicken with tamari and vinegar, add the noodles, and toss to coat. Finish with sesame oil and scallion."],
       benefits:"<b>Cabbage</b> is cruciferous, cheap, and rich in indole-3-carbinol, which supports the liver's detoxification enzymes. <b>Buckwheat</b> contains rutin, a flavonoid that strengthens capillary walls, and lean <b>chicken</b> supplies leucine to trigger muscle protein synthesis."
     }
   ],
-  exercise:{icon:"🚴", title:"Zone 2 Cardio", text:"35–40 minutes at a pace where you could still hold a conversation. Low-intensity aerobic volume is what builds mitochondrial density — the cellular machinery that determines how much energy you have at 70."}
+  exercise:{icon:"<img src='img/zone-2-cardio-3.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Zone 2 Cardio", text:"35–40 minutes at a pace where you could still hold a conversation. Low-intensity aerobic volume is what builds mitochondrial density — the cellular machinery that determines how much energy you have at 70."}
 },
 {
   key:"Wednesday",
   intro:"Beta-carotene, plant protein, and a bitter green to wake up the digestion.",
   meals:[
     {
-      tag:"Breakfast", icon:"🍠",
+      tag:"Breakfast", icon:"<img src='img/sweet-potato-and-kale-hash-with-a-soft-egg.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Sweet Potato & Kale Hash with a Soft Egg",
       ingredients:["1 medium sweet potato, small dice","2 cups chopped kale, stems removed","1/4 red onion, diced","1 egg","1 tbsp olive oil","1/2 tsp smoked paprika","1/4 tsp chili flakes","Salt & pepper","Squeeze of lemon"],
       steps:["Heat olive oil in a skillet; add sweet potato and cook covered 8 minutes, stirring occasionally, until tender.","Add onion, paprika, and chili flakes; cook 3 minutes uncovered so the potato crisps.","Fold in kale with a splash of water and cook 2 minutes until it collapses.","Make a well, crack in the egg, cover, and cook 3 minutes until the white sets. Finish with lemon."],
       benefits:"<b>Sweet potato</b> is one of the densest food sources of beta-carotene, the precursor to the vitamin A that drives skin cell turnover. <b>Kale</b> layers on lutein and vitamin K, and the <b>egg yolk's</b> fat markedly improves absorption of both carotenoids."
     },
     {
-      tag:"Lunch", icon:"🌯",
+      tag:"Lunch", icon:"<img src='img/tempeh-and-crunchy-slaw-wrap.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Tempeh & Crunchy Slaw Wrap",
       ingredients:["4 oz tempeh, sliced","2 whole grain tortillas","2 cups shredded cabbage and carrot","2 tbsp plain yogurt","1 tbsp apple cider vinegar","1 tsp maple syrup","1 tbsp tamari","1 tsp smoked paprika","1 tbsp olive oil","Handful of cilantro"],
       steps:["Steam tempeh 8 minutes to soften its bitterness, then pat dry.","Toss with tamari and paprika, and pan-fry in olive oil until crisp on both sides.","Whisk yogurt, vinegar, and maple syrup; toss through the cabbage and carrot.","Warm the tortillas, fill with slaw, tempeh, and cilantro, and roll tightly."],
       benefits:"<b>Tempeh</b> is whole fermented soy — the fermentation frees its isoflavones and makes minerals more absorbable than in unfermented soy. The raw <b>cabbage slaw</b> preserves heat-sensitive vitamin C and myrosinase, and <b>yogurt</b> adds a second source of live cultures."
     },
     {
-      tag:"Dinner", icon:"🍛",
+      tag:"Dinner", icon:"<img src='img/turmeric-cauliflower-steaks-with-butter-beans.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Turmeric Cauliflower Steaks with Butter Beans",
       ingredients:["1 large cauliflower, cut into 1-inch steaks","1.5 cups cooked butter beans","2 tbsp olive oil","1 tsp ground turmeric","1/2 tsp cumin","1/4 tsp black pepper","2 garlic cloves, minced","1 cup cherry tomatoes","2 tbsp chopped dill","Juice of 1/2 lemon"],
       steps:["Heat oven to 425°F. Brush cauliflower steaks with oil, turmeric, cumin, black pepper, and salt.","Roast 25–30 minutes, flipping halfway, until the centres are tender and the edges bronzed.","Warm butter beans with garlic, tomatoes, and a splash of olive oil until the tomatoes burst, about 6 minutes.","Spoon beans onto plates, set the cauliflower on top, and finish with dill and lemon."],
       benefits:"<b>Turmeric's</b> curcumin needs <b>black pepper's</b> piperine to be absorbed in useful quantities — together they measurably lower inflammatory cytokines. <b>Butter beans</b> add resistant starch that ferments into butyrate, the short-chain fatty acid the gut lining runs on."
     }
   ],
-  exercise:{icon:"🧘", title:"Mobility & Core", text:"30 minutes of hip openers, thoracic rotations, and slow core work — dead bugs, side planks, bird dogs. Spinal mobility is a use-it-or-lose-it asset, and the parasympathetic downshift helps regulate the cortisol that accelerates cellular ageing."}
+  exercise:{icon:"<img src='img/mobility-core.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Mobility & Core", text:"30 minutes of hip openers, thoracic rotations, and slow core work — dead bugs, side planks, bird dogs. Spinal mobility is a use-it-or-lose-it asset, and the parasympathetic downshift helps regulate the cortisol that accelerates cellular ageing."}
 },
 {
   key:"Thursday",
   intro:"Casein-rich dairy, anthocyanin-heavy fruit, and a fatty fish other than salmon.",
   meals:[
     {
-      tag:"Breakfast", icon:"🍑",
+      tag:"Breakfast", icon:"<img src='img/cottage-cheese-bowl-with-peach-flax-and-almonds.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Cottage Cheese Bowl with Peach, Flax & Almonds",
       ingredients:["1 cup cottage cheese","1 ripe peach, sliced","1 tbsp ground flaxseed","2 tbsp sliced almonds, toasted","1 tsp raw honey","1/4 tsp cinnamon","Pinch of flaky salt"],
       steps:["Toast the almonds in a dry pan 2–3 minutes until fragrant; cool.","Spoon cottage cheese into a shallow bowl and stir the flaxseed through.","Arrange peach slices over the top.","Finish with almonds, honey, cinnamon, and a small pinch of salt to lift the sweetness."],
       benefits:"<b>Cottage cheese</b> is dense in slow-digesting casein protein, useful for preserving lean mass as anabolic sensitivity declines with age. <b>Flaxseed</b> lignans have oestrogen-modulating and antioxidant activity, and <b>almonds</b> contribute vitamin E that protects skin lipids from oxidation."
     },
     {
-      tag:"Lunch", icon:"🍎",
+      tag:"Lunch", icon:"<img src='img/red-cabbage-apple-and-walnut-slaw-with-grilled-chicken.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Red Cabbage, Apple & Walnut Slaw with Grilled Chicken",
       ingredients:["4 oz grilled chicken breast, sliced","3 cups shredded red cabbage","1 tart apple, julienned","1/4 cup walnuts, toasted","2 tbsp plain yogurt","1 tbsp wholegrain mustard","1 tbsp apple cider vinegar","1 tbsp olive oil","1 tbsp chopped chives","Salt & pepper"],
       steps:["Whisk yogurt, mustard, vinegar, olive oil, salt, and pepper.","Toss cabbage and apple in the dressing and let sit 10 minutes to soften slightly.","Fold in walnuts and chives.","Top with warm sliced chicken."],
       benefits:"<b>Red cabbage</b> carries both glucosinolates and the anthocyanins that give it colour — a rare double antioxidant load. <b>Apple</b> skin supplies quercetin, which has been shown in lab models to help clear senescent cells, and <b>walnuts</b> add plant omega-3 ALA."
     },
     {
-      tag:"Dinner", icon:"🐟",
+      tag:"Dinner", icon:"<img src='img/baked-trout-with-broccolini-and-barley.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Baked Trout with Broccolini & Barley",
       ingredients:["5 oz rainbow trout fillet","1 bunch broccolini, trimmed","1/2 cup pearl barley (dry)","1 tbsp olive oil","1 lemon, half sliced, half juiced","2 garlic cloves, sliced","1 tbsp capers","2 tbsp chopped parsley","Salt & pepper"],
       steps:["Simmer barley in salted water 25–30 minutes until chewy-tender; drain.","Heat oven to 400°F. Lay trout on a lined tray, season, and top with lemon slices. Bake 10–12 minutes.","Toss broccolini with oil and garlic, add to the tray for the last 8 minutes.","Stir capers, parsley, and lemon juice through the barley and serve everything together."],
       benefits:"<b>Trout</b> matches salmon for EPA and DHA while sitting even lower on the mercury scale. <b>Broccolini</b> keeps the week's sulforaphane supply going, and <b>barley's</b> beta-glucan fiber lowers LDL cholesterol and slows glucose absorption."
     }
   ],
-  exercise:{icon:"💪", title:"Upper-Body Strength", text:"35 minutes of pushing and pulling — incline press, rows, lat pulldowns, face pulls. Grip strength, which this work builds directly, is one of the single best predictors of all-cause mortality in older adults."}
+  exercise:{icon:"<img src='img/upper-body-strength-4.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Upper-Body Strength", text:"35 minutes of pushing and pulling — incline press, rows, lat pulldowns, face pulls. Grip strength, which this work builds directly, is one of the single best predictors of all-cause mortality in older adults."}
 },
 {
   key:"Friday",
   intro:"Raw ferments, pomegranate polyphenols, and a slow-simmered legume stew.",
   meals:[
     {
-      tag:"Breakfast", icon:"🍞",
+      tag:"Breakfast", icon:"<img src='img/sauerkraut-and-avocado-rye-toast-with-a-jammy-egg.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Sauerkraut & Avocado Rye Toast with a Jammy Egg",
       ingredients:["2 slices dark rye bread","1/2 avocado","1/3 cup raw sauerkraut, drained","1 egg","1 tsp olive oil","1/2 tsp chili flakes","Squeeze of lemon","Salt & pepper"],
       steps:["Lower the egg into boiling water and cook exactly 7 minutes, then chill in ice water and peel.","Toast the rye and mash the avocado onto it with lemon, salt, and pepper.","Spoon sauerkraut over the avocado.","Halve the egg, set it on top, and finish with olive oil and chili flakes."],
       benefits:"<b>Raw, unpasteurised sauerkraut</b> retains its live cultures — the heat-treated jars on most shelves do not. Fermented cabbage keeps the week's cruciferous compounds in play, and the <b>avocado's</b> monounsaturated fat slows the meal's glucose response."
     },
     {
-      tag:"Lunch", icon:"🌰",
+      tag:"Lunch", icon:"<img src='img/brussels-sprout-and-farro-salad-with-pomegranate.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Brussels Sprout & Farro Salad with Pomegranate",
       ingredients:["2 cups Brussels sprouts, shaved thin","1 cup cooked farro","1/4 cup pomegranate seeds","1/4 cup hazelnuts, toasted and chopped","2 tbsp shaved pecorino (optional)","2 tbsp olive oil","1 tbsp lemon juice","1 tsp honey","Salt & pepper"],
       steps:["Shave the sprouts as finely as you can — a mandoline or the slicing disc of a food processor is worth the wash-up.","Whisk olive oil, lemon juice, honey, salt, and pepper, then massage it into the sprouts and leave 10 minutes to tenderise.","Fold in the farro and hazelnuts.","Scatter pomegranate seeds and pecorino over the top."],
       benefits:"<b>Brussels sprouts</b> eaten raw preserve the myrosinase enzyme needed to convert glucosinolates into sulforaphane. <b>Farro</b> supplies fiber and selenium for glutathione production, and <b>hazelnuts</b> are exceptionally rich in vitamin E."
     },
     {
-      tag:"Dinner", icon:"🍲",
+      tag:"Dinner", icon:"<img src='img/lentil-and-kale-stew-with-garlic-and-cumin.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Lentil & Kale Stew with Garlic and Cumin",
       ingredients:["1 cup brown lentils","4 cups low-sodium vegetable broth","3 cups chopped kale","1 onion, diced","3 garlic cloves, minced","1 carrot, diced","1 celery stalk, diced","1 tsp cumin","1 tsp smoked paprika","1 bay leaf","2 tbsp olive oil","1 tbsp red wine vinegar"],
       steps:["Sweat onion, carrot, and celery in olive oil 8 minutes until soft and sweet.","Add garlic, cumin, and paprika; stir 1 minute until fragrant.","Add lentils, broth, and bay leaf; simmer 30 minutes until the lentils hold their shape but yield.","Stir in kale, cook 4 minutes, then finish with vinegar — the acid is what makes the whole pot taste finished."],
       benefits:"<b>Lentils</b> are a cornerstone legume in every long-lived population studied, supplying folate, iron, and fermentable fiber. <b>Kale</b> adds lutein and vitamin K for skin and bone, and the <b>olive oil</b> polyphenols carry oleocanthal's anti-inflammatory effect."
     }
   ],
-  exercise:{icon:"🦵", title:"Lower-Body Strength", text:"35–40 minutes of squats, split squats, hip hinges, and calf raises. Leg power fades faster than leg strength with age, so include a few explosive reps — step-ups or box jumps if your joints allow."}
+  exercise:{icon:"<img src='img/lower-body-strength-2.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Lower-Body Strength", text:"35–40 minutes of squats, split squats, hip hinges, and calf raises. Leg power fades faster than leg strength with age, so include a few explosive reps — step-ups or box jumps if your joints allow."}
 },
 {
   key:"Saturday",
   intro:"A slower morning, an oily fish lunch, and a traybake that fills the kitchen with rosemary.",
   meals:[
     {
-      tag:"Breakfast", icon:"🥝",
+      tag:"Breakfast", icon:"<img src='img/yogurt-bowl-with-toasted-buckwheat-kiwi-and-pepitas.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Yogurt Bowl with Toasted Buckwheat, Kiwi & Pepitas",
       ingredients:["1 cup plain Greek yogurt","2 tbsp raw buckwheat groats","2 kiwi, sliced","2 tbsp pumpkin seeds","1 tsp honey","1 tsp lemon zest","Pinch of cardamom"],
       steps:["Toast buckwheat groats and pumpkin seeds in a dry pan 4 minutes, shaking often, until they smell nutty.","Spoon yogurt into a bowl and stir the cardamom and lemon zest through.","Arrange kiwi over the top.","Scatter the toasted groats and seeds and drizzle with honey."],
       benefits:"<b>Kiwi</b> carries more vitamin C per gram than orange, and vitamin C is a non-negotiable cofactor for collagen synthesis. <b>Pumpkin seeds</b> are one of the best plant sources of zinc for skin repair, and toasted <b>buckwheat</b> adds rutin and a genuinely good crunch."
     },
     {
-      tag:"Lunch", icon:"🍊",
+      tag:"Lunch", icon:"<img src='img/grilled-mackerel-with-shaved-fennel-and-orange.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Grilled Mackerel with Shaved Fennel & Orange",
       ingredients:["2 mackerel fillets","1 fennel bulb, shaved thin","1 orange, segmented","1/4 red onion, sliced paper-thin","2 tbsp olive oil","1 tbsp lemon juice","10 black olives","2 tbsp fennel fronds","Salt & pepper"],
       steps:["Score the mackerel skin, season well, and grill skin-side down 4 minutes, then 1–2 minutes on the flesh side.","Soak the sliced onion in cold water 5 minutes to take the bite out; drain.","Toss fennel, orange segments, onion, and olives with olive oil and lemon juice.","Lay the mackerel over the salad and scatter with fennel fronds."],
       benefits:"<b>Mackerel</b> is among the highest omega-3 fish per serving and one of the cheapest — its EPA and DHA lower the inflammatory signalling implicated in skin and vascular ageing. <b>Fennel</b> supplies anethole and fiber, and <b>orange</b> brings vitamin C and flavanones."
     },
     {
-      tag:"Dinner", icon:"🫘",
+      tag:"Dinner", icon:"<img src='img/roasted-vegetable-and-white-bean-traybake-with-rosemary.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Roasted Vegetable & White Bean Traybake with Rosemary",
       ingredients:["1.5 cups cooked cannellini beans","1 red pepper, chunked","1 zucchini, thick sliced","1 red onion, wedged","1 cup cherry tomatoes","3 garlic cloves, whole","2 tbsp olive oil","2 sprigs rosemary","1 tbsp balsamic vinegar","2 tbsp chopped basil","Salt & pepper"],
       steps:["Heat oven to 425°F. Toss vegetables with olive oil, rosemary, garlic, salt, and pepper across one wide tray — crowding steams them instead of roasting.","Roast 25 minutes until the edges catch and the tomatoes split.","Fold the beans through and return to the oven 8 minutes to warm and absorb the juices.","Finish with balsamic vinegar and torn basil."],
       benefits:"<b>White beans</b> deliver resistant starch and plant protein at almost no inflammatory cost. <b>Roasted tomatoes</b> release more absorbable lycopene than raw ones, and <b>rosemary's</b> carnosic acid is a potent antioxidant that also limits the harmful compounds formed at high roasting temperatures."
     }
   ],
-  exercise:{icon:"🥾", title:"Long Walk or Hike", text:"60–90 minutes outdoors, ideally with some uphill. The duration matters more than the intensity here, and daylight exposure anchors the circadian rhythm that governs overnight cellular repair."}
+  exercise:{icon:"<img src='img/long-walk-hike.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Long Walk or Hike", text:"60–90 minutes outdoors, ideally with some uphill. The duration matters more than the intensity here, and daylight exposure anchors the circadian rhythm that governs overnight cellular repair."}
 },
 {
   key:"Sunday",
   intro:"A gentle close: eggs, a warming soup, and steamed fish that takes ten minutes.",
   meals:[
     {
-      tag:"Breakfast", icon:"🍳",
+      tag:"Breakfast", icon:"<img src='img/broccoli-and-herb-frittata.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Broccoli & Herb Frittata",
       ingredients:["5 eggs","1.5 cups small broccoli florets, blanched","2 tbsp chopped dill","2 tbsp chopped parsley","1/4 cup crumbled feta","1 shallot, sliced","1 tbsp olive oil","Salt & pepper"],
       steps:["Heat oven to 375°F. Soften shallot in olive oil in an ovenproof skillet, 3 minutes.","Add broccoli and warm through.","Whisk eggs with herbs, salt, and pepper; pour into the pan and scatter feta over the top.","Cook 2 minutes on the stove, then transfer to the oven 12–14 minutes until just set with a slight wobble. Rest 5 minutes before slicing."],
       benefits:"<b>Eggs</b> provide complete protein and the lutein and zeaxanthin that concentrate in the retina and skin. <b>Broccoli</b> adds sulforaphane precursors and vitamin C, and the generous <b>herbs</b> are, gram for gram, among the most polyphenol-dense foods in the kitchen."
     },
     {
-      tag:"Lunch", icon:"🎃",
+      tag:"Lunch", icon:"<img src='img/butternut-squash-and-red-lentil-soup-with-ginger.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Butternut Squash & Red Lentil Soup with Ginger",
       ingredients:["3 cups cubed butternut squash","3/4 cup red lentils","4 cups low-sodium broth","1 onion, diced","1 tbsp grated ginger","2 garlic cloves","1 tsp turmeric","1/2 tsp cumin","1 tbsp olive oil","1/3 cup coconut milk","Juice of 1/2 lime","2 tbsp pumpkin seeds"],
       steps:["Sauté onion in olive oil 5 minutes, then add ginger, garlic, turmeric, and cumin for 1 minute.","Add squash, lentils, and broth; simmer 20–25 minutes until everything is soft.","Blend until smooth, then stir in coconut milk and lime juice.","Serve topped with toasted pumpkin seeds."],
       benefits:"<b>Butternut squash</b> is loaded with alpha- and beta-carotene, which accumulate in skin and offer measurable protection against UV-driven oxidative damage. <b>Ginger's</b> gingerol is anti-inflammatory, and <b>red lentils</b> add the protein that makes a pureed soup actually filling."
     },
     {
-      tag:"Dinner", icon:"🐠",
+      tag:"Dinner", icon:"<img src='img/steamed-sea-bass-with-ginger-scallion-and-greens.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Steamed Sea Bass with Ginger, Scallion & Greens",
       ingredients:["2 sea bass fillets","2-inch piece ginger, julienned","4 scallions, cut in lengths","2 cups choy sum or baby spinach","2 tbsp low-sodium tamari","1 tbsp Shaoxing wine or dry sherry","1 tbsp neutral oil","1 tsp sesame oil","1 cup cooked brown rice","Fresh cilantro"],
       steps:["Lay the fillets on a heatproof plate, scatter half the ginger over them, and splash with the wine.","Steam over simmering water 8–10 minutes until the flesh turns opaque.","Pour off the watery liquid, then top the fish with remaining ginger, scallions, and tamari.","Heat the neutral oil until it shimmers and pour it over the aromatics — it should hiss. Add sesame oil, cilantro, and serve with wilted greens and rice."],
       benefits:"<b>Steaming</b> cooks protein without generating the advanced glycation end products that high, dry heat produces — one of the simplest anti-ageing changes available in a kitchen. <b>Sea bass</b> is a lean protein, and <b>ginger and scallion</b> add sulfur compounds and antioxidants."
     }
   ],
-  exercise:{icon:"🚶", title:"Active Recovery & Breathwork", text:"30 minutes of easy walking plus 10 minutes of slow nasal breathing or a body scan. Deliberate downregulation improves heart rate variability, a reliable marker of how well the nervous system is ageing."}
+  exercise:{icon:"<img src='img/active-recovery-breathwork.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Active Recovery & Breathwork", text:"30 minutes of easy walking plus 10 minutes of slow nasal breathing or a body scan. Deliberate downregulation improves heart rate variability, a reliable marker of how well the nervous system is ageing."}
 }
 ];
 
@@ -1047,196 +1353,196 @@ const WEEK_3_DAYS = [
   intro:"Begin the Blue Zones week the way Ikaria does — beans, olive oil, and bread that earns its place.",
   meals:[
     {
-      tag:"Breakfast", icon:"🍯",
+      tag:"Breakfast", icon:"<img src='img/sourdough-with-ricotta-figs-and-walnuts.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Sourdough with Ricotta, Figs & Walnuts",
       ingredients:["2 slices whole grain sourdough","1/3 cup fresh ricotta","2 fresh figs, quartered (or 3 dried, sliced)","2 tbsp walnuts, chopped","1 tsp honey","1 tsp lemon zest","Pinch of black pepper"],
       steps:["Toast the sourdough until the edges are crisp.","Whip the ricotta with lemon zest and a pinch of salt until spreadable.","Spread thickly on the toast and arrange the figs on top.","Finish with walnuts, honey, and a grind of black pepper."],
       benefits:"<b>Sourdough fermentation</b> lowers the bread's glycemic impact and partly breaks down gluten and phytates, making minerals more available. <b>Figs</b> supply potassium and polyphenols, <b>ricotta</b> adds whey protein, and <b>walnuts</b> bring the omega-3 ALA that anchors this whole plan."
     },
     {
-      tag:"Lunch", icon:"🍲",
+      tag:"Lunch", icon:"<img src='img/greek-lentil-soup-fakes.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Greek Lentil Soup (Fakes)",
       ingredients:["1 cup brown lentils","4 cups water or light broth","1 onion, diced","2 carrots, diced","3 garlic cloves, sliced","2 bay leaves","1 tsp dried oregano","3 tbsp olive oil","2 tbsp red wine vinegar","1 tbsp tomato paste","Salt & pepper"],
       steps:["Simmer lentils in water 10 minutes, then drain — this old trick keeps the soup clean-tasting.","Sweat onion, carrot, and garlic in half the olive oil until soft, 8 minutes.","Return lentils with fresh water, bay, oregano, and tomato paste; simmer 25 minutes.","Off the heat, stir in the remaining raw olive oil and the vinegar. Season generously."],
       benefits:"Legumes eaten daily are the single strongest dietary thread running through every Blue Zone. <b>Lentils</b> supply folate, fiber, and polyphenols, and adding the <b>olive oil</b> raw at the end preserves the heat-sensitive polyphenols that give it its anti-inflammatory effect."
     },
     {
-      tag:"Dinner", icon:"🍝",
+      tag:"Dinner", icon:"<img src='img/sardine-puttanesca-with-whole-wheat-spaghetti.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Sardine Puttanesca with Whole Wheat Spaghetti",
       ingredients:["2 tins sardines in olive oil, drained","6 oz whole wheat spaghetti","1 can crushed tomatoes","3 garlic cloves, sliced","1 tbsp capers","12 black olives, torn","1/2 tsp chili flakes","2 tbsp olive oil","2 tbsp chopped parsley","Salt & pepper"],
       steps:["Cook the spaghetti in well-salted water; reserve a cup of the cooking water before draining.","Warm garlic and chili flakes in olive oil until barely golden — take it off before it browns.","Add tomatoes, capers, and olives; simmer 12 minutes until glossy and thick.","Flake in the sardines, add the pasta with a splash of its water, and toss hard so the sauce clings. Finish with parsley."],
       benefits:"<b>Sardines</b> are small, short-lived, and low in mercury while carrying more omega-3 and vitamin D than almost any other tin in the cupboard — and their soft bones deliver calcium. <b>Tomatoes</b> cooked in olive oil release lycopene in its most absorbable form."
     }
   ],
-  exercise:{icon:"🏋️", title:"Full-Body Strength", text:"40 minutes of resistance work. In Blue Zones the equivalent is a lifetime of gardening and hauling — the point is regular loaded movement, whatever form it takes."}
+  exercise:{icon:"<img src='img/full-body-strength-2.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Full-Body Strength", text:"40 minutes of resistance work. In Blue Zones the equivalent is a lifetime of gardening and hauling — the point is regular loaded movement, whatever form it takes."}
 },
 {
   key:"Tuesday",
   intro:"Whole grains at breakfast, a herb-heavy bean salad, and fish with wild greens.",
   meals:[
     {
-      tag:"Breakfast", icon:"🌾",
+      tag:"Breakfast", icon:"<img src='img/barley-porridge-with-almond-honey-orange.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Barley Porridge with Almond, Honey & Orange",
       ingredients:["1/2 cup quick-cook barley flakes","1 cup milk or almond milk","1 tbsp almond butter","1 tsp honey","1 tsp orange zest","2 tbsp sliced almonds","Pinch of salt","Pinch of cinnamon"],
       steps:["Simmer barley flakes with milk and salt 8–10 minutes, stirring, until creamy.","Stir in almond butter and cinnamon.","Spoon into a bowl and top with orange zest, sliced almonds, and honey."],
       benefits:"<b>Barley</b> holds more beta-glucan than oats, the soluble fiber that blunts glucose spikes and lowers LDL cholesterol. <b>Almonds</b> supply vitamin E and magnesium, and the <b>orange zest</b> contributes flavonoids concentrated in the peel rather than the flesh."
     },
     {
-      tag:"Lunch", icon:"🫛",
+      tag:"Lunch", icon:"<img src='img/fava-bean-and-herb-salad-with-feta.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Fava Bean & Herb Salad with Feta",
       ingredients:["2 cups cooked fava beans (or edamame)","1 cup chopped dill, mint, and parsley","1/4 cup crumbled feta","1/4 red onion, thinly sliced","2 tbsp olive oil","1 tbsp lemon juice","1 tsp sumac","2 cups arugula","Salt & pepper"],
       steps:["If using dried favas, soak overnight and simmer until tender; frozen or fresh need only 4 minutes.","Slip off the tough outer skins for a sweeter, brighter salad.","Toss beans with herbs, onion, olive oil, lemon juice, and sumac.","Serve over arugula with feta crumbled on top."],
       benefits:"<b>Fava beans</b> are a Mediterranean staple rich in folate and L-dopa precursors, and they carry a low glycemic load. The volume of <b>fresh herbs</b> here is the point — dill, mint, and parsley are polyphenol powerhouses used as ingredients rather than garnish."
     },
     {
-      tag:"Dinner", icon:"🐟",
+      tag:"Dinner", icon:"<img src='img/grilled-sea-bream-with-horta-and-lemon.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Grilled Sea Bream with Horta & Lemon",
       ingredients:["1 whole sea bream, cleaned (or 2 fillets)","6 cups mixed bitter greens (dandelion, chicory, chard)","3 tbsp olive oil","1 lemon","2 garlic cloves, sliced","1 tsp dried oregano","Salt & pepper","Boiled small potatoes (optional)"],
       steps:["Score the fish, rub with oil, oregano, salt, and pepper, and stuff the cavity with lemon slices.","Grill 6–7 minutes per side until the skin blisters and the flesh pulls from the bone.","Boil the greens 6–8 minutes until tender, drain well, and dress while hot with olive oil, garlic, lemon juice, and salt.","Serve the fish over the greens with the pan juices."],
       benefits:"<b>Horta</b> — boiled wild greens — is eaten almost daily on Crete and Ikaria, and these bitter leaves outrank cultivated greens for polyphenols and nitrates. <b>Sea bream</b> is lean and low-mercury, and dressing hot greens in <b>olive oil</b> maximises absorption of their fat-soluble antioxidants."
     }
   ],
-  exercise:{icon:"⛰️", title:"Hill Walk", text:"45 minutes of walking with real gradient. Blue Zone longevity isn't built in gyms — it's built by terrain that makes ordinary movement slightly hard, every single day."}
+  exercise:{icon:"<img src='img/hill-walk.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Hill Walk", text:"45 minutes of walking with real gradient. Blue Zone longevity isn't built in gyms — it's built by terrain that makes ordinary movement slightly hard, every single day."}
 },
 {
   key:"Wednesday",
   intro:"Tomato, olive oil, and beans — the three pillars, in three different forms.",
   meals:[
     {
-      tag:"Breakfast", icon:"🍅",
+      tag:"Breakfast", icon:"<img src='img/pan-con-tomate-with-a-soft-egg.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Pan con Tomate with a Soft Egg",
       ingredients:["2 slices rustic whole grain bread","2 ripe tomatoes, halved","1 garlic clove","2 tbsp extra virgin olive oil","1 egg","Flaky salt","Black pepper"],
       steps:["Toast the bread until firm enough to stand up to rubbing.","Rub the cut garlic clove over the surface, then rub the cut tomato hard into the bread until only the skin is left in your hand.","Drizzle generously with olive oil and season with flaky salt.","Fry or poach the egg and set it on top with a grind of pepper."],
       benefits:"Raw <b>tomato</b> pulp with <b>extra virgin olive oil</b> is a classic pairing for a reason — the oil's fat dramatically increases lycopene absorption. Olive oil polyphenols are strongest when the oil is unheated, which is exactly how it's used here."
     },
     {
-      tag:"Lunch", icon:"🥣",
+      tag:"Lunch", icon:"<img src='img/minestrone-with-cannellini-beans-and-kale.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Minestrone with Cannellini Beans & Kale",
       ingredients:["1.5 cups cooked cannellini beans","3 cups chopped kale","1 onion, diced","2 carrots, diced","2 celery stalks, diced","2 garlic cloves","1 can chopped tomatoes","5 cups vegetable broth","1/2 cup small whole wheat pasta","2 tbsp olive oil","1 parmesan rind (optional)","2 tbsp basil"],
       steps:["Sweat onion, carrot, and celery in olive oil 10 minutes — the long, slow start is what separates a good minestrone from a thin one.","Add garlic, tomatoes, broth, and the parmesan rind; simmer 20 minutes.","Add pasta and beans, cook 8 minutes, then stir in kale for the last 3.","Rest 10 minutes off the heat before serving, finished with basil and a thread of raw olive oil."],
       benefits:"A single bowl covers legumes, cruciferous greens, and cooked tomato. <b>Cannellini beans</b> add resistant starch for the gut microbiome, and <b>kale's</b> vitamin K works alongside the calcium here to support bone density, which drops sharply with age."
     },
     {
-      tag:"Dinner", icon:"🍢",
+      tag:"Dinner", icon:"<img src='img/chicken-souvlaki-bowl-with-tzatziki-and-bulgur.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Chicken Souvlaki Bowl with Tzatziki & Bulgur",
       ingredients:["5 oz chicken thigh, cubed","1 cup cooked bulgur","1 cup Greek yogurt","1/2 cucumber, grated and squeezed dry","1 garlic clove, grated","2 tbsp olive oil","1 tbsp red wine vinegar","1 tsp dried oregano","1 lemon","Tomato, red onion, parsley to serve"],
       steps:["Marinate chicken in olive oil, vinegar, oregano, lemon juice, salt, and pepper for at least 30 minutes.","Thread onto skewers and grill 10–12 minutes, turning, until charred at the edges and cooked through.","Mix yogurt, cucumber, garlic, a little olive oil, and salt for the tzatziki.","Build bowls with bulgur, chicken, tomato, onion, parsley, and a large spoon of tzatziki."],
       benefits:"<b>Bulgur</b> is a minimally processed whole grain with a low glycemic index. The <b>acidic marinade</b> does real work — marinating meat in lemon juice, vinegar, and herbs before grilling substantially reduces the harmful compounds that form on charred protein."
     }
   ],
-  exercise:{icon:"💪", title:"Upper-Body Strength", text:"35 minutes of presses, rows, and carries. Loaded carries in particular translate directly into the everyday capability — groceries, luggage, grandchildren — that determines independence later on."}
+  exercise:{icon:"<img src='img/upper-body-strength-3.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Upper-Body Strength", text:"35 minutes of presses, rows, and carries. Loaded carries in particular translate directly into the everyday capability — groceries, luggage, grandchildren — that determines independence later on."}
 },
 {
   key:"Thursday",
   intro:"Yogurt with honey, stuffed peppers, and beans baked slowly in tomato.",
   meals:[
     {
-      tag:"Breakfast", icon:"🍇",
+      tag:"Breakfast", icon:"<img src='img/greek-yogurt-with-thyme-honey-walnuts-grapes.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Greek Yogurt with Thyme Honey, Walnuts & Grapes",
       ingredients:["1 cup full-fat Greek yogurt","1 tbsp thyme honey","1/4 cup walnuts, toasted","1/2 cup red grapes, halved","1 tsp bee pollen (optional)","Pinch of cinnamon"],
       steps:["Toast the walnuts until fragrant and let them cool so they stay crisp.","Spoon yogurt into a bowl and swirl the honey through it, leaving visible ribbons.","Top with grapes, walnuts, and a pinch of cinnamon.","Add bee pollen if you have it."],
       benefits:"This is the everyday breakfast of Ikaria, and it holds up: <b>full-fat yogurt</b> supplies protein and live cultures, <b>walnuts</b> deliver omega-3 ALA, and dark <b>grapes</b> bring resveratrol and anthocyanins. <b>Thyme honey</b> carries antibacterial and antioxidant compounds ordinary honey lacks."
     },
     {
-      tag:"Lunch", icon:"🫑",
+      tag:"Lunch", icon:"<img src='img/stuffed-peppers-with-rice-herbs-and-pine-nuts.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Stuffed Peppers with Rice, Herbs & Pine Nuts",
       ingredients:["4 bell peppers","1 cup cooked brown rice","1 onion, finely diced","2 tbsp pine nuts","1/4 cup chopped parsley","2 tbsp chopped mint","2 tbsp currants","3 tbsp olive oil","1 tsp cinnamon","1 tomato, grated","Salt & pepper"],
       steps:["Heat oven to 375°F. Cut the tops off the peppers and hollow them out, keeping the lids.","Soften onion in olive oil, add pine nuts and cinnamon, then fold through rice, herbs, currants, and grated tomato.","Fill the peppers, replace the lids, and set them upright in a dish with a splash of water and oil.","Bake 45 minutes until the peppers slump and blister."],
       benefits:"<b>Bell peppers</b> hold more vitamin C than citrus, essential for collagen cross-linking. <b>Pine nuts</b> add vitamin E and manganese, <b>cinnamon</b> has been shown to modestly improve insulin sensitivity, and the herbs and currants layer on polyphenols."
     },
     {
-      tag:"Dinner", icon:"🫘",
+      tag:"Dinner", icon:"<img src='img/gigantes-baked-butter-beans-in-tomato-and-dill.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Gigantes: Baked Butter Beans in Tomato & Dill",
       ingredients:["2 cups cooked butter beans","1 can chopped tomatoes","1 onion, diced","3 garlic cloves, sliced","1 carrot, finely diced","1/3 cup olive oil","1 tsp dried oregano","1/4 cup chopped dill","1 tsp honey","Salt & pepper","Feta to serve"],
       steps:["Heat oven to 350°F. Soften onion, carrot, and garlic in half the olive oil, 10 minutes.","Add tomatoes, oregano, honey, salt, and pepper; simmer 10 minutes.","Fold in the beans, transfer to a baking dish, and pour the remaining olive oil over the top.","Bake uncovered 45–50 minutes until the surface darkens and the sauce thickens. Stir dill through and serve with feta."],
       benefits:"A dish built on the assumption that <b>olive oil is a food, not a seasoning</b> — the generous pour is the traditional method and the source of most of its polyphenols. <b>Butter beans</b> supply plant protein and fermentable fiber, and slow-cooked <b>tomato</b> yields concentrated lycopene."
     }
   ],
-  exercise:{icon:"🏊", title:"Zone 2 Swim or Cycle", text:"40 minutes at an easy, sustainable effort. Non-impact aerobic work protects joints while still driving the mitochondrial and cardiovascular adaptations that matter most for long-term healthspan."}
+  exercise:{icon:"<img src='img/zone-swim-cycle.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Zone 2 Swim or Cycle", text:"40 minutes at an easy, sustainable effort. Non-impact aerobic work protects joints while still driving the mitochondrial and cardiovascular adaptations that matter most for long-term healthspan."}
 },
 {
   key:"Friday",
   intro:"Kefir and figs, a tinned-fish lunch that takes five minutes, and shrimp with orzo.",
   meals:[
     {
-      tag:"Breakfast", icon:"🥤",
+      tag:"Breakfast", icon:"<img src='img/fig-and-almond-kefir-smoothie.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Fig & Almond Kefir Smoothie",
       ingredients:["1 cup plain kefir","3 dried figs, stems removed","1 tbsp almond butter","1 tbsp ground flaxseed","1/2 frozen banana","1/2 tsp vanilla","Pinch of cardamom","Ice"],
       steps:["Soak the dried figs in warm water 10 minutes if they're firm; this makes them blend smooth.","Add all ingredients to a blender.","Blend 45 seconds until completely smooth.","Pour and drink cold."],
       benefits:"<b>Kefir</b> brings a wide range of live cultures, and fermented dairy intake tracks with lower inflammatory markers in long-term cohort studies. <b>Dried figs</b> are unusually rich in calcium and polyphenols for a fruit, and <b>flaxseed</b> lignans add antioxidant depth."
     },
     {
-      tag:"Lunch", icon:"🥗",
+      tag:"Lunch", icon:"<img src='img/tuna-olive-and-chickpea-salad-with-capers.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Tuna, Olive & Chickpea Salad with Capers",
       ingredients:["1 can tuna in olive oil, drained","1.5 cups cooked chickpeas","1/4 red onion, thinly sliced","12 green olives, torn","1 tbsp capers","1 celery stalk, sliced thin","2 tbsp olive oil","1 tbsp lemon juice","2 tbsp chopped parsley","Salt & pepper"],
       steps:["Soak the onion in cold water 5 minutes so it stays crisp without the harsh bite.","Combine chickpeas, tuna, olives, capers, and celery in a bowl.","Dress with olive oil, lemon juice, salt, and pepper, and fold gently to keep the tuna in flakes.","Stir the parsley through and let it sit 10 minutes before eating."],
       benefits:"<b>Tuna</b> adds omega-3s and selenium, a mineral the body needs to build glutathione — its master antioxidant. <b>Chickpeas</b> supply fiber and slow-release carbohydrate, and <b>olives</b> contribute hydroxytyrosol, one of the most bioactive polyphenols in the Mediterranean diet."
     },
     {
-      tag:"Dinner", icon:"🍤",
+      tag:"Dinner", icon:"<img src='img/herbed-shrimp-and-orzo-with-spinach.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Herbed Shrimp & Orzo with Spinach",
       ingredients:["6 oz shrimp, peeled","1 cup whole wheat orzo","3 cups spinach","2 garlic cloves, sliced","1/2 cup cherry tomatoes, halved","2 tbsp olive oil","1/4 cup dry white wine","1 lemon, zested and juiced","2 tbsp dill","2 tbsp feta (optional)"],
       steps:["Cook orzo in salted water until just al dente; drain, keeping a little water back.","Sauté garlic in olive oil 30 seconds, add shrimp, and cook 2 minutes per side until pink.","Add tomatoes and wine; let it bubble 2 minutes to reduce.","Fold in spinach, orzo, lemon zest and juice, and dill, loosening with pasta water. Top with feta."],
       benefits:"<b>Shrimp</b> is a lean protein carrying astaxanthin, the carotenoid that gives it colour and has been studied for skin elasticity and UV protection. <b>Spinach</b> adds folate and lutein, and <b>whole wheat orzo</b> keeps the fiber that white pasta gives up."
     }
   ],
-  exercise:{icon:"🦵", title:"Lower-Body Strength", text:"35–40 minutes of squats, deadlift patterns, step-ups, and single-leg balance. Balance work belongs in the strength session — falls, not disease, are what most often end independent living."}
+  exercise:{icon:"<img src='img/lower-body-strength-4.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Lower-Body Strength", text:"35–40 minutes of squats, deadlift patterns, step-ups, and single-leg balance. Balance work belongs in the strength session — falls, not disease, are what most often end independent living."}
 },
 {
   key:"Saturday",
   intro:"Cook slowly today: a greens pie, charred eggplant, and a saffron stew worth the effort.",
   meals:[
     {
-      tag:"Breakfast", icon:"<img src='https://images.unsplash.com/photo-1467003909585-2f8a72700288? auto=format&amp;fit=crop&amp;w=500&amp;q=80'class='w-full h-full object-cover'>",
+      tag:"Breakfast", icon:"<img src='img/crustless-spinach-and-feta-bake.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Crustless Spinach & Feta Bake",
       ingredients:["10 oz spinach, wilted and squeezed dry","5 eggs","1/2 cup crumbled feta","2 scallions, sliced","1/4 cup chopped dill","2 tbsp chopped mint","2 tbsp olive oil","1/4 cup Greek yogurt","Salt, pepper, nutmeg"],
       steps:["Heat oven to 375°F and oil a small baking dish.","Squeeze every drop of water from the spinach — a wet mix will never set properly.","Whisk eggs with yogurt, herbs, scallions, nutmeg, salt, and pepper, then fold in spinach and feta.","Pour into the dish and bake 30 minutes until puffed and golden. Cool 10 minutes before cutting."],
       benefits:"All the herb-and-greens payload of spanakopita without the butter-laden pastry. <b>Spinach</b> delivers folate, lutein, and nitrates that support blood flow, while <b>eggs and feta</b> supply protein and calcium in a dish that's just as good cold the next day."
     },
     {
-      tag:"Lunch", icon:"🍆",
+      tag:"Lunch", icon:"<img src='img/grilled-eggplant-with-tahini-and-pomegranate.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Grilled Eggplant with Tahini & Pomegranate",
       ingredients:["2 medium eggplants, sliced thick","3 tbsp tahini","1 tbsp lemon juice","1 garlic clove, grated","2 tbsp olive oil","1/4 cup pomegranate seeds","2 tbsp chopped parsley","1 tsp sumac","2 tbsp toasted pine nuts","Salt & pepper"],
       steps:["Salt the eggplant slices and leave 20 minutes, then pat dry — this draws out moisture so they grill rather than steam.","Brush with olive oil and grill 4–5 minutes per side until striped and collapsing.","Whisk tahini, lemon juice, garlic, and cold water into a loose sauce.","Layer eggplant on a platter, spoon tahini over, and scatter pomegranate, parsley, pine nuts, and sumac."],
       benefits:"<b>Eggplant</b> skin carries nasunin, an anthocyanin studied for protecting cell membranes from oxidative damage. <b>Tahini</b> supplies sesamin lignans and calcium, and <b>pomegranate</b> ellagitannins feed the gut bacteria that produce urolithin A."
     },
     {
-      tag:"Dinner", icon:"🍲",
+      tag:"Dinner", icon:"<img src='img/seafood-and-Saffron-stew-with-fennel.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Seafood & Saffron Stew with Fennel",
       ingredients:["6 oz white fish, cubed","4 oz shrimp or mussels","1 fennel bulb, sliced","1 onion, sliced","3 garlic cloves","1 can chopped tomatoes","3 cups fish or vegetable broth","Pinch of saffron threads","1 strip orange zest","3 tbsp olive oil","2 tbsp parsley","Whole grain bread to serve"],
       steps:["Steep the saffron in 2 tbsp warm broth for 10 minutes to bloom its colour and aroma.","Soften fennel and onion in olive oil 10 minutes, then add garlic and cook 1 minute.","Add tomatoes, broth, saffron with its liquid, and orange zest; simmer 15 minutes.","Add fish first, then shellfish after 2 minutes; cook 4–5 minutes more until just opaque. Serve with bread and parsley."],
       benefits:"<b>Saffron's</b> crocin and safranal are potent antioxidants, with early trials suggesting benefits for mood and retinal health. <b>Fennel</b> supplies fiber and anethole, and mixed <b>seafood</b> covers omega-3s, iodine, selenium, and B12 in one pot."
     }
   ],
-  exercise:{icon:"💃", title:"Social Movement", text:"An hour of walking, dancing, or gardening with other people. The social connection is not a footnote — strong social ties predict longevity about as powerfully as not smoking, and shared movement gives you both at once."}
+  exercise:{icon:"<img src='img/social-movement.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Social Movement", text:"An hour of walking, dancing, or gardening with other people. The social connection is not a footnote — strong social ties predict longevity about as powerfully as not smoking, and shared movement gives you both at once."}
 },
 {
   key:"Sunday",
   intro:"The long table: a frittata, a bread salad, and slow-roast chicken with olives.",
   meals:[
     {
-      tag:"Breakfast", icon:"<img src='img/Zucchini-Mint-Feta-Frittata.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
+      tag:"Breakfast", icon:"<img src='img/zucchini-mint-feta-frittata.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Zucchini, Mint & Feta Frittata",
       ingredients:["5 eggs","2 zucchini, coarsely grated","1/4 cup crumbled feta","2 tbsp chopped mint","1 shallot, sliced","2 tbsp olive oil","1 tsp lemon zest","Salt & pepper"],
       steps:["Salt the grated zucchini and leave 10 minutes, then squeeze out the liquid.","Soften shallot in olive oil in an ovenproof pan, add zucchini, and cook 4 minutes.","Whisk eggs with mint, lemon zest, salt, and pepper; pour in and scatter feta on top.","Cook 3 minutes on the hob, then finish under a medium broiler 5–6 minutes until set and lightly browned."],
       benefits:"<b>Zucchini</b> is high-volume and low-calorie with useful potassium and vitamin C. <b>Eggs</b> supply choline for cell membranes and liver function, and <b>mint</b> adds rosmarinic acid, an anti-inflammatory polyphenol."
     },
     {
-      tag:"Lunch", icon:"<img src='img/Panzanella-with-Basil-Good-Olive-Oil.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
+      tag:"Lunch", icon:"<img src='img/panzanella-with-basil-good-olive-oil.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Panzanella with Basil & Good Olive Oil",
       ingredients:["3 cups torn day-old whole grain bread","4 ripe tomatoes, chunked","1 cucumber, chunked","1/4 red onion, sliced thin","1/2 cup basil leaves","3 tbsp extra virgin olive oil","1 tbsp red wine vinegar","1 garlic clove, halved","Salt & pepper"],
       steps:["Toast the bread chunks in a dry pan or low oven until dry and crisp, then rub with the cut garlic.","Salt the tomatoes in a bowl and let them sit 15 minutes to release their juice — that juice is the dressing.","Add bread, cucumber, and onion; toss with olive oil and vinegar.","Rest 20 minutes so the bread drinks it all in, then fold in basil before serving."],
       benefits:"A dish designed around waste-nothing frugality that happens to be nutritionally sound. Raw <b>tomato</b> and <b>olive oil</b> together maximise lycopene uptake, <b>basil</b> supplies polyphenols, and stale <b>whole grain bread</b> has a lower glycemic response than fresh."
     },
     {
-      tag:"Dinner", icon:"<img src='img/Slow-Roast-Chicken-with-Lemon-Olives.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
+      tag:"Dinner", icon:"<img src='img/slow-roast-chicken-with-lemon-olives.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Slow-Roast Chicken Thighs with Lemon, Olives & Chickpeas",
       ingredients:["4 bone-in chicken thighs, skin on","1.5 cups cooked chickpeas","1 lemon, sliced","1/2 cup green olives","1 onion, wedged","4 garlic cloves","2 tbsp olive oil","1 tsp oregano","1/2 tsp cumin","1/2 cup broth","Parsley to finish"],
       steps:["Heat oven to 375°F. Season the chicken well and brown skin-side down in a heavy pan, 6 minutes, until the fat renders and the skin crisps.","Turn the thighs, add onion, garlic, chickpeas, olives, lemon, oregano, cumin, and broth.","Transfer to the oven and roast 35–40 minutes, basting once.","Rest 10 minutes, then serve with the pan juices and plenty of parsley."],
       benefits:"Chicken appears in Blue Zone diets — in modest portions, alongside a much larger volume of plants, which is exactly the ratio here. <b>Chickpeas</b> carry the fiber and plant protein, <b>olives</b> add hydroxytyrosol, and slow moderate-heat roasting limits the glycation products that searing produces."
     }
   ],
-  exercise:{icon:"🚶", title:"Active Recovery & a Long Meal", text:"A 40-minute unhurried walk, ideally after eating. Post-meal walking meaningfully lowers the glucose spike, and the Blue Zone habit of eating slowly with company does more for stress physiology than any supplement."}
+  exercise:{icon:"<img src='img/active-recovery-long-meal.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Active Recovery & a Long Meal", text:"A 40-minute unhurried walk, ideally after eating. Post-meal walking meaningfully lowers the glucose spike, and the Blue Zone habit of eating slowly with company does more for stress physiology than any supplement."}
 }
 ];
 
@@ -1247,196 +1553,196 @@ const WEEK_4_DAYS = [
   intro:"Close the month the Okinawan way: green tea, mushrooms, soy, and sea vegetables.",
   meals:[
     {
-      tag:"Breakfast", icon:"🍵",
+      tag:"Breakfast", icon:"<img src='img/matcha-chia-pudding-with-kiwi-and-pistachio.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Matcha Chia Pudding with Kiwi & Pistachio",
       ingredients:["3 tbsp chia seeds","1 cup unsweetened almond milk","1 tsp ceremonial-grade matcha","1 tsp maple syrup","1/2 tsp vanilla","1 kiwi, sliced","2 tbsp pistachios, chopped"],
       steps:["Whisk the matcha with 2 tbsp warm almond milk first, until no lumps remain — added straight to cold liquid it will clump every time.","Whisk in the remaining milk, chia, maple syrup, and vanilla.","Refrigerate 4 hours or overnight, stirring once after 30 minutes.","Top with kiwi and pistachios."],
       benefits:"<b>Matcha</b> delivers whole powdered leaf, so its EGCG content far exceeds steeped green tea — this catechin is among the most-studied compounds for cellular protection and metabolic health. <b>Chia</b> adds omega-3 ALA and fiber, and <b>kiwi</b> supplies collagen-supporting vitamin C."
     },
     {
-      tag:"Lunch", icon:"🍄",
+      tag:"Lunch", icon:"<img src='img/shiitake-and-miso-brown-rice-bowl-with-edamame.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Shiitake & Miso Brown Rice Bowl with Edamame",
       ingredients:["1 cup cooked brown rice","2 cups shiitake mushrooms, sliced","1 cup shelled edamame","1 tbsp white miso","1 tbsp tamari","1 tsp grated ginger","1 tbsp neutral oil","1 tsp sesame oil","1 scallion, sliced","1 tsp toasted sesame seeds","1 cup baby spinach"],
       steps:["Sear the shiitake in neutral oil over high heat without stirring for 3 minutes so they brown rather than sweat.","Add ginger and tamari, and cook 2 minutes more.","Whisk miso with 2 tbsp warm water and the sesame oil into a thin sauce.","Build the bowl with rice, mushrooms, edamame, and spinach; pour the miso sauce over and top with scallion and sesame."],
       benefits:"<b>Shiitake</b> are rich in ergothioneine, an antioxidant amino acid the body actively transports into cells — populations eating more mushrooms show lower rates of cognitive decline. <b>Edamame</b> supplies complete plant protein and isoflavones, and <b>miso</b> adds live fermentation."
     },
     {
-      tag:"Dinner", icon:"🍜",
+      tag:"Dinner", icon:"<img src='img/ginger-tofu-with-wakame-and-soba.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Ginger Tofu with Wakame & Soba",
       ingredients:["8 oz firm tofu, cubed","4 oz soba noodles","2 tbsp dried wakame, rehydrated","1 tbsp grated ginger","2 tbsp tamari","1 tsp rice vinegar","1 tsp honey","1 tbsp neutral oil","1 tsp sesame oil","1 cucumber, ribboned","1 scallion, sliced"],
       steps:["Press the tofu 20 minutes under a weight, then cube and pan-fry in neutral oil until golden on several sides.","Soak the wakame in cold water 5 minutes; it will expand considerably. Drain.","Cook soba 4 minutes, rinse cold, and drain well.","Whisk ginger, tamari, vinegar, honey, and sesame oil; toss everything together and serve at room temperature."],
       benefits:"<b>Wakame</b> supplies iodine for thyroid function and fucoxanthin, a carotenoid studied for metabolic effects. <b>Tofu's</b> isoflavones have mild oestrogenic activity linked to bone and skin benefits after menopause, and <b>soba</b> brings buckwheat's rutin."
     }
   ],
-  exercise:{icon:"🏋️", title:"Full-Body Strength", text:"40 minutes of compound lifting. Okinawan elders traditionally sat and rose from the floor many times a day — add a few unassisted floor-to-stand reps at the end, which is a genuine predictor of longevity."}
+  exercise:{icon:"<img src='img/full-body-strength.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Full-Body Strength", text:"40 minutes of compound lifting. Okinawan elders traditionally sat and rose from the floor many times a day — add a few unassisted floor-to-stand reps at the end, which is a genuine predictor of longevity."}
 },
 {
   key:"Tuesday",
   intro:"Savoury breakfast, hand-rolled fish, and a barley risotto with maitake.",
   meals:[
     {
-      tag:"Breakfast", icon:"🥣",
+      tag:"Breakfast", icon:"<img src='img/savoury-oat-congee-with-mushrooms-and-scallion.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Savoury Oat Congee with Mushrooms & Scallion",
       ingredients:["1/2 cup steel-cut oats","2 cups low-sodium broth","1 cup mixed mushrooms, sliced","1 tsp grated ginger","1 egg","1 tsp tamari","1 tsp sesame oil","1 scallion, sliced","1 tsp neutral oil","White pepper"],
       steps:["Simmer oats in broth with the ginger 20–25 minutes, stirring occasionally, until soupy and soft.","Meanwhile brown the mushrooms in neutral oil until their edges crisp.","Poach or soft-boil the egg.","Ladle the congee into a bowl, top with mushrooms and egg, and finish with tamari, sesame oil, scallion, and white pepper."],
       benefits:"Savoury breakfasts avoid the morning glucose spike that sweet ones create. <b>Oats</b> provide beta-glucan fiber, <b>mushrooms</b> add ergothioneine and B vitamins, and <b>ginger</b> contributes gingerol's anti-inflammatory action."
     },
     {
-      tag:"Lunch", icon:"🍣",
+      tag:"Lunch", icon:"<img src='img/salmon-and-avocado-nori-hand-rolls.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Salmon & Avocado Nori Hand Rolls",
       ingredients:["4 oz cooked or sashimi-grade salmon","4 sheets nori","1 cup cooked short-grain brown rice","1/2 avocado, sliced","1/2 cucumber, matchsticked","2 tbsp pickled ginger","1 tsp rice vinegar","Tamari and wasabi to serve","1 tsp toasted sesame seeds"],
       steps:["Season the warm rice with rice vinegar and let it cool to room temperature.","Cut each nori sheet in half and hold it in your palm, rough side up.","Spread a thin layer of rice diagonally, then add salmon, avocado, cucumber, and pickled ginger.","Roll into a cone and eat immediately — nori softens fast, and the crisp is half the pleasure."],
       benefits:"<b>Nori</b> is dense in iodine, B12, and antioxidant pigments unusual in land plants. <b>Salmon</b> supplies EPA and DHA, and <b>avocado's</b> monounsaturated fat helps absorb the fat-soluble compounds in both."
     },
     {
-      tag:"Dinner", icon:"🍚",
+      tag:"Dinner", icon:"<img src='img/maitake-and-barley-risotto-with-peas.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Maitake & Barley Risotto with Peas",
       ingredients:["1 cup pearl barley","4 cups warm mushroom or vegetable broth","2 cups maitake mushrooms, torn","1 cup peas","1 shallot, diced","2 garlic cloves","1/4 cup dry white wine","2 tbsp olive oil","2 tbsp grated parmesan (optional)","1 tbsp thyme leaves","Lemon zest"],
       steps:["Sear the torn maitake in olive oil until crisp at the edges; set half aside for the top.","Soften shallot and garlic, add barley, and toast 2 minutes.","Add wine, let it absorb, then add broth a ladle at a time, stirring, for 30–35 minutes until the barley is creamy but still chewy.","Fold in peas, thyme, parmesan, and the cooked mushrooms. Finish with lemon zest and the reserved crisp maitake."],
       benefits:"<b>Maitake</b> contains beta-glucans that modulate immune function, which becomes less precise with age. <b>Barley</b> makes a higher-fiber, lower-glycemic risotto than arborio rice, and <b>peas</b> add plant protein and vitamin K."
     }
   ],
-  exercise:{icon:"🧘", title:"Yoga & Balance", text:"35 minutes of flow work with dedicated single-leg balance holds. Balance is a trainable skill that declines silently from the forties onward — thirty seconds per leg, daily, measurably slows that decline."}
+  exercise:{icon:"<img src='img/yoga-balance.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Yoga & Balance", text:"35 minutes of flow work with dedicated single-leg balance holds. Balance is a trainable skill that declines silently from the forties onward — thirty seconds per leg, daily, measurably slows that decline."}
 },
 {
   key:"Wednesday",
   intro:"Green tea in a glass, sea vegetables at noon, and miso-lacquered eggplant at night.",
   meals:[
     {
-      tag:"Breakfast", icon:"🥬",
+      tag:"Breakfast", icon:"<img src='img/green-tea-and-spinach-and-mango-smoothie.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Green Tea, Spinach & Mango Smoothie",
       ingredients:["1 cup brewed green tea, chilled","2 cups spinach","1 cup frozen mango","1/2 frozen banana","2 tbsp hemp seeds","1 tbsp lime juice","1 tsp grated ginger","Ice"],
       steps:["Brew the green tea at 175°F rather than boiling — scalding water makes it bitter and degrades catechins. Chill it.","Blend tea, spinach, and ginger first until completely smooth.","Add mango, banana, hemp seeds, and lime; blend again.","Adjust thickness with ice or more tea."],
       benefits:"<b>Green tea</b> catechins are among the best-evidenced dietary compounds for cardiovascular and metabolic protection. <b>Hemp seeds</b> supply complete protein with a favourable omega-3 to omega-6 ratio, and <b>spinach</b> adds folate and lutein without altering the flavour."
     },
     {
-      tag:"Lunch", icon:"🥒",
+      tag:"Lunch", icon:"<img src='img/sea-vegetable-salad-with-cucumber-sesame-and-tofu.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Sea Vegetable Salad with Cucumber, Sesame & Tofu",
       ingredients:["3 tbsp mixed dried sea vegetables (wakame, agar, dulse)","1 cucumber, thinly sliced","6 oz silken or firm tofu, cubed","1 tbsp rice vinegar","1 tbsp tamari","1 tsp sesame oil","1 tsp honey","1 tsp grated ginger","1 tbsp toasted sesame seeds","1 scallion, sliced"],
       steps:["Rehydrate the sea vegetables in cold water 8 minutes, then drain and squeeze gently.","Salt the cucumber slices 10 minutes and pat dry so the dressing isn't watered down.","Whisk vinegar, tamari, sesame oil, honey, and ginger.","Toss everything together and finish with sesame seeds and scallion."],
       benefits:"<b>Sea vegetables</b> are the richest natural source of iodine and supply fucoidans studied for immune and anti-inflammatory activity. <b>Tofu</b> adds isoflavones and calcium, and the whole dish is high in volume and minerals for very little energy."
     },
     {
-      tag:"Dinner", icon:"🍆",
+      tag:"Dinner", icon:"<img src='img/miso-roasted-eggplant-with-black-rice-and-greens.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Miso-Roasted Eggplant with Black Rice & Greens",
       ingredients:["2 eggplants, halved and scored","3 tbsp white miso","1 tbsp mirin","1 tbsp rice vinegar","1 tsp honey","1 cup cooked black rice","2 cups Asian greens (gai lan or bok choy)","1 tbsp neutral oil","1 tsp sesame oil","1 scallion, sliced","1 tsp sesame seeds"],
       steps:["Heat oven to 425°F. Score the eggplant flesh in a diamond pattern, brush with neutral oil, and roast cut-side down 20 minutes.","Whisk miso, mirin, vinegar, and honey into a glaze.","Flip the eggplant, spread the glaze thickly over the flesh, and roast 12–15 minutes more until it bubbles and darkens.","Steam the greens, and serve everything over black rice with scallion and sesame."],
       benefits:"<b>Black rice</b> carries anthocyanins at levels comparable to blueberries, which polished white rice lacks entirely. <b>Eggplant</b> skin adds nasunin, and <b>miso</b> brings fermentation-derived compounds along with a depth of flavour that needs no added fat."
     }
   ],
-  exercise:{icon:"💪", title:"Upper-Body Strength", text:"35 minutes of pulling-dominant work — rows, pull-downs, band pull-aparts, and rear-delt flies. Counterbalancing the forward posture of desk and phone life protects the thoracic spine that keeps you upright at 80."}
+  exercise:{icon:"<img src='img/upper-body-strength.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Upper-Body Strength", text:"35 minutes of pulling-dominant work — rows, pull-downs, band pull-aparts, and rear-delt flies. Counterbalancing the forward posture of desk and phone life protects the thoracic spine that keeps you upright at 80."}
 },
 {
   key:"Thursday",
   intro:"Buckwheat, lentil larb, and cod poached in a clear kombu broth.",
   meals:[
     {
-      tag:"Breakfast", icon:"🫐",
+      tag:"Breakfast", icon:"<img src='img/buckwheat-and-blueberry-porridge-with-walnuts.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Buckwheat & Blueberry Porridge with Walnuts",
       ingredients:["1/2 cup buckwheat groats, soaked overnight","1 cup almond milk","1/2 cup blueberries","2 tbsp walnuts, chopped","1 tbsp ground flaxseed","1/2 tsp cinnamon","1 tsp maple syrup","Pinch of salt"],
       steps:["Drain and rinse the soaked buckwheat — soaking cuts the cooking time and softens its texture considerably.","Simmer with almond milk and salt 12–15 minutes until thick and tender.","Stir in flaxseed and cinnamon.","Top with blueberries, walnuts, and maple syrup."],
       benefits:"<b>Buckwheat</b> isn't a grain at all but a seed, gluten-free and rich in rutin, which strengthens capillaries and supports circulation to the skin. <b>Blueberries</b> supply anthocyanins with the strongest evidence base of any fruit for cognitive ageing."
     },
     {
-      tag:"Lunch", icon:"🥬",
+      tag:"Lunch", icon:"<img src='img/mushroom-and-Lentil-larb-lettuce-cups.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Mushroom & Lentil Larb Lettuce Cups",
       ingredients:["2 cups finely chopped mushrooms","1 cup cooked brown lentils","1 head butter lettuce, leaves separated","2 tbsp lime juice","1 tbsp fish sauce or tamari","1 tsp chili flakes","2 tbsp toasted rice powder (optional)","1/4 cup mint leaves","1/4 cup cilantro","2 scallions, sliced","1 tbsp neutral oil"],
       steps:["Brown the mushrooms hard in a dry-ish pan until their water has cooked off and they begin to crisp — 8 minutes, and don't rush it.","Add lentils and warm through.","Off the heat, toss with lime juice, fish sauce, chili, and toasted rice powder.","Fold in the herbs and scallions and spoon into lettuce cups."],
       benefits:"<b>Mushrooms</b> supply ergothioneine and, if sun-exposed, vitamin D2. <b>Lentils</b> add folate and fiber, and the enormous quantity of raw <b>herbs</b> here brings polyphenols that are largely lost when herbs are cooked."
     },
     {
-      tag:"Dinner", icon:"🐟",
+      tag:"Dinner", icon:"<img src='img/steamed-cod-in-kombu-dashi-with-daikon.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Steamed Cod in Kombu Dashi with Daikon",
       ingredients:["5 oz cod fillet","1 strip kombu (4 inches)","3 cups water","1 cup daikon, thinly sliced","1 carrot, thinly sliced","2 cups baby spinach","1 tbsp tamari","1 tsp mirin","1 tsp grated ginger","1 scallion, sliced","1 cup cooked brown rice"],
       steps:["Soak the kombu in cold water 30 minutes, then heat gently to just below a simmer and remove it before it boils — boiling turns dashi bitter and slippery.","Add daikon and carrot; simmer 8 minutes until translucent.","Season the broth with tamari, mirin, and ginger, then lower in the cod and poach 6–8 minutes until it flakes.","Add spinach for the last minute and serve in bowls with rice and scallion."],
       benefits:"<b>Kombu</b> gives depth with almost no sodium, salt intake being a real concern in traditional Japanese diets. Gentle <b>poaching</b> produces none of the glycation products of frying or grilling, and <b>daikon</b> is cruciferous — quietly supplying the same enzyme-supporting compounds as broccoli."
     }
   ],
-  exercise:{icon:"🚴", title:"Zone 2 Cardio", text:"40 minutes at a conversational pace. This is the fourth Zone 2 session of the cycle — the cumulative weekly volume, not any single session, is what raises VO2 max and mitochondrial capacity."}
+  exercise:{icon:"<img src='img/zone-2-cardio.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Zone 2 Cardio", text:"40 minutes at a conversational pace. This is the fourth Zone 2 session of the cycle — the cumulative weekly volume, not any single session, is what raises VO2 max and mitochondrial capacity."}
 },
 {
   key:"Friday",
   intro:"Turmeric tofu, a cold noodle salad, and a hot pot to share.",
   meals:[
     {
-      tag:"Breakfast", icon:"🍳",
+      tag:"Breakfast", icon:"<img src='img/turmeric-tofu-scramble-spinach-nori.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Turmeric Tofu Scramble with Spinach & Nori",
       ingredients:["8 oz firm tofu, crumbled","2 cups spinach","1/2 tsp turmeric","1/4 tsp black pepper","1 tsp nutritional yeast","1/2 sheet nori, crumbled","1 scallion, sliced","1 tbsp olive oil","1/4 tsp kala namak (black salt), optional","2 slices whole grain toast"],
       steps:["Press the tofu briefly and crumble it into uneven pieces — variation in size makes it read like egg.","Fry in olive oil over medium-high heat 5 minutes until the edges brown.","Add turmeric, black pepper, and nutritional yeast; toss 1 minute.","Fold in spinach until wilted, then finish with nori, scallion, and kala namak. Serve on toast."],
       benefits:"<b>Turmeric with black pepper</b> is the pairing that makes curcumin bioavailable. <b>Tofu</b> brings isoflavones and calcium, <b>nori</b> adds iodine and B12 to a plant-based plate, and <b>spinach</b> supplies folate for DNA repair."
     },
     {
-      tag:"Lunch", icon:"🍜",
+      tag:"Lunch", icon:"<img src='img/soba-noodle-salad-edamame-sesame-dressing.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Soba Noodle Salad with Edamame & Sesame Dressing",
       ingredients:["4 oz soba noodles","1 cup shelled edamame","1 carrot, julienned","1 cup shredded red cabbage","2 tbsp tahini or sesame paste","1 tbsp tamari","1 tbsp rice vinegar","1 tsp honey","1 tsp grated ginger","1 tbsp sesame seeds","Cilantro to finish"],
       steps:["Cook soba 4 minutes and rinse thoroughly under cold water to stop the cooking and wash off surface starch.","Whisk tahini, tamari, vinegar, honey, ginger, and 2 tbsp water into a pourable dressing.","Toss noodles with edamame, carrot, and cabbage.","Add the dressing just before serving and finish with sesame seeds and cilantro."],
       benefits:"<b>Soba's</b> buckwheat supplies rutin and a complete amino acid profile unusual in a noodle. <b>Edamame</b> adds protein and isoflavones, <b>red cabbage</b> layers in anthocyanins and glucosinolates, and <b>tahini</b> brings sesamin lignans."
     },
     {
-      tag:"Dinner", icon:"🍲",
+      tag:"Dinner", icon:"<img src='img/shiitake-chicken-hot-pot-napa-cabbage.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Shiitake & Chicken Hot Pot with Napa Cabbage",
       ingredients:["5 oz chicken breast, sliced thin","2 cups shiitake mushrooms","4 cups napa cabbage, chopped","6 oz firm tofu, cubed","4 cups kombu dashi or light broth","2 tbsp tamari","1 tbsp mirin","1 tbsp grated ginger","2 garlic cloves","2 scallions","1 cup cooked brown rice or udon"],
       steps:["Bring the dashi to a gentle simmer with ginger, garlic, tamari, and mirin.","Add shiitake and the thick cabbage stems; cook 5 minutes.","Add chicken and tofu; simmer 6–8 minutes until the chicken is cooked through.","Add the cabbage leaves and scallions for the last 2 minutes and serve straight from the pot with rice or noodles."],
       benefits:"Simmering in broth is one of the lowest-glycation cooking methods available. <b>Shiitake</b> supply ergothioneine and immune-modulating beta-glucans, <b>napa cabbage</b> is cruciferous, and the shared pot slows the meal down — pace itself affects glucose response and satiety."
     }
   ],
-  exercise:{icon:"🦵", title:"Lower-Body Strength", text:"35–40 minutes of loaded squats, hinges, and lunges, finishing with slow eccentric step-downs. Controlled lowering builds the tendon resilience that protects knees and hips over decades."}
+  exercise:{icon:"<img src='img/lower-body-strength.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Lower-Body Strength", text:"35–40 minutes of loaded squats, hinges, and lunges, finishing with slow eccentric step-downs. Controlled lowering builds the tendon resilience that protects knees and hips over decades."}
 },
 {
   key:"Saturday",
   intro:"Matcha oats, a poke bowl, and mushroom burgers that make no apology.",
   meals:[
     {
-      tag:"Breakfast", icon:"🍐",
+      tag:"Breakfast", icon:"<img src='img/matcha-overnight-oats-toasted-almond-pear.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Matcha Overnight Oats with Toasted Almond & Pear",
       ingredients:["1/2 cup rolled oats","3/4 cup almond milk","1 tsp matcha","1 tbsp chia seeds","1 tsp maple syrup","1 ripe pear, sliced","2 tbsp toasted almonds","Pinch of salt"],
       steps:["Dissolve the matcha in 2 tbsp warm almond milk before adding anything else.","Combine with the remaining milk, oats, chia, maple syrup, and salt in a jar.","Refrigerate overnight.","Top with sliced pear and toasted almonds in the morning."],
       benefits:"<b>Matcha</b> provides EGCG alongside L-theanine, which smooths the caffeine curve rather than spiking it. <b>Pear</b> skin carries fiber and flavonoids, and <b>oats</b> keep the morning glucose response gentle."
     },
     {
-      tag:"Lunch", icon:"🍣",
+      tag:"Lunch", icon:"<img src='img/poke-style-salmon-bowl-brown-rice-wakame.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Poke-Style Salmon Bowl with Brown Rice & Wakame",
       ingredients:["5 oz sashimi-grade salmon, cubed (or seared)","1 cup cooked short-grain brown rice","2 tbsp rehydrated wakame","1/2 avocado, sliced","1/2 cucumber, diced","1/4 cup edamame","1 tbsp tamari","1 tsp sesame oil","1 tsp rice vinegar","1 tsp grated ginger","1 scallion, sesame seeds"],
       steps:["Whisk tamari, sesame oil, vinegar, and ginger, and toss the salmon through it. Rest 10 minutes.","If you'd rather not eat it raw, sear the cubes 30 seconds per side over high heat.","Layer rice, then salmon, avocado, cucumber, edamame, and wakame.","Finish with scallion and sesame seeds."],
       benefits:"Raw or barely-seared <b>salmon</b> retains omega-3 fats that prolonged high heat oxidises. <b>Wakame</b> adds iodine and fucoxanthin, <b>avocado</b> supplies vitamin E, and <b>brown rice</b> keeps the bran that white rice discards."
     },
     {
-      tag:"Dinner", icon:"🍔",
+      tag:"Dinner", icon:"<img src='img/mushroom-walnut-black-bean-burgers-slaw.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Mushroom, Walnut & Black Bean Burgers with Slaw",
       ingredients:["2 cups mushrooms, finely chopped","1 cup cooked black beans","1/2 cup walnuts","1/2 cup cooked brown rice","1 tbsp ground flaxseed + 3 tbsp water","1 tsp smoked paprika","2 garlic cloves","1 tbsp tamari","2 tbsp olive oil","Whole grain buns","Cabbage slaw to serve"],
       steps:["Mix the flaxseed with water and let it gel 5 minutes — this is what binds the patties.","Brown the mushrooms hard until dry, then pulse with walnuts, garlic, beans, rice, paprika, tamari, and the flax gel until it holds together but still has texture.","Form 4 patties and chill 30 minutes; this step is the difference between burgers and crumbs.","Pan-fry in olive oil 4–5 minutes per side until crusted. Serve on buns with slaw."],
       benefits:"<b>Mushrooms and walnuts</b> together give the savoury depth of meat with ergothioneine, omega-3 ALA, and polyphenols instead of saturated fat and heme iron. <b>Black beans</b> add anthocyanins in their skins plus resistant starch."
     }
   ],
-  exercise:{icon:"⚡", title:"Intervals", text:"20 minutes of hard-easy intervals — 8 rounds of 30 seconds effort, 90 seconds easy, on a bike or hill. Short bursts of high intensity raise VO2 max, which is one of the strongest single predictors of remaining lifespan."}
+  exercise:{icon:"<img src='img/intervals.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Intervals", text:"20 minutes of hard-easy intervals — 8 rounds of 30 seconds effort, 90 seconds easy, on a bike or hill. Short bursts of high intensity raise VO2 max, which is one of the strongest single predictors of remaining lifespan."}
 },
 {
   key:"Sunday",
   intro:"The quiet end of the cycle: silken tofu, roasted squash, and a clear broth before bed.",
   meals:[
     {
-      tag:"Breakfast", icon:"🥡",
+      tag:"Breakfast", icon:"<img src='img/silken-tofu-bowl-ginger-scallion-sesame.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Silken Tofu Bowl with Ginger, Scallion & Sesame",
       ingredients:["1 block silken tofu, chilled","1 tbsp tamari","1 tsp sesame oil","1 tbsp grated ginger","2 scallions, sliced","1 tsp toasted sesame seeds","1 tsp rice vinegar","1/2 sheet nori, crumbled","1 cup steamed greens"],
       steps:["Turn the silken tofu out gently onto a shallow bowl and pat away any excess liquid.","Whisk tamari, sesame oil, vinegar, and ginger.","Spoon the dressing over the tofu — don't stir it in; the point is the contrast.","Top with scallion, sesame, and nori, with greens alongside."],
       benefits:"A cold, gentle breakfast with almost no cooking. <b>Silken tofu</b> supplies isoflavones and easily digested protein, <b>ginger</b> supports digestion, and <b>nori</b> adds iodine and B12 to a plant-based start."
     },
     {
-      tag:"Lunch", icon:"🎃",
+      tag:"Lunch", icon:"<img src='img/roasted-squash-farro-sage-pepitas.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Roasted Squash & Farro with Sage and Pepitas",
       ingredients:["3 cups cubed kabocha or butternut squash","1 cup cooked farro","2 tbsp olive oil","8 sage leaves","1/4 cup pumpkin seeds","2 cups arugula","1 tbsp apple cider vinegar","1 tsp maple syrup","1/4 cup crumbled goat cheese (optional)","Salt & pepper"],
       steps:["Heat oven to 425°F. Toss squash with olive oil, salt, and pepper; roast 25 minutes until caramelised at the edges.","Crisp the sage leaves in a little oil for 20 seconds and drain on paper.","Whisk vinegar, maple syrup, and olive oil into a dressing.","Toss farro, squash, and arugula with the dressing; top with pepitas, crisp sage, and goat cheese."],
       benefits:"<b>Kabocha and butternut squash</b> are dense in carotenoids that accumulate in skin and offer measurable photoprotection. <b>Pumpkin seeds</b> supply zinc and magnesium, and <b>farro</b> adds fiber and selenium."
     },
     {
-      tag:"Dinner", icon:"🍵",
+      tag:"Dinner", icon:"<img src='img/clear-miso-broth-salmon-tofu-greens.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>",
       name:"Clear Miso Broth with Salmon, Tofu & Greens",
       ingredients:["4 cups kombu dashi","4 oz salmon, cubed","6 oz silken tofu, cubed","2 cups baby spinach or watercress","2 tbsp white miso","1 tsp grated ginger","1 scallion, sliced","1 tsp wakame, rehydrated","1 cup cooked brown rice"],
       steps:["Warm the dashi with the ginger to just below a simmer.","Add the salmon and poach 4 minutes until barely opaque, then add tofu and wakame to warm through.","Take the pot off the heat, ladle a little broth into a bowl, whisk the miso into it, and stir that back in — boiling miso kills its cultures and flattens the flavour.","Add greens, let them wilt, and serve with rice and scallion."],
       benefits:"A light, warm final meal supports the overnight fast and sleep quality, both tied to cellular repair. <b>Miso</b> adds live cultures and isoflavones, <b>salmon</b> closes the month with omega-3s, and <b>wakame</b> supplies iodine and minerals."
     }
   ],
-  exercise:{icon:"🚶", title:"Active Recovery & Reset", text:"A 40-minute easy walk, 10 minutes of stretching, and an early night. The cycle restarts tomorrow at Week 1 — sleep is when most of what you built this month is actually consolidated."}
+  exercise:{icon:"<img src='img/active-recovery-and-reset.png' auto=format&amp;fit=crop&amp;w=500&amp;q=80 class='w-full h-full object-cover'>", title:"Active Recovery & Reset", text:"A 40-minute easy walk, 10 minutes of stretching, and an early night. The cycle restarts tomorrow at Week 1 — sleep is when most of what you built this month is actually consolidated."}
 }
 ];
 
@@ -1524,6 +1830,7 @@ function buildSelect(){
   }
   sel.classList.toggle('is-current', viewingCurrentWeek());
   document.getElementById('week-now').disabled = viewingCurrentWeek();
+  /*document.getElementById('week-now', viewingCurrentWeek());*/
 }
 
 function buildDial(cyc){
@@ -1600,7 +1907,7 @@ function buildPanels(cyc){
       card.innerHTML = `
         <div class="meal-photo" style="background: linear-gradient(135deg, ${color}, ${shade(color)});">
           ${meal.icon}
-          <span class="cap">${meal.tag}</span>
+          <!--<span class="cap">${meal.tag}</span>-->
         </div>
         <div class="meal-body">
           <div class="meal-tag">${meal.tag}</div>
@@ -1622,12 +1929,13 @@ function buildPanels(cyc){
     const ex = document.createElement('div');
     ex.className = 'exercise-card';
     ex.innerHTML = `
-      <div class="exercise-icon">${day.exercise.icon}</div>
+      
       <div class="exercise-text">
         <div class="label">Recommended movement</div>
         <h3>${day.exercise.title}</h3>
         <p>${day.exercise.text}</p>
       </div>
+      <div class="exercise-icon">${day.exercise.icon}</div>
     `;
     panel.appendChild(ex);
 
@@ -1697,9 +2005,13 @@ window.addEventListener('resize', debounce(() => {
 function updateClock(){
   const now = new Date();
   document.getElementById('clock-time').textContent = now.toLocaleTimeString(undefined, {hour12:true});
-  document.getElementById('clock-day').textContent = DAY_KEYS[(now.getDay() + 6) % 7];
-  document.getElementById('clock-date').textContent =
-    `${now.toLocaleDateString(undefined, {year:'numeric', month:'long', day:'numeric'})} · Week ${String(CURRENT.week).padStart(2,'0')}`;
+  /*document.getElementById('clock-day').textContent = `${DAY_KEYS[(now.getDay() + 6) % 7]} ${now.toLocaleTimeString(undefined, {hour12:true})}`;*/
+  /*document.getElementById('clock-day').textContent = DAY_KEYS[(now.getDay() + 6) % 7];*/
+  /*document.getElementById('clock-date').textContent =
+    `${DAY_KEYS[(now.getDay() + 6) % 7]}, ${now.toLocaleDateString(undefined, {year:'numeric', month:'long', day:'numeric'})} · Week ${now.toLocaleTimeString(undefined, {hour12:true})}`;*/
+  /*document.getElementById('clock-date').textContent =
+    `${DAY_KEYS[(now.getDay() + 6) % 7]}, ${now.toLocaleDateString(undefined, {year:'numeric', month:'long', day:'numeric'})}`;*/
+  document.getElementById('clock-date').textContent = `${DAY_KEYS[(now.getDay() + 6) % 7]}, ${now.getDate()} ${now.toLocaleDateString(undefined, { month: 'long' })}, ${now.getFullYear()}`;
 }
 
 /* ---------- RENDER ---------- */
@@ -1720,6 +2032,190 @@ function render(){
   requestAnimationFrame(() => selectDay(key, false));
 }
 
+/* ---------- SUPPORT MODAL ----------
+   Everything you need to change lives in this one object.
+   Drop your QR images at the paths below (any square PNG or JPG works).
+   Until a file exists there, the card shows a placeholder instead of a broken image. */
+const SUPPORT = {
+  gcash: {
+    accountName: "Allan Codova",
+    number: "0927 534 0005",
+    qr: "img/gcash-qr.png"
+  },
+  bank: {
+    bankName: "BPI",
+    accountName: "Allan Cordova",
+    number: "1379196094",
+    qr: "img/bank-qr.png"
+  },
+  paypal: {
+    url: "https://paypal.me/yourusername"
+  }
+};
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+function qrMarkup(src, label){
+  return `<img src="${escapeHtml(src)}" alt="${escapeHtml(label)} QR code" data-qr-label="${escapeHtml(label)}">`;
+}
+
+// If a QR file isn't there yet, show a labelled placeholder instead of a broken image.
+function wireQrFallbacks(root){
+  root.querySelectorAll('.qr-frame img').forEach(img => {
+    img.addEventListener('error', () => {
+      const frame = img.parentNode;
+      if(!frame) return;
+      frame.innerHTML =
+        `<div class="qr-missing">` +
+          `<i class="fa-solid fa-qrcode" aria-hidden="true"></i>` +
+          `<span>Add your ${escapeHtml(img.dataset.qrLabel || '')} QR at<br>${escapeHtml(img.getAttribute('src'))}</span>` +
+        `</div>`;
+    });
+    // Catch images that already failed before the listener was attached
+    if(img.complete && img.naturalWidth === 0) img.dispatchEvent(new Event('error'));
+  });
+}
+
+function buildSupportCards(){
+  const grid = document.getElementById('pay-grid');
+  if(!grid) return;
+
+  const g = SUPPORT.gcash;
+  const b = SUPPORT.bank;
+
+  grid.innerHTML = `
+    <section class="pay-card">
+      <div class="pay-head">
+        <span class="pay-mark" aria-hidden="true"><i class="fa-solid fa-mobile-screen-button"></i></span>
+        <span class="pay-title">GCash</span>
+      </div>
+      <div class="qr-frame">${qrMarkup(g.qr, 'GCash')}</div>
+      <div class="pay-lines">
+        <div class="pay-label">Account name</div>
+        <div class="pay-value">${escapeHtml(g.accountName)}</div>
+        <div class="pay-label">Mobile number</div>
+        <div class="pay-value">${escapeHtml(g.number)}</div>
+      </div>
+      <button type="button" class="copy-btn" data-copy="${escapeHtml(g.number)}">
+        <i class="fa-regular fa-copy" aria-hidden="true"></i><span>Copy number</span>
+      </button>
+    </section>
+
+    <section class="pay-card">
+      <div class="pay-head">
+        <span class="pay-mark bank" aria-hidden="true"><i class="fa-solid fa-building-columns"></i></span>
+        <span class="pay-title">Bank transfer</span>
+      </div>
+      <div class="qr-frame">${qrMarkup(b.qr, 'bank')}</div>
+      <div class="pay-lines">
+        <div class="pay-label">${escapeHtml(b.bankName)} — account name</div>
+        <div class="pay-value">${escapeHtml(b.accountName)}</div>
+        <div class="pay-label">Account number</div>
+        <div class="pay-value">${escapeHtml(b.number)}</div>
+      </div>
+      <button type="button" class="copy-btn" data-copy="${escapeHtml(b.number)}">
+        <i class="fa-regular fa-copy" aria-hidden="true"></i><span>Copy account</span>
+      </button>
+    </section>
+  `;
+
+  wireQrFallbacks(grid);
+
+  const paypal = document.getElementById('paypal-btn');
+  if(paypal) paypal.href = SUPPORT.paypal.url;
+}
+
+function copyText(text){
+  if(navigator.clipboard && window.isSecureContext){
+    return navigator.clipboard.writeText(text);
+  }
+  // Fallback for pages served over file:// or plain http
+  return new Promise((resolve, reject) => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch(err) { ok = false; }
+    document.body.removeChild(ta);
+    ok ? resolve() : reject(new Error('copy failed'));
+  });
+}
+
+let supportLastFocus = null;
+
+function openSupport(){
+  const overlay = document.getElementById('support-overlay');
+  if(!overlay) return;
+  supportLastFocus = document.activeElement;
+  overlay.hidden = false;
+  overlay.classList.add('open');
+  document.body.classList.add('support-open');
+  const close = document.getElementById('support-close');
+  if(close) close.focus();
+}
+
+function closeSupport(){
+  const overlay = document.getElementById('support-overlay');
+  if(!overlay || !overlay.classList.contains('open')) return;
+  overlay.classList.remove('open');
+  overlay.hidden = true;
+  document.body.classList.remove('support-open');
+  if(supportLastFocus && typeof supportLastFocus.focus === 'function') supportLastFocus.focus();
+}
+
+function initSupport(){
+  buildSupportCards();
+
+  const fab = document.getElementById('kofi-fab');
+  const overlay = document.getElementById('support-overlay');
+  const close = document.getElementById('support-close');
+  if(!fab || !overlay) return;
+
+  fab.addEventListener('click', openSupport);
+  if(close) close.addEventListener('click', closeSupport);
+
+  // Clicking the backdrop — but not the card — dismisses the modal
+  overlay.addEventListener('click', (e) => { if(e.target === overlay) closeSupport(); });
+
+  overlay.addEventListener('click', (e) => {
+    const btn = e.target.closest('.copy-btn');
+    if(!btn) return;
+    copyText(btn.dataset.copy).then(() => {
+      const label = btn.querySelector('span');
+      const original = label.textContent;
+      btn.classList.add('copied');
+      label.textContent = 'Copied';
+      setTimeout(() => { btn.classList.remove('copied'); label.textContent = original; }, 1600);
+    }).catch(() => {
+      btn.querySelector('span').textContent = 'Select and copy';
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if(!overlay.classList.contains('open')) return;
+
+    if(e.key === 'Escape'){ closeSupport(); return; }
+
+    // Keep tabbing inside the dialog while it's open
+    if(e.key === 'Tab'){
+      const focusable = overlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if(!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    }
+  });
+}
+
 function init(){
   document.getElementById('week-select').addEventListener('change', (e) => {
     viewWeek = parseInt(e.target.value, 10);
@@ -1736,6 +2232,7 @@ function init(){
   render();
   updateClock();
   setInterval(updateClock, 1000);
+  initSupport();
   window.addEventListener('orientationchange', () => {
     setTimeout(() => currentActiveKey && centerTab(currentActiveKey, false), 200);
   });
